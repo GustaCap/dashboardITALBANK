@@ -11,7 +11,9 @@
                 <i class="material-icons">view_carousel</i><!--icono-->
               </div>
               <p class="card-category">CELL4</p>
-              <h3 class="card-title">5289
+              <h3 class="card-title">@foreach ($query as $item )
+                  {{ $item->count }}
+              @endforeach
                 <small>CR</small>
               </h3>
             </div>

@@ -3701,7 +3701,7 @@ tbody.collapse.show {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  width: 18rem;
+  width: 32rem;
   margin-right: 1rem;
 }
 

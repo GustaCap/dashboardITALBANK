@@ -51,15 +51,21 @@
       <li class="nav-item{{ $activePage == 'searchDocID' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('searchDocID') }}">
           <i class="material-icons">assignment_ind</i>
-            <p>{{ __('Search') }}</p>
+            <p>{{ __('Consultar ID Documento') }}</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'dni' ? ' active' : '' }}">
+      <li class="nav-item{{ $activePage == 'searchFechaRegistro' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('searchFechaRegistro') }}">
+          <i class="material-icons">assignment_ind</i>
+            <p>{{ __('Consultar Recha Registro ') }}</p>
+        </a>
+      </li>
+      {{-- <li class="nav-item{{ $activePage == 'dni' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('dni') }}">
           <i class="material-icons">assignment_ind</i>
             <p>{{ __('Documentos') }}</p>
         </a>
-      </li>
+      </li> --}}
 
       {{-- <li class="nav-item{{ $activePage == 'table' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('table') }}">

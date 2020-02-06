@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
   <div class="container-fluid">
     <div class="navbar-wrapper">
-      <a class="navbar-brand" href="#">{{ $titlePage }}</a>
+      {{-- <a class="navbar-brand" href="#">{{ $titlePage }}</a> --}}
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
     <span class="sr-only">Toggle navigation</span>
@@ -12,7 +12,7 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end">
         {{-- formulario de busqueda --}}
-      <form class="navbar-form">
+      {{-- <form class="navbar-form">
         <div class="input-group no-border">
         <input type="text" value="" class="form-control" placeholder="Buscar...">
         <button type="submit" class="btn btn-white btn-round btn-just-icon">
@@ -20,7 +20,7 @@
           <div class="ripple-container"></div>
         </button>
         </div>
-      </form> {{-- fin del formulario --}}
+      </form> fin del formulario --}}
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="{{ route('home') }}">

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -22,5 +23,27 @@ class HomeController extends Controller
     public function index()
     {
         return view('dashboard');
+    }
+
+    public function totalDocumentos()
+    {
+
+        try {
+
+            $query = "select COUNT(*) from dolgram.documentidscannedmod";
+
+        } catch (Exception $e) {
+
+            report($e);
+
+            return false;
+        }
+
+        $query = DB::connection('italsis')->select($query);
+        // $data = implode($query);
+        // dd($query);
+        return view('dashboard', compact('query'));
+
+
     }
 }

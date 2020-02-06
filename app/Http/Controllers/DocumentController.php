@@ -3,92 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use Illuminate\Support\Arr;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-// use PhpParser\Node\Expr\Cast\Array_;
 use Illuminate\Support\Str;
+use App\Documentidscannedmod;
+use App\Documentroutemod;
+
+// use App\Exceptions\Handler;
 
 class DocumentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store($request)
-    {
-        //
-        // $query = "select id from dolgram.documentidscannedmod where documentid = "
-        dd($request);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($request)
-    {
-        $id = $request;
-        dd($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-        dd($id);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     public function consultar(Request $request)
     {
@@ -108,17 +32,130 @@ class DocumentController extends Controller
 
 
         $id= $request -> id;
-        $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
+
+        try {
+
+            // Validate the value...
+            // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
+            $query = "select * from dolgram.documentroutemod INNER JOIN dolgram.documentidscannedmod ON dolgram.documentroutemod.id_tipo_doc = dolgram.documentidscannedmod.id_doc and dolgram.documentidscannedmod.documentid = '$id'";
+            // $query = documentroutemod::join('documentidscannedmod', 'documentidscannedmod.id_doc', '=', 'documentroutemod.id_tipo_doc')->select('documentidscannedmod.*')->get();
+        } catch (Exception $e) {
+
+            report($e);
+
+            return false;
+        }
+
+        // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
         $query = DB::connection('italsis')->select($query);
 
-        // $prueba = class_basename($h);
-        // $value = str::contains($h, '1/1948/3/3.2/3.2.4/');
+        // ************************************************************************************************************/
+        // Generar tipo de cliente de acuerdo con la cadena de caracteres contenia en el paht
 
-        // dd($value,  $h, $prueba, $query);
+        $tipo1 = '/1/1.'; // Cliente Individuo
+        $tipo2 = '/2/2.'; // Cliente Corporativo
+        $tipo3 = '/3/3.'; // Cliente Individuo - Pensionado
 
-        // return view('pages.dni')->with('query', $query);
-        // return view('pages.dni', compact('query'));
-        return view('pages.dni', ['query' => $query]);
-        // dd($query);
+        foreach ($query as $item) {
+
+            // Esta variable almacena la ruta completa del documento consultado por el usuario
+            $cadena = $item->path;
+            # code...
+        }
+
+        $cadenatipo1 = Str::contains($cadena, $tipo1);
+        if ($cadenatipo1) {
+
+            $tipoCliente = 'Cliente Individuo';
+            # code...
+        }
+
+        $cadenatipo2 = Str::contains($cadena, $tipo2);
+        if ($cadenatipo2) {
+
+            $tipoCliente = 'Cliente Corporativo';
+            # code...
+        }
+
+        $cadenatipo3 = Str::contains($cadena, $tipo3);
+        if ($cadenatipo3) {
+
+            $tipoCliente = 'Cliente Individuo - Pensionado';
+            # code...
+        }
+
+        //******************************************************************************************************************/
+
+
+        return view('pages.dni', ['query' => $query],['tipoCliente' => $tipoCliente] );
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function fechaRegistro(Request $request)
+    {
+         // Validacion de campo id para que no sea vasio ......................................
+
+         $validate = \Validator::make($request->all(), [
+
+            'fecha' => 'required',
+        ]);
+
+        if ($validate->fails())
+        {
+            return redirect()->back()->withInput()->withErrors($validate->errors());
+        }
+
+        // fin de la validación ..............................................................
+
+        $fechaRegistro = $request->fecha;
+
+        try {
+
+            $query = "select documentid, path from dolgram.documentidscannedmod";
+
+
+
+
+
+
+        } catch (Exception $e) {
+
+            report($e);
+
+            return false;
+        }
+
+        $query = DB::connection('italsis')->select($query);
+
+
     }
 }

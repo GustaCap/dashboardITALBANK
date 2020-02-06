@@ -40,7 +40,7 @@
         <div class="card">
           <div class="card-header card-header-primary">
             <h4 class="card-title ">Informacion General</h4>
-            <p class="card-category"> ...</p>
+          <p class="card-category">{{ $tipoCliente }}</p>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -64,12 +64,7 @@
                   <th>
                     Estatus
                   </th>
-                  {{-- <th>
-                    City
-                  </th>
-                  <th>
-                    Salary
-                  </th> --}}
+
                 </thead>
                 <tbody>
                     @foreach ($query as $item)
@@ -101,108 +96,7 @@
                           </td>
                       </tr>
                     @endforeach
-                  {{-- <tr>
-                    <td>
-                      1
-                    </td>
-                    <td>
-                      Dakota Rice
-                    </td>
-                    <td>
-                      Niger
-                    </td>
-                    <td>
-                      Oud-Turnhout
-                    </td>
-                    <td class="text-primary">
-                      $36,738
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      2
-                    </td>
-                    <td>
-                      Minerva Hooper
-                    </td>
-                    <td>
-                      Curaçao
-                    </td>
-                    <td>
-                      Sinaai-Waas
-                    </td>
-                    <td class="text-primary">
-                      $23,789
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      3
-                    </td>
-                    <td>
-                      Sage Rodriguez
-                    </td>
-                    <td>
-                      Netherlands
-                    </td>
-                    <td>
-                      Baileux
-                    </td>
-                    <td class="text-primary">
-                      $56,142
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      4
-                    </td>
-                    <td>
-                      Philip Chaney
-                    </td>
-                    <td>
-                      Korea, South
-                    </td>
-                    <td>
-                      Overland Park
-                    </td>
-                    <td class="text-primary">
-                      $38,735
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      5
-                    </td>
-                    <td>
-                      Doris Greene
-                    </td>
-                    <td>
-                      Malawi
-                    </td>
-                    <td>
-                      Feldkirchen in Kärnten
-                    </td>
-                    <td class="text-primary">
-                      $63,542
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      6
-                    </td>
-                    <td>
-                      Mason Porter
-                    </td>
-                    <td>
-                      Chile
-                    </td>
-                    <td>
-                      Gloucester
-                    </td>
-                    <td class="text-primary">
-                      $78,615
-                    </td>
-                  </tr> --}}
+
                 </tbody>
               </table>
             </div>
@@ -223,7 +117,7 @@
                     ID Documento
                   </th>
                   <th>
-                    Mod
+                    Tipo de Documento
                   </th>
                   <th>
                     Documento
@@ -231,9 +125,6 @@
                   <th>
                     Preview
                   </th>
-                  {{-- <th>
-                    Salary
-                  </th> --}}
                 </thead>
                 <tbody>
                     @foreach ($query as $item)
@@ -242,7 +133,7 @@
                         {{ $item->documentid }}
                       </td>
                       <td>
-                        {{ $item->mod }}
+                       <strong>{{ $item->doc_name }}</strong>
                       </td>
                       <td>
 
@@ -250,7 +141,7 @@
 
                         </td>
                         <td>
-                            <iframe src="{{'/dashboard/storage/app/public'.$item->path}}" width="80%" height="auto"></iframe>
+                            <iframe src="{{'/dashboard/storage/app/public'.$item->path}}" width="100%" height="250px"></iframe>
                           </td>
                   </tr>
                   @endforeach

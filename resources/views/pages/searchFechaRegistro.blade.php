@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'searchDocID', 'titlePage' => __('Consultar ID Documentos ')])
+@extends('layouts.app', ['activePage' => 'searchDocID', 'titlePage' => __('Consultar Fecha de Registro ')])
 
 @section('content')
 <div class="content">
@@ -16,13 +16,13 @@
 
     {{-- ------------------------------------ --}}
 
-      <div class="row">
+    <div class="row">
         <div class="col-md-12">
              {{-- formulario de busqueda --}}
-      <form class="navbar-form" method="POST" action="{{ route('idDocumentConsultar') }}">
+      <form class="navbar-form" method="POST" action="{{ route('fechaRegistroConsultar') }}">
         @csrf {{-- Para mostrar los errores si enviamos en formulario vasio --}}
         <div class="input-group no-border">
-        <input type="text" name = "id" class="form-control" placeholder="Introduzca el id del documento...">
+        <input type="text" name = "fecha" class="form-control" placeholder="Introduzca la fecha de Registro. Ej: yyyy/mm/dd - 2020/01/01">
         <button type="submit" class="btn btn-white btn-round btn-just-icon">
           <i class="material-icons">search</i>
           {{-- <div class="ripple-container"></div> --}}
