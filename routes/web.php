@@ -11,12 +11,17 @@
 |
 */
 
+
+
+Route::get('/prueba', 'HomeController@prueba')->name('prueba');
+
 Route::get('/', function () {
     return view('welcome');
 });
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+Route::get('/dashboarditalDoc', 'HomeController@indexItalDoc')->name('dashboarditalDoc')->middleware('auth');
 
 
 /**

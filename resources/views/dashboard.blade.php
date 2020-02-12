@@ -10,17 +10,19 @@
               <div class="card-icon">
                 <i class="material-icons">view_carousel</i><!--icono-->
               </div>
-              <p class="card-category">CELL4</p>
+              <p class="card-category">ItalDocumentos</p>
               <h3 class="card-title">@foreach ($query as $item )
                   {{ $item->count }}
               @endforeach
-                <small>CR</small>
+                <small>Registros</small>
               </h3>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <i class="material-icons">assignment_turned_in</i> Total Clientes
-                  </div>
+                  <a class="href-style" href="{{ route('dashboarditalDoc') }}"><i class="material-icons">assignment_turned_in</i> Infomacion Detallada</a>
+                  {{-- <i class="material-icons">assignment_turned_in</i> Infomacion Detallada --}}
+
+                </div>
             </div>
           </div>
         </div><!--fin card cell4-->
@@ -30,15 +32,16 @@
               <div class="card-icon">
                 <i class="material-icons">view_carousel</i><!--icono-->
               </div>
-              <p class="card-category">SharedField</p>
+              <p class="card-category">SharedFile</p>
               <h3 class="card-title">236
-                <small>CR</small>
+                <small>Registros</small>
               </h3>
 
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">assignment_turned_in</i>Total Clientes
+                <a class="href-style" href="{{ route('home') }}"><i class="material-icons">assignment_turned_in</i> Infomacion Detallada</a>
+                {{-- <i class="material-icons">assignment_turned_in</i>Total Clientes --}}
               </div>
             </div>
           </div>
@@ -49,9 +52,9 @@
               <div class="card-icon">
                 <i class="material-icons">view_carousel</i>
               </div>
-              <p class="card-category">Italdocumentos</p>
+              <p class="card-category">Onboarding</p>
               <h3 class="card-title">236
-                <small>CR</small>
+                <small>Registros</small>
               </h3>
             </div>
             <div class="card-footer">
@@ -69,7 +72,7 @@
               </div>
               <p class="card-category">IBS</p>
               <h3 class="card-title">236
-                <small>CR</small>
+                <small>Registros</small>
               </h3>
             </div>
             <div class="card-footer">

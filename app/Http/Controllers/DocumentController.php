@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use App\Documentidscannedmod;
 use App\Documentroutemod;
 
+use Carbon\Carbon;
+
 // use App\Exceptions\Handler;
 
 class DocumentController extends Controller
@@ -92,39 +94,11 @@ class DocumentController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function fechaRegistro(Request $request)
-    {
-         // Validacion de campo id para que no sea vasio ......................................
+        {
+             // Validacion de campo id para que no sea vasio ......................................
 
-         $validate = \Validator::make($request->all(), [
+        $validate = \Validator::make($request->all(), [
 
             'fecha' => 'required',
         ]);
@@ -136,17 +110,19 @@ class DocumentController extends Controller
 
         // fin de la validación ..............................................................
 
-        $fechaRegistro = $request->fecha;
+        $fecha= $request -> fecha;
+        $newDate = date("Ymd", strtotime($fecha));
+
+        $fecha2 = $newDate + 1;
+
+        $pr = strlen($newDate);
 
         try {
 
-            $query = "select documentid, path from dolgram.documentidscannedmod";
-
-
-
-
-
-
+            // Validate the value...
+            // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
+            $query = "select * from dolgram.documentroutemod INNER JOIN dolgram.documentidscannedmod ON dolgram.documentroutemod.id_tipo_doc = dolgram.documentidscannedmod.id_doc and dolgram.documentidscannedmod.uploaddate between '$newDate' and '$fecha2'";
+            // $query = documentroutemod::join('documentidscannedmod', 'documentidscannedmod.id_doc', '=', 'documentroutemod.id_tipo_doc')->select('documentidscannedmod.*')->get();
         } catch (Exception $e) {
 
             report($e);
@@ -154,8 +130,40 @@ class DocumentController extends Controller
             return false;
         }
 
+        // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
         $query = DB::connection('italsis')->select($query);
+        // date('y-m-d', $fecha );
 
 
-    }
+
+        // $fecha2 = $newDate->addDay();
+        // $fechaActual = date('Y-m-d');
+        // $date = Carbon::now();
+        // $today = Carbon::today();
+
+        // echo $today;
+
+        // try {
+
+
+        //     $query = "select * from dolgram.documentroutemod INNER JOIN dolgram.documentidscannedmod ON dolgram.documentroutemod.id_tipo_doc = dolgram.documentidscannedmod.id_doc and dolgram.documentidscannedmod.documentid = '$id'";
+
+        // } catch (Exception $e) {
+
+        //     report($e);
+
+        //     return false;
+        // }
+
+        // // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
+        // $query = DB::connection('italsis')->select($query);
+
+        dd($fecha, $newDate, $pr, $fecha2, $query);
+
+        }
+
+
+
+
+
 }

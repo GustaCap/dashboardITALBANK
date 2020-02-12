@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'searchDocID', 'titlePage' => __('Consultar Fecha de Registro ')])
+@extends('layouts.app', ['activePage' => 'searchFechaRegistro', 'titlePage' => __('Consultar Fecha de Registro ')])
 
 @section('content')
 <div class="content">
@@ -22,7 +22,8 @@
       <form class="navbar-form" method="POST" action="{{ route('fechaRegistroConsultar') }}">
         @csrf {{-- Para mostrar los errores si enviamos en formulario vasio --}}
         <div class="input-group no-border">
-        <input type="text" name = "fecha" class="form-control" placeholder="Introduzca la fecha de Registro. Ej: yyyy/mm/dd - 2020/01/01">
+        <input type="text" id="datepicker" name = "fecha" class="form-control" placeholder="Introduzca la fecha de Registro">
+        {{-- <p>Date: <input type="text" id="datepicker"></p> --}}
         <button type="submit" class="btn btn-white btn-round btn-just-icon">
           <i class="material-icons">search</i>
           {{-- <div class="ripple-container"></div> --}}
@@ -34,4 +35,13 @@
       </div>
   </div>
 </div>
+@push('js')
+<script>
+    $( function() {
+      $( "#datepicker" ).datepicker();
+    } );
+    </script>
+@endpush
+
+
 @endsection

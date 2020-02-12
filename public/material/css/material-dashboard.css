@@ -5371,7 +5371,7 @@ button.close {
 }
 
 .badge {
-  display: inline-block;
+  /* display: inline-block;
   padding: 0.25em 0.4em;
   font-size: 75%;
   font-weight: 500;
@@ -5379,7 +5379,20 @@ button.close {
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 0.25rem;
+  border-radius: 0.25rem; */
+  /* Agregado por Gustavo para modificar el estilo de la propiedad ya que se muestra fuera del espacio */
+  display: inline-block;
+padding: 0.25em 0.4em;
+    padding-top: 0.25em;
+font-size: 80%;
+font-weight: 501;
+line-height: 1;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+border-radius: 0.25rem;
+padding-top: 0.6em;
+margin-left: 6px;
 }
 
 .badge:empty {
@@ -16312,12 +16325,13 @@ legend {
 }
 
 a {
-  color: #9c27b0;
+  /* color: #9c27b0; */
+  color: #999;
 }
 
 a:hover,
 a:focus {
-  color: #89229b;
+  color: #0058a3;
   text-decoration: none;
 }
 
@@ -16695,6 +16709,7 @@ label {
 .card .card-footer .stats .material-icons {
   position: relative;
   top: -10px;
+  /* top: -1px; */
   margin-right: 3px;
   margin-left: 3px;
   font-size: 18px;
@@ -17101,7 +17116,8 @@ label {
 .card .card-body+.card-footer .stats .material-icons,
 .card .card-footer .stats .material-icons {
   position: relative;
-  top: 4px;
+  /* top: 4px; */
+  top: -1px;
   font-size: 16px;
 }
 
@@ -18861,9 +18877,12 @@ Copyright (c) 2015 Daniel Eden
 }
 
 /*  Agregadas por Gustavo */
+
 .text-red{
     color: #f00 !important;
 }
+
+
 
 
 /*# sourceMappingURL=dashboard-free.css.map */

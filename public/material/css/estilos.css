@@ -1,0 +1,17 @@
+.add-ruta{
+    height: 50px;
+    width: 50px;
+    margin-left: 403px;
+    margin-top: -50px;
+    /* color: #4ea852; */
+}
+
+.add-ruta .icon{
+
+    font-size: 34px;
+    margin-top: 7px;
+}
+
+.icon:hover{
+    color:#00ff0b;
+}
