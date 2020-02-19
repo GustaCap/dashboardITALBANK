@@ -48,8 +48,15 @@ class DocumentController extends Controller
             return false;
         }
 
+
         // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
         $query = DB::connection('italsis')->select($query);
+
+        if ($query==NULL) {
+
+            abort(404);
+
+        }
 
         // ************************************************************************************************************/
         // Generar tipo de cliente de acuerdo con la cadena de caracteres contenia en el paht
@@ -119,10 +126,8 @@ class DocumentController extends Controller
 
         try {
 
-            // Validate the value...
-            // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
             $query = "select * from dolgram.documentroutemod INNER JOIN dolgram.documentidscannedmod ON dolgram.documentroutemod.id_tipo_doc = dolgram.documentidscannedmod.id_doc and dolgram.documentidscannedmod.uploaddate between '$newDate' and '$fecha2'";
-            // $query = documentroutemod::join('documentidscannedmod', 'documentidscannedmod.id_doc', '=', 'documentroutemod.id_tipo_doc')->select('documentidscannedmod.*')->get();
+
         } catch (Exception $e) {
 
             report($e);
@@ -132,33 +137,25 @@ class DocumentController extends Controller
 
         // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
         $query = DB::connection('italsis')->select($query);
-        // date('y-m-d', $fecha );
 
+        foreach ($query as $key) {
 
+            $c = $key->uploaddate;
 
-        // $fecha2 = $newDate->addDay();
-        // $fechaActual = date('Y-m-d');
-        // $date = Carbon::now();
-        // $today = Carbon::today();
+            // dd($c);
+            # code...
+        }
+        // $fecha = Carbon($c);
+        $f1 = Carbon::now();
+        if ($c > $f1) {
 
-        // echo $today;
+            dd('vencido', $c, $f1);
+            # code...
+        }else {
+            dd('es menor y esta vencido');
+        }
 
-        // try {
-
-
-        //     $query = "select * from dolgram.documentroutemod INNER JOIN dolgram.documentidscannedmod ON dolgram.documentroutemod.id_tipo_doc = dolgram.documentidscannedmod.id_doc and dolgram.documentidscannedmod.documentid = '$id'";
-
-        // } catch (Exception $e) {
-
-        //     report($e);
-
-        //     return false;
-        // }
-
-        // // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
-        // $query = DB::connection('italsis')->select($query);
-
-        dd($fecha, $newDate, $pr, $fecha2, $query);
+        // dd($c);
 
         }
 
