@@ -22,7 +22,15 @@ use GuzzleHttp\Psr7\Response;
 class DocumentController extends Controller
 {
 
-    public function consultar(Request $request)
+    public function consultaGeneral()
+    {
+        $archivos = Archivo::All();
+        // dd($archivos);
+        return view('pages.searchDocID', compact('archivos'));
+        # code...
+    }
+
+    public function consultar_backup(Request $request)
     {
         // Validacion de campo id para que no sea vasio ......................................
 
@@ -176,15 +184,17 @@ class DocumentController extends Controller
         // dd($dataCliente);
     }
 
+
+
     public function getClienteCE()
     {
 
-        $tipoCliente = Tipocliente::all();
-        $query1 = "select * from clientes where tipocliente_id = '2'";
+        // $tipoCliente = Tipocliente::all();
+        // $query1 = "select * from clientes where tipocliente_id = '2'";
         $query2 = "select * from raices where tipocliente_id = '2' ";
         // $dataCliente = DB::connection('italdocv2')->select($query1);
         $dataRaices = DB::connection('italdocv5')->select($query2);
-        return view('pages.getClienteCE', ['dataRaices' => $dataRaices], ['tipoCliente' => $tipoCliente]);
+        return view('pages.getClienteCE', ['dataRaices' => $dataRaices]);
 
     }
 
@@ -309,6 +319,101 @@ class DocumentController extends Controller
          * ****************************************************************************************************
          */
         $carpeta = $request->carpetas;
+         
+
+        $query = "select fec_expiracion from raices where carpeta_raiz = '$carpeta'";
+
+        $validaFecha = DB::connection('italdocv5')->select($query);
+
+        //print_r($carpeta);
+        // dd($carpeta, $validaFecha);
+
+         foreach ($validaFecha as $item) {
+
+            if ($item->fec_expiracion == 1) {
+
+                 $this->validate($request, [
+
+                      'fecExpira' => 'required'
+                  ]);
+
+             }
+
+        }
+         /**
+         * Fin de la validacion de fecha de Expiracion
+         * ****************************************************************************************************
+         */
+
+        if ($request->hasfile('file')) {
+
+
+            $file = $request->file('file');
+
+            $numCuenta = $request->numCuenta;
+            $tipocliente = $request->tipocliente;
+            $fecEmitido = $request->fecEmitido;
+            $fecExpira = $request->fecExpira;
+
+            $nombre = $file->getClientOriginalName();
+            // $nombreimage = date('Y-m-d').'_'.$cliente_id.'_'.$nombre;
+            $nombreimage = date('Y-m-d').'_'.$numCuenta.'_'.$nombre;
+
+            $ruta = public_path().'/'.$carpeta;
+            // $ruta = storage_path().'/'.$carpeta;
+
+            $file->move($ruta, $nombreimage);
+        }
+
+        $rutaFinal = '/'.$carpeta.'/'.$nombreimage;
+
+        $data = Archivo::create([
+
+            'tipo_cliente' => $tipocliente,
+            'name_archivo' => $nombre,
+            'n_cuenta' => $numCuenta,
+            'fecha_emitido' => $fecEmitido,
+            'fecha_vence' => $fecExpira,
+            'file' =>  $rutaFinal
+
+            ]);
+
+        $data->save();
+        return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * respaldo
+     *
+     */
+
+    public function postClienteFiles_backup(Request $request)
+    {
+
+        $this->validate($request, [
+
+            'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048'
+        ]);
+
+        /**
+         * Validacion para documentos que tengas fecha de expiracion.
+         * ****************************************************************************************************
+         */
+        $carpeta = $request->carpetas;
 
         $query = "select fec_expiracion from raices where carpeta_raiz = '$carpeta'";
 
@@ -367,7 +472,6 @@ class DocumentController extends Controller
         return redirect()->back()->with('status', 'Carga successfully');
 
     }
-
 
 
 

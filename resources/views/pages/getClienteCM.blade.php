@@ -29,19 +29,24 @@
                   <label class="col-sm-2 col-form-label">{{ __('Nombre del Cliente') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group">
-                        <input type="text" id="num_cuenta" name = "num_cuenta" class="form-control" placeholder="Eje: 0001111222333" required>
-                        {{-- <select id="id" name="id" class="form-control" required>
-                            <option> </option>
-                            @foreach($dataCliente as $item)
-                                <option value="{{ $item->id }}">{{ $item->nombre }}, {{ $item->apellido }}</option>
-                            @endforeach
-                     </select> --}}
+                        <input type="text" id="numCuenta" name = "numCuenta" class="form-control" placeholder="Eje: 0001111222333" required>
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                        <select id="tipocliente" name="tipocliente" class="form-control">
+                            <option> </option>
+                            <option value="Cliente MSB (CM)">Cliente MSB (CM)</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
 
                 <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Carpeta de Documentos') }}</label>
+                  <label class="col-sm-2 col-form-label">{{ __('Ruta de Documentos') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group">
                         <select id="carpetas" name="carpetas" class="form-control" required>
@@ -59,16 +64,16 @@
                     <label class="col-sm-2 col-form-label">{{ __('Fecha de Emisión') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                        <input type="text" id="datepicker1" name = "fec_emitido" class="form-control" required>
+                        <input type="text" id="datepicker1" name = "fecEmitido" class="form-control" required>
                       </div>
                     </div>
                   </div>
                   {{-- FECHA DE EXPIRA --}}
                   <div class="row">
-                    <label class="col-sm-2 col-form-label">{{ __('Fecha de Experación') }}</label>
+                    <label class="col-sm-2 col-form-label">{{ __('Fecha de Expiración') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                        <input type="text" id="datepicker2" name = "fec_expira" class="form-control">
+                        <input type="text" id="datepicker2" name = "fecExpira" class="form-control" placeholder="Si aplica para la ruta selecionada">
                       </div>
                     </div>
                   </div>

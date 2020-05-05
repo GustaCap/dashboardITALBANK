@@ -34,24 +34,31 @@
                     </div>
                   </div>
                 @endif
+               
                 <div class="row">
                   <label class="col-sm-2 col-form-label">{{ __('Nombre del Cliente') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group">
-                        <input type="text" id="num_cuenta" name = "num_cuenta" class="form-control" placeholder="Eje: 0001111222333">
-                        {{-- <select id="id" name="id" class="form-control" required>
-                            <option> </option>
-                            @foreach($dataCliente as $item)
-                                <option value="{{ $item->id }}">{{ $item->nombre }}, {{ $item->apellido }}</option>
-                            @endforeach
-                     </select> --}}
+                        <input type="text" id="numCuenta" name = "numCuenta" class="form-control" placeholder="Eje: 0001111222333" value="{{ old('numCuenta') }}">
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                        <select id="tipocliente" name="tipocliente" class="form-control">
+                            <option> </option>
+                            <option value="Cliente Bancos (CB)">Cliente Bancos (CB)</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
 
                 <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Carpeta de Documentos') }}</label>
+                  <label class="col-sm-2 col-form-label">{{ __('Ruta de Documentos') }}</label>
                   <div class="col-sm-7">
+                    {{-- @foreach($dataRaices as $item) --}}
                     <div class="form-group">
                         <select id="carpetas" name="carpetas" class="form-control" required>
                             <option> </option>
@@ -59,8 +66,8 @@
                                 <option value="{{ $item->carpeta_raiz }}">{{ $item->carpeta_raiz }}</option>
                             @endforeach
                      </select>
-
                     </div>
+                    {{-- @endforeach --}}
                   </div>
                 </div>
                 {{-- FECHA DE EMISION --}}
@@ -68,7 +75,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Fecha de Emisión') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                        <input type="text" id="datepicker1" name = "fec_emitido" class="form-control">
+                        <input type="text" id="datepicker1" name = "fecEmitido" class="form-control">
                       </div>
                     </div>
                   </div>
@@ -77,7 +84,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Fecha de Experación') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                        <input type="text" id="datepicker2" name = "fec_expira" class="form-control">
+                        <input type="text" id="datepicker2" name = "fecExpira" class="form-control" placeholder="Si aplica para la ruta selecionada">
                       </div>
                     </div>
                   </div>
@@ -94,6 +101,7 @@
 
                 <button type="submit" class="btn btn-primary mb-4">{{ __('Cargar Documentos') }}</button>
               </div>
+              
             </div>
           </form>
         </div>

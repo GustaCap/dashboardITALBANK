@@ -60,9 +60,11 @@ Route::group(['middleware' => 'auth'], function () {
      * por el usuario.
      * Nombre de la Ruta: 'searchDocID'
      */
-    Route::get('searchDocID', function () {
-        return view('pages.searchDocID');
-    })->name('searchDocID');
+    // Route::get('searchDocID', function () {
+    //     return view('pages.searchDocID');
+    // })->name('searchDocID');
+
+    Route::get('searchDocID', 'DocumentController@consultaGeneral') -> name('searchDocID');
 
 
      /**

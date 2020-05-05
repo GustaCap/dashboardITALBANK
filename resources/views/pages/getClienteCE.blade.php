@@ -39,30 +39,10 @@
                   <div class="col-sm-8">
                     <div class="form-group">
                         <input type="text" id="numCuenta" name = "numCuenta" class="form-control" placeholder="Eje: 0001111222333" >
-                        {{-- <select id="id" name="id" class="form-control" required>
-                            <option> </option>
-                            @foreach($dataCliente as $item)
-                                <option value="{{ $item->id }}">{{ $item->nombre }}, {{ $item->apellido }}</option>
-                            @endforeach
-                     </select> --}}
                     </div>
                   </div>
                 </div>
 
-                <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Carpeta de Documentos') }}</label>
-                  <div class="col-sm-8">
-                    <div class="form-group">
-                        <select id="carpetas" name="carpetas" class="form-control">
-                            <option> </option>
-                            @foreach($dataRaices as $item)
-                                <option value="{{ $item->carpeta_raiz }}">{{ $item->carpeta_raiz }}</option>
-                            @endforeach
-                     </select>
-
-                    </div>
-                  </div>
-                </div>
                 {{-- Lista de tipo de cliente --}}
                 <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
@@ -70,11 +50,24 @@
                       <div class="form-group">
                           <select id="tipocliente" name="tipocliente" class="form-control">
                               <option> </option>
-                              @foreach($tipoCliente as $item)
-                                  <option value="{{ $item->tipo }}">{{ $item->tipo }}</option>
-                              @endforeach
+                              <option value="Cliente Empresa(CE)">Cliente Empresa(CE)</option>
                        </select>
 
+                      </div>
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Ruta de Documentos') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                          <select id="carpetas" name="carpetas" class="form-control" required>
+                              <option> </option>
+                              @foreach($dataRaices as $item)
+                                  <option value="{{ $item->carpeta_raiz }}">{{ $item->carpeta_raiz }}</option>
+                              @endforeach
+                       </select>
+  
                       </div>
                     </div>
                   </div>
@@ -92,7 +85,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Fecha de Expiración') }}</label>
                     <div class="col-sm-8">
                       <div class="form-group">
-                        <input type="text" id="datepicker2" name = "fecExpira" class="form-control">
+                        <input type="text" id="datepicker2" name = "fecExpira" class="form-control" placeholder="Si aplica para la ruta selecionada">
                       </div>
                     </div>
                   </div>
@@ -117,11 +110,43 @@
     </div>
   </div>
   @push('js')
-  <script>
+  <script type="text/javascript">
       $( function() {
         $( "#datepicker1" ).datepicker();
         $( "#datepicker2" ).datepicker();
       } );
+
+      function ShowHideDiv() {
+            var tipocliente = document.getElementById("tipocliente");
+            var carpetas_c1 = document.getElementById("carpetas_c1");
+            var carpetas_c2 = document.getElementById("carpetas_c2");
+            var carpetas_c3 = document.getElementById("carpetas_c3");
+            var carpetas_c4 = document.getElementById("carpetas_c4");
+            if (tipocliente.value == "1") {
+                carpetas_c1.style.display = "block";
+            } else if (tipocliente.value == "2") {
+                carpetas_c2.style.display = "block";
+            } else if (tipocliente.value == "3") {
+                carpetas_c3.style.display = "block";
+            } else {
+                carpetas_c4.style.display = "block";
+            }
+            // carpetas.style.display = tipocliente.value == "2" ? "block" : "none";
+            // carpetas_c1.style.display = tipocliente.value == "1" ? "block" : "none";
+            // carpetas_c2.style.display = tipocliente.value == "2" ? "block" : "none";
+            // carpetas_c3.style.display = tipocliente.value == "3" ? "block" : "none";
+            // carpetas_c4.style.display = tipocliente.value == "4" ? "block" : "none";
+        }
+
   </script>
   @endpush
+  {{-- @push('js')
+  <script type="text/javascript">
+      function ShowHideDiv() {
+            var tipocliente = document.getElementById("tipocliente");
+            var carpetas = document.getElementById("carpetas");
+            carpetas.style.display = tipocliente.value == "2" ? "block" : "none";
+        }
+  </script>
+  @endpush --}}
 @endsection

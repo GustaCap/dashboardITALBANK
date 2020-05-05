@@ -22,6 +22,7 @@
       <form class="navbar-form" method="POST" action="{{ route('fechaRegistroConsultar') }}">
         @csrf {{-- Para mostrar los errores si enviamos en formulario vasio --}}
         <div class="input-group no-border">
+        <label class="col-sm-2 col-form-label">{{ __('Desde') }}</label>
         <input type="text" id="datepicker" name = "fecha" class="form-control" placeholder="Introduzca la fecha de Registro">
         {{-- <p>Date: <input type="text" id="datepicker"></p> --}}
         <button type="submit" class="btn btn-white btn-round btn-just-icon">
@@ -29,6 +30,15 @@
           {{-- <div class="ripple-container"></div> --}}
         </button>
         </div>
+        <div class="input-group no-border">
+            <label class="col-sm-2 col-form-label">{{ __('Desde') }}</label>
+            <input type="text" id="datepicker" name = "fecha" class="form-control" placeholder="Introduzca la fecha de Registro">
+            {{-- <p>Date: <input type="text" id="datepicker"></p> --}}
+            <button type="submit" class="btn btn-white btn-round btn-just-icon">
+              <i class="material-icons">search</i>
+              {{-- <div class="ripple-container"></div> --}}
+            </button>
+            </div>
       </form> {{-- fin del formulario --}}
         </div>
 

@@ -9,16 +9,25 @@ class Raiz extends Model
 
     protected $table = 'raices';
 
-    protected $fillable = ['id','carpetaRaiz','nivelRelacion','fecExpiracion','tipocliente_id'];
+    protected $fillable = [
+        'id',
+        'carpeta_raiz',
+        'tipocliente_id',
+        'nivel_relacion',
+        'requerido',
+        'frecuencia',
+        'fec_expiracion'
+        
+    ];
 
     // protected $connection = 'italdocv2';
     // protected $connection = 'italdocv3';
     protected $connection = 'italdocv5';
 
 
-    public function tipoclientes()
+    public function tipocliente()
     {
-        return $this->hasMany('App\Tipocliente');
+        return $this->belongsTo('App\Tipocliente');
     }
 
 

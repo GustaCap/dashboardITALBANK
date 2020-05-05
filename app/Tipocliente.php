@@ -11,7 +11,8 @@ class Tipocliente extends Model
 
     protected $fillable = ['id','tipo'];
 
-    protected $connection = 'italdocv2';
+    // protected $connection = 'italdocv2';
+    protected $connection = 'italdocv5';
 
 
     public function clientes()

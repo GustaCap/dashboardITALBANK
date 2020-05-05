@@ -23,6 +23,13 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
 
+    {{-- data tables --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+     {{-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"> --}}
+     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"> --}}
+
+
+
 
     </head>
     <body class="{{ $class ?? '' }}">
@@ -127,7 +134,9 @@
         <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
         <script src="{{ asset('material') }}/js/plugins/bootstrap-datetimepicker.min.js"></script>
         <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-        <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script>
+        {{-- <script src="{{ asset('material') }}/js/jquery-3.5.0.min.js"></script>
+        <script src="{{ asset('material') }}/js/jquery.dataTables.min.js"></script> --}}
+        {{-- <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script> --}}
         <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
         <script src="{{ asset('material') }}/js/plugins/bootstrap-tagsinput.js"></script>
         <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
@@ -158,6 +167,18 @@
         {{-- Agregados para renderizar el almanaque en la busqueda de la vista searchFechaRegistro.blade.php --}}
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        {{-- Agregados para pluging DataTables --}}
+        {{-- AGREGADO --}}
+        {{-- <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script> --}}
+
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+        {{-- AGREGADO --}}
+        {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script> --}}
+        
+        <script type="text/javascript" charset="utf8" src="https:////cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"></script>
+        
 
 
 
