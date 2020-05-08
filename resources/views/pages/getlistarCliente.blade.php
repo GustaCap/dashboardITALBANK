@@ -26,6 +26,8 @@
                   <th style="width:70px"><strong>ID Italbank</strong></th>
                   <th style="width:50px"><strong>Tipo Cliente</strong></th>
                   <th style="width:80px"><strong>Cuenta</strong></th>
+                  <th style="width:140px"><strong>Acción</strong></th>
+
                 </thead>
                 
                 <tbody>
@@ -62,6 +64,8 @@
                       @endif
 
                       <td>{{ $item->n_cuenta }}</td>
+                      <td class="text-center"><a class="btn btn-primary" href="{{ route('getConsultaCliente',$item->id) }}">Ver detalle</a></td>
+                      
                     </tr>
                     @endforeach
                   </tbody>

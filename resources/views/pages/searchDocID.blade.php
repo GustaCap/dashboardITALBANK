@@ -18,24 +18,25 @@
               <table id="table_id" class="table display cell-border" style="width:100%">
                 {{-- <thead class="text-warning"> --}}
                   <thead class="text-danger">
-                  <th style="width:40px"><strong>id</strong></th>
-                  <th style="width:60px"><strong>Pre_id</strong></th>
-                  <th style="width:110px"><strong>Cliente_id</strong></th>
+                  {{-- <th style="width:40px"><strong>id</strong></th> --}}
+                  <th style="width:60px"><strong>Pre-id</strong></th>
+                  <th style="width:110px"><strong>Cliente-id</strong></th>
                   <th style="width:134px"><strong>Tipo Cliente</strong></th>
                   <th style="width:180px"><strong>Nro.Cuenta</strong></th>
                   {{-- <th><strong>Nro.Transferencia</strong></th> --}}
                   {{-- <th><strong>Archivo</strong></th> --}}
                   <th style="width:180px"><strong>File</strong></th>
                   <th style="width:50px"><strong>Ver</strong></th>
-                  <th style="width:80px"><strong>Emitido</strong></th>
+                  <th style="width:50px"><strong>Preview</strong></th>
+                  {{-- <th style="width:80px"><strong>Emitido</strong></th> --}}
                   <th style="width:80px"><strong>Vence</strong></th>
-                  <th style="width:120px"><strong>Cargado</strong></th>
+                  {{-- <th style="width:120px"><strong>Cargado</strong></th> --}}
                 </thead>
                 
                 <tbody>
                     @foreach ($archivos as $item)
                     <tr>
-                      <td>{{ $item->id }}</td>
+                      {{-- <td>{{ $item->id }}</td> --}}
                       <td>{{ $item->p_cliente_id }}</td>
                       <td>{{ $item->cliente_id }}</td>
                       <td>{{ $item->tipo_cliente }}</td>
@@ -45,8 +46,9 @@
                       <td>{{ $item->name_archivo }}</td>
                       
                       <td><a href="{{ '/dashboard/public'.$item->file }}"><i class="material-icons">get_app</i></a></td>
-                      
-                      <td>{{ $item->fecha_emitido }}</td>
+                      {{-- <td><iframe src="{{'/dashboard/public'.$item->file}}" width="100%" height="250px"></iframe></td> --}}
+                      <td>img-pdf</td>
+                      {{-- <td>{{ $item->fecha_emitido }}</td> --}}
                       @php
                           $fechahoy =strtotime(date('y-m-d'));
                           // echo $fechahoy;
@@ -63,7 +65,7 @@
                       
                       
                        {{-- <td>{{ $item->fecha_vence }}</td> --}}
-                      <td>{{ $item->created_at }}</td>
+                      {{-- <td>{{ $item->created_at }}</td> --}}
                     </tr>
                     @endforeach
                   </tbody>

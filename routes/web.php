@@ -164,6 +164,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('registroRuta', 'RutaController@store')-> name('postRegistroRuta');
     Route::get('listarRuta', 'RutaController@show')-> name('getlistarRuta');
 
+    Route::get('consultaCliente/{id}', 'ClienteController@clienteDetalle')-> name('getConsultaCliente');
+
+
+
     Route::get('cargaDeDocumentos', function () {
 
       return  view('pages.cargaDeDocumentos');

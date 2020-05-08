@@ -85,15 +85,21 @@ class ClienteController extends Controller
 
     }
 
+
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function clienteDetalle(Request $request)
     {
-        //
+        // $cliente = Cliente::find($request->id);
+        $cliente = Cliente::with('archivos')->find($request->id);
+
+        
+        return $cliente;
     }
 
     /**

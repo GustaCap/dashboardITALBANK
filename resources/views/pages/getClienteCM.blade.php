@@ -41,14 +41,22 @@
                   </div>
                 </div>
                 <div class="row d-flex justify-content-center">
-                  <div class="col-lg-10 col-md-12">
+                  <div class="col-lg-12 col-md-12">
                     <div class="progress mt-5 mb-5" style="height: 1.5rem;">
                       <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow=""
                       aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                         0%
                       </div>
+                      
                     </div>
+                    <div id="success" class="text-center"></div>
                   </div>
+                  {{-- <div class="row d-flex justify-content-center">
+                    <div class="col-lg-10">
+                      <div id="success"></div>
+                    </div>
+                  </div> --}}
+                  
                   
                   <div class="card-body table-responsive-sm">
                   <table class="table table-hover table-bordered ">
@@ -57,11 +65,9 @@
                             <th>Select</th>
                             <th>Documento</th>
                             <th>Requerido</th>
-                            {{-- <th>Emitido</th> --}}
                             <th>Vence</th>
                             <th>Archivo</th>
                             <th>Cargar</th>
-                            {{-- <th>mensaje</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -71,23 +77,19 @@
                             <td><input type="radio" id="carpetas" name="carpetas" value="{{ $item->carpeta_raiz }}" ></td>
                             <td><label for="carpetas">{{ $item->carpeta_raiz }}</label><br></td>
                             <td>{{ $item->requerido }}</td>
-                            {{-- <td><input type="date" name = "fecEmitido" id="fecEmitido"></td> --}}
                             @if ($item->fec_expiracion == '1')
                             <td><input type="date" name = "fecExpira" id="fecExpira"></td>
                             @else
                             <td>No Aplica</td>
                             @endif
-                            {{-- <td><input type="date" name = "fecExpira" id="fecExpira"></td> --}}
                             <td><input id="file" name="file" type="file"></td>
                             <td><button type="submit" class="btn btn-primary mb-4" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
                            
                         </tr>
                         @endforeach
-                        {{-- <tr>
-                          <td><button type="submit" class="btn btn-primary mb-4" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
-                          </tr>      --}}
                     </tbody>
                 </table>
+                
               </div>
                 </div>
                 </div>
@@ -129,6 +131,7 @@ $('form').ajaxForm({
       $('.progress-bar').css('width', '100%');
       $('#success').html('<span class="text-success"><b>'+data.success+'</b></span><br /><br />');
       $('#success').append(data.image);
+      
     }
   }
 });

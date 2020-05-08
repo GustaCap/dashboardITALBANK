@@ -355,25 +355,25 @@ class DocumentController extends Controller
         $carpeta = $request->carpetas;
          
 
-        $query = "select fec_expiracion from raices where carpeta_raiz = '$carpeta'";
+        // $query = "select fec_expiracion from raices where carpeta_raiz = '$carpeta'";
 
-        $validaFecha = DB::connection('italdocv5')->select($query);
+        // $validaFecha = DB::connection('italdocv5')->select($query);
 
         //print_r($carpeta);
         // dd($carpeta, $validaFecha);
 
-         foreach ($validaFecha as $item) {
+        //  foreach ($validaFecha as $item) {
 
-            if ($item->fec_expiracion == 1) {
+        //     if ($item->fec_expiracion == 1) {
 
-                 $this->validate($request, [
+        //          $this->validate($request, [
 
-                      'fecExpira' => 'required'
-                  ]);
+        //               'fecExpira' => 'required'
+        //           ]);
 
-             }
+        //      }
 
-        }
+        // }
          /**
          * Fin de la validacion de fecha de Expiracion
          * ****************************************************************************************************
@@ -443,15 +443,16 @@ class DocumentController extends Controller
             ]);
 
         $data->save();
-        return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
+        $output = array(
+            'success' => 'Carga successfully',
+            // 'image'  => '<img src="/dashboard/public/'.$rutaFinal.'" class="img-thumbnail" />'
+           );
+   
+           return response()->json($output);
+        // return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
 
     }
     
-    /**
-     * respaldo
-     *
-     */
-
     public function postClienteFiles_backup(Request $request)
     {
 
