@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Cliente;
+use App\Raiz;
 use App\Tipocliente;
 use Illuminate\Http\Request;
 
-class ClienteController extends Controller
+class RutaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class ClienteController extends Controller
     {
         $tipocliente = Tipocliente::all();
         // dd($tipocliente);
-        return view('pages.getRegistroCliente')->with('tipocliente', $tipocliente);
+        return view('pages.getRegistroRuta')->with('tipocliente', $tipocliente);
     }
 
     /**
@@ -38,36 +38,40 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $this->validate($request, [
 
-            'nombre' => 'required',
-            'apellido' => 'required',
-            'dni' => 'required',
-            'email' => 'required|email',
-            'tipocliente_id' => 'required'
+            'nivel1' => 'required',
+            'tipocliente_id' => 'required',
+            'nivel_relacion' => 'required',
+            'requerido' => 'required',
+            'frecuencia' => 'required',
+            'fec_expiracion' => 'required'
         ]);
 
-        if (empty($request->cliente_id_itbk) && empty($request->n_cuenta) ) {
+        $carpeta_raiz = $request->nivel1;
 
-            return redirect()->back()->with('warning', 'Debe cargar el Id del Cliente ITALBANK o su Número de Cuenta')->withInput($request->input());
-           
-            # code...
+        if (!empty($request->nivel2)) {
+
+            $carpeta_raiz = $request->nivel1.'/'.$request->nivel2;
         }
 
-        $datacliente = Cliente::create([
+        if (!empty($request->nivel2) && !empty($request->nivel3)) {
 
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'dni' => $request->dni,
-            'email' => $request->email,
+            $carpeta_raiz = $request->nivel1.'/'.$request->nivel2.'/'.$request->nivel3;
+        }
+
+        $dataraiz = Raiz::create([
+
+            'carpeta_raiz' => $carpeta_raiz,
+            'nivel_relacion' => $request->nivel_relacion,
+            'fec_expiracion' => $request->fec_expiracion,
             'tipocliente_id' => $request->tipocliente_id,
-            'cliente_id_itbk' =>  $request->cliente_id_itbk,
-            'n_cuenta' =>  $request->n_cuenta,
+            'requerido' => $request->requerido,
+            'frecuencia' =>  $request->frecuencia
 
             ]);
 
-        $datacliente->save();
+        $dataraiz->save();
         return redirect()->back()->with('status', 'Carga successfully');
 
     }
@@ -80,8 +84,9 @@ class ClienteController extends Controller
      */
     public function show()
     {
-        $dataCliente = Cliente::all();
-        return view('pages.getlistarCliente')->with('dataCliente', $dataCliente);
+        $dataRaices = Raiz::all();
+        return view('pages.getlistarRuta')->with('dataRaices', $dataRaices);
+
 
     }
 

@@ -153,6 +153,21 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'italdocv6' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('ITALDOCV6_HOST', '10.200.0.77'),
+            'port' => env('ITALDOCV6_PORT', '5432'),
+            'database' => env('ITALDOCV6_DATABASE', 'forge'),
+            'username' => env('ITALDOCV6_USERNAME', 'forge'),
+            'password' => env('ITALDOCV6_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),

@@ -17,12 +17,42 @@
             <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'searchDocID' ? ' active' : '' }}">
+      <li class="nav-item{{ $activePage == 'registroCliente' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('getRegistroCliente') }}">
+          <i class="material-icons">assignment_turned_in</i>
+            <p>{{ __('Registrar Cliente') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'listarCliente' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('getlistarCliente') }}">
+          <i class="material-icons">assignment_turned_in</i>
+            <p>{{ __('Consultar Cliente') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'registroRuta' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('getRegistroRuta') }}">
+          <i class="material-icons">assignment_turned_in</i>
+            <p>{{ __('Registrar Ruta') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'listarRuta' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('getlistarRuta') }}">
+          <i class="material-icons">assignment_turned_in</i>
+            <p>{{ __('Consultar Ruta') }}</p>
+        </a>
+      </li>
+      {{-- <li class="nav-item{{ $activePage == 'cargaDeDocumentos' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('cargaDeDocumentos') }}">
+          <i class="material-icons">assignment_turned_in</i>
+            <p>{{ __('Cargar Documentos') }}</p>
+        </a>
+      </li> --}}
+      {{-- <li class="nav-item{{ $activePage == 'searchDocID' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('searchDocID') }}">
           <i class="material-icons">assignment_turned_in</i>
             <p>{{ __('Consultar Clientes') }}</p>
         </a>
-      </li>
+      </li> --}}
       {{-- <li class="nav-item{{ $activePage == 'searchFechaRegistro' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('searchFechaRegistro') }}">
           <i class="material-icons">date_range</i>
@@ -62,8 +92,15 @@
                   {{-- <span class="sidebar-normal"> {{ __('User Management') }} </span> --}}
                 </a>
               </li>
+              
           </ul>
         </div>
+      </li>
+      <li class="nav-item{{ $activePage == 'searchDocID' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('searchDocID') }}">
+          <i class="material-icons">assignment_turned_in</i>
+            <p>{{ __('Consultar Documentos') }}</p>
+        </a>
       </li>
 
       

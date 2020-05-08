@@ -22,7 +22,7 @@ class Raiz extends Model
 
     // protected $connection = 'italdocv2';
     // protected $connection = 'italdocv3';
-    protected $connection = 'italdocv5';
+    protected $connection = 'italdocv6';
 
 
     public function tipocliente()

@@ -171,7 +171,7 @@ class DocumentController extends Controller
 
         }
 
-    public function getClienteIND()
+    public function getClienteINDbackup()
     {
 
         // $query1 = "select * from clientes where tipocliente_id = '1'";
@@ -184,9 +184,24 @@ class DocumentController extends Controller
         // dd($dataCliente);
     }
 
+    public function getClienteIND()
+    {
+
+        $query1 = "select * from clientes where tipocliente_id = '1'";
+        $query2 = "select * from raices where tipocliente_id = '1' ";
+        // $dataCliente = DB::connection('italdocv2')->select($query1);
+        $dataClientes = DB::connection('italdocv6')->select($query1);
+        $dataRaices = DB::connection('italdocv6')->select($query2);
+        // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
+        return view('pages.getClienteIND')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
 
 
-    public function getClienteCE()
+        // dd($dataCliente);
+    }
+
+
+
+    public function getClienteCEBackup()
     {
 
         // $tipoCliente = Tipocliente::all();
@@ -198,25 +213,42 @@ class DocumentController extends Controller
 
     }
 
+    public function getClienteCE()
+    {
+
+        $query1 = "select * from clientes where tipocliente_id = '2'";
+        $query2 = "select * from raices where tipocliente_id = '2' ";
+        // $dataCliente = DB::connection('italdocv2')->select($query1);
+        $dataClientes = DB::connection('italdocv6')->select($query1);
+        $dataRaices = DB::connection('italdocv6')->select($query2);
+        // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
+        return view('pages.getClienteCE')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
+
+    }
+
     public function getClienteCB()
     {
 
-        // $query1 = "select * from clientes where tipocliente_id = '3'";
+        $query1 = "select * from clientes where tipocliente_id = '3'";
         $query2 = "select * from raices where tipocliente_id = '3' ";
         // $dataCliente = DB::connection('italdocv2')->select($query1);
-        $dataRaices = DB::connection('italdocv5')->select($query2);
-        return view('pages.getClienteCB', ['dataRaices' => $dataRaices]);
+        $dataClientes = DB::connection('italdocv6')->select($query1);
+        $dataRaices = DB::connection('italdocv6')->select($query2);
+        // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
+        return view('pages.getClienteCB')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
 
     }
 
     public function getClienteCM()
     {
 
-        // $query1 = "select * from clientes where tipocliente_id = '4'";
+        $query1 = "select * from clientes where tipocliente_id = '4'";
         $query2 = "select * from raices where tipocliente_id = '4' ";
         // $dataCliente = DB::connection('italdocv2')->select($query1);
-        $dataRaices = DB::connection('italdocv5')->select($query2);
-        return view('pages.getClienteCM', ['dataRaices' => $dataRaices]);
+        $dataClientes = DB::connection('italdocv6')->select($query1);
+        $dataRaices = DB::connection('italdocv6')->select($query2);
+        // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
+        return view('pages.getClienteCM')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
 
     }
 
@@ -311,7 +343,9 @@ class DocumentController extends Controller
 
         $this->validate($request, [
 
-            'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048'
+            // 'numCuenta' => 'required',
+            'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
+            // 'carpeta' => 'required'
         ]);
 
         /**
@@ -351,7 +385,35 @@ class DocumentController extends Controller
             $file = $request->file('file');
 
             $numCuenta = $request->numCuenta;
-            $tipocliente = $request->tipocliente;
+            $query1 = "select * from clientes where n_cuenta = '$numCuenta' ";
+            $datotipocliente = DB::connection('italdocv6')->select($query1);
+            foreach ($datotipocliente as $item) {
+
+                if ($item->tipocliente_id == 1) {
+    
+                     $tipocliente = 1;
+    
+                 }
+                 if ($item->tipocliente_id == 2) {
+    
+                    $tipocliente = 2;
+   
+                }
+                if ($item->tipocliente_id == 3) {
+    
+                    $tipocliente = 3;
+   
+                }
+                if ($item->tipocliente_id == 4) {
+    
+                    $tipocliente = 4;
+   
+                }
+    
+            }
+            // $datacliente = DB::connection('italdocv6')->select($query1);
+            // dd('$datacliente');
+            //$tipocliente = $request->tipocliente;
             $fecEmitido = $request->fecEmitido;
             $fecExpira = $request->fecExpira;
 
@@ -369,6 +431,8 @@ class DocumentController extends Controller
 
         $data = Archivo::create([
 
+            'cliente_id' => $tipocliente,
+            
             'tipo_cliente' => $tipocliente,
             'name_archivo' => $nombre,
             'n_cuenta' => $numCuenta,
@@ -382,20 +446,7 @@ class DocumentController extends Controller
         return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     /**
      * respaldo
      *

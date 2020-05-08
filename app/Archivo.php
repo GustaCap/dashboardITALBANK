@@ -29,7 +29,7 @@ class Archivo extends Model
 
     // protected $connection = 'italdocv2';
     // protected $connection = 'italdocv3';
-    protected $connection = 'italdocv5';
+    protected $connection = 'italdocv6';
 
     /**Un achivo pertenece a un solo cliente */
     public function cliente()

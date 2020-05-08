@@ -19,7 +19,8 @@ class Cliente extends Model
         'n_cuenta'
     ];
 
-    protected $connection = 'italdocv5';
+    // protected $connection = 'italdocv5';
+    protected $connection = 'italdocv6';
 
     /**Un cliente solo tiene un tipo de cliente */
     public function tipocliente()

@@ -156,6 +156,20 @@ Route::group(['middleware' => 'auth'], function () {
     //Prueba...
     Route::post('postClienteFiles', 'DocumentController@postClienteFiles') -> name('postClienteFiles');
 
+    Route::get('registroCliente', 'ClienteController@index')-> name('getRegistroCliente');
+    Route::post('registroCliente', 'ClienteController@store')-> name('postRegistroCliente');
+    Route::get('listarCliente', 'ClienteController@show')-> name('getlistarCliente');
+
+    Route::get('registroRuta', 'RutaController@index')-> name('getRegistroRuta');
+    Route::post('registroRuta', 'RutaController@store')-> name('postRegistroRuta');
+    Route::get('listarRuta', 'RutaController@show')-> name('getlistarRuta');
+
+    Route::get('cargaDeDocumentos', function () {
+
+      return  view('pages.cargaDeDocumentos');
+        
+    })->name('cargaDeDocumentos');
+
 });
 
 Route::group(['middleware' => 'auth'], function () {

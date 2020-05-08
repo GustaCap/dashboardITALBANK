@@ -20,7 +20,7 @@ class CreateClientesTable extends Migration
             $table->string('dni');
             $table->string('email')->unique();
             $table->string('cliente_id_itbk')->nullable();
-            $table->string('tipocliente_id');
+            $table->integer('tipocliente_id');
             $table->string('n_cuenta')->nullable();
             $table->foreign('tipocliente_id')->references('id')->on('tipoclientes')->onDelete('cascade');
             $table->timestamps();
