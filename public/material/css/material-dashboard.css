@@ -14574,9 +14574,13 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 
 .sidebar .sidebar-wrapper>.nav [data-toggle="collapse"]~div>ul>li>a i,
 .sidebar .sidebar-wrapper .user .user-info [data-toggle="collapse"]~div>ul>li>a i {
-  font-size: 17px;
-  line-height: 20px;
-  width: 26px;
+  /* MODIFICADO POR GUSTAVO. 11/05/2020 */
+  /* font-size: 17px; */
+  font-size: 20px;
+  /* line-height: 20px; */
+  line-height: 27px;
+  /* width: 26px; */
+  width: 32px;
 }
 
 .sidebar .logo-tim {

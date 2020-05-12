@@ -64,7 +64,9 @@
                       @endif
 
                       <td>{{ $item->n_cuenta }}</td>
+                      <form method="POST" action="{{ route('postRegistroCliente') }}">
                       <td class="text-center"><a class="btn btn-primary" href="{{ route('getConsultaCliente',$item->id) }}">Ver detalle</a></td>
+                      </form>
                       
                     </tr>
                     @endforeach

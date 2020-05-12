@@ -47,7 +47,8 @@
                       
                       <td><a href="{{ '/dashboard/public'.$item->file }}"><i class="material-icons">get_app</i></a></td>
                       {{-- <td><iframe src="{{'/dashboard/public'.$item->file}}" width="100%" height="250px"></iframe></td> --}}
-                      <td>img-pdf</td>
+                      <td><canvas>src="{{'/dashboard/public'.$item->file}}" width="100" height="100"></canvas></td>
+                      {{-- <td>img-pdf</td> --}}
                       {{-- <td>{{ $item->fecha_emitido }}</td> --}}
                       @php
                           $fechahoy =strtotime(date('y-m-d'));

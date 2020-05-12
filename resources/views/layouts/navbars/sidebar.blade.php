@@ -19,25 +19,25 @@
       </li>
       <li class="nav-item{{ $activePage == 'registroCliente' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('getRegistroCliente') }}">
-          <i class="material-icons">assignment_turned_in</i>
+          <i class="material-icons">person_add</i>
             <p>{{ __('Registrar Cliente') }}</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'listarCliente' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('getlistarCliente') }}">
-          <i class="material-icons">assignment_turned_in</i>
+          <i class="material-icons">how_to_reg</i>
             <p>{{ __('Consultar Cliente') }}</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'registroRuta' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('getRegistroRuta') }}">
-          <i class="material-icons">assignment_turned_in</i>
+          <i class="material-icons">description</i>
             <p>{{ __('Registrar Ruta') }}</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'listarRuta' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('getlistarRuta') }}">
-          <i class="material-icons">assignment_turned_in</i>
+          <i class="material-icons">library_add_check</i>
             <p>{{ __('Consultar Ruta') }}</p>
         </a>
       </li>
@@ -70,25 +70,33 @@
           <ul class="nav">
             <li class="nav-item{{ $activePage == 'getClienteIND' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('getClienteIND') }}">
-                <span class="sidebar-normal">Individuos(IND)</span>
+                <i class="material-icons iconNote_add">note_add</i>
+                  <p>{{ __('Individuos(IND)') }}</p>
+                {{-- <span class="sidebar-normal">Individuos(IND)</span> --}}
                 {{-- <span class="sidebar-normal"></span> --}}
               </a>
             </li>
             <li class="nav-item{{ $activePage == 'getClienteCE' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('getClienteCE') }}">
-                <span class="sidebar-normal">Empresa(CE)</span>
+                <i class="material-icons iconNote_add">note_add</i>
+                  <p>{{ __('Empresa(CE)') }}</p>
+                {{-- <span class="sidebar-normal">Empresa(CE)</span> --}}
                 {{-- <span class="sidebar-normal"> {{ __('User Management') }} </span> --}}
               </a>
             </li>
             <li class="nav-item{{ $activePage == 'getClienteCB' ? ' active' : '' }}">
                 <a class="nav-link" href="{{ route('getClienteCB') }}">
-                  <span class="sidebar-normal">Bancos(CB)</span>
+                  <i class="material-icons iconNote_add">note_add</i>
+                  <p>{{ __('Bancos(CB)') }}</p>
+                  {{-- <span class="sidebar-normal">Bancos(CB)</span> --}}
                   {{-- <span class="sidebar-normal"> {{ __('User Management') }} </span> --}}
                 </a>
               </li>
               <li class="nav-item{{ $activePage == 'getClienteCM' ? ' active' : '' }}">
                 <a class="nav-link" href="{{ route('getClienteCM') }}">
-                  <span class="sidebar-normal">MSB(CM)</span>
+                  <i class="material-icons iconNote_add">note_add</i>
+                  <p>{{ __('MSB(CM)') }}</p>
+                  {{-- <span class="sidebar-normal">MSB(CM)</span> --}}
                   {{-- <span class="sidebar-normal"> {{ __('User Management') }} </span> --}}
                 </a>
               </li>

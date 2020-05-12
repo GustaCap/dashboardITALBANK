@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Archivo;
 use App\Cliente;
+use App\Raiz;
 use App\Tipocliente;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use PHPUnit\Framework\Constraint\Count;
+use Illuminate\Support\Str;
 
 class ClienteController extends Controller
 {
@@ -93,13 +99,49 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function clienteDetalle(Request $request)
+    public function clienteDetalle($id)
     {
-        // $cliente = Cliente::find($request->id);
-        $cliente = Cliente::with('archivos')->find($request->id);
+        $cliente = Cliente::with('archivos')->find($id);
 
-        
-        return $cliente;
+        // // dd($cliente);
+
+
+        $tipoCliente = $cliente->tipocliente_id;
+
+        $query = "select * from raices where tipocliente_id = '$tipoCliente'";
+        $result = DB::connection('italdocv6')->select($query);
+
+        $array = Arr::pluck($result, 'id');
+        //dd($array);
+
+        // if (in_array('CE Planillas de Verificacion de Requisitos', $result)) {
+        //     echo 'si esta';
+        // }
+       
+
+        // $total = Count($result);
+
+        //$r = Str::contains('/CE Planillas de Verificacion de Requisitos/2020-05-08_12548796321510_JPG.jpg', 'CE Planillas de Verificacion de Requisitos');
+        //$r = Str::containst
+       //dd($r);
+
+        //dd($cliente, $tipoCliente, $result, $total);
+
+        // $archivos = Archivo::All();
+
+
+
+
+
+
+        // return view('pages.getConsultaCliente', compact('cliente', 'result'));
+        return view('pages.getConsultaCliente', compact('cliente', 'array'));
+    }
+
+    public function clienteDetalleBackup($id)
+    {
+        $cliente = Cliente::with('archivos')->find($id);
+        return view('pages.getConsultaCliente', compact('cliente'));
     }
 
     /**

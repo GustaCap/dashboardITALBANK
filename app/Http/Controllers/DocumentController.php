@@ -389,6 +389,8 @@ class DocumentController extends Controller
             $datotipocliente = DB::connection('italdocv6')->select($query1);
             foreach ($datotipocliente as $item) {
 
+                $cliente_id = $item->id;
+
                 if ($item->tipocliente_id == 1) {
     
                      $tipocliente = 1;
@@ -431,7 +433,7 @@ class DocumentController extends Controller
 
         $data = Archivo::create([
 
-            'cliente_id' => $tipocliente,
+            'cliente_id' => $cliente_id,
             
             'tipo_cliente' => $tipocliente,
             'name_archivo' => $nombre,

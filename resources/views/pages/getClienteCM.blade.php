@@ -41,7 +41,7 @@
                   </div>
                 </div>
                 <div class="row d-flex justify-content-center">
-                  <div class="col-lg-12 col-md-12">
+                  <div class="col-lg-10 col-md-12">
                     <div class="progress mt-5 mb-5" style="height: 1.5rem;">
                       <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow=""
                       aria-valuemin="0" aria-valuemax="100" style="width: 0%">
@@ -62,28 +62,28 @@
                   <table class="table table-hover table-bordered ">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Select</th>
-                            <th>Documento</th>
-                            <th>Requerido</th>
-                            <th>Vence</th>
-                            <th>Archivo</th>
-                            <th>Cargar</th>
+                          <th>Opción</th>
+                          <th>Documento</th>
+                          <th class="text-center">Requerido</th>
+                          <th class="text-center">Vence</th>
+                          <th>Archivo</th>
+                          <th class="text-center">Cargar</th>
                         </tr>
                     </thead>
                     <tbody>
                       @foreach($dataRaices as $item)
                         <tr>
                           
-                            <td><input type="radio" id="carpetas" name="carpetas" value="{{ $item->carpeta_raiz }}" ></td>
+                            <td class="text-center"><input type="radio" id="carpetas" name="carpetas" value="{{ $item->carpeta_raiz }}" ></td>
                             <td><label for="carpetas">{{ $item->carpeta_raiz }}</label><br></td>
-                            <td>{{ $item->requerido }}</td>
+                            <td class="text-center">{{ $item->requerido }}</td>
                             @if ($item->fec_expiracion == '1')
                             <td><input type="date" name = "fecExpira" id="fecExpira"></td>
                             @else
-                            <td>No Aplica</td>
+                            <td class="text-center">No Aplica</td>
                             @endif
                             <td><input id="file" name="file" type="file"></td>
-                            <td><button type="submit" class="btn btn-primary mb-4" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
+                            <td><button type="submit" class="btn btn-primary" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
                            
                         </tr>
                         @endforeach
@@ -173,27 +173,32 @@ $(document).on('change','input[type="file"]',function(){
 });
 
 /*Valdar fecha */
-function validarFechaMenorActual(date){
-      var x=new Date();
-      var fecha = date.split("/");
-      x.setFullYear(fecha[2],fecha[1]-1,fecha[0]);
-      var today = new Date();
- 
-      if (x >= today)
-        return false;
-      else
-      alert("Documento vencido");
+$(document).on('change','input[type="date"]',function(){
+
+var hoy             = new Date();
+var fechaFormulario = new Date(document.getElementById("fecExpira").value); 
+
+// Compara solo las fechas => no las horas!!
+hoy.setHours(0,0,0,0);
+
+if (hoy == fechaFormulario) {
+  console.log("Fecha a partir de hoy");
 }
+else {
+  alert('El documento esta vencido');
+  this.value = '';
+  }
+});
 
 /** Muestra barra de progreso*/
-function mostrar() {
-    var x = document.getElementById('ajaxSubmit');
-    if (x.style.display === 'none') {
-        x.style.display = 'block';
-    } else {
-        x.style.display = 'none';
-    }
-}
+// function mostrar() {
+//     var x = document.getElementById('ajaxSubmit');
+//     if (x.style.display === 'none') {
+//         x.style.display = 'block';
+//     } else {
+//         x.style.display = 'none';
+//     }
+// }
 
   </script>
 

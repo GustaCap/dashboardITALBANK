@@ -32,3 +32,27 @@
     margin-left: 0.6rem;
 
   }
+
+  .iconForward{
+    position:absolute;
+    top:52px;
+    right:18px;
+    font-size: 1rem;
+  }
+
+  .iconForward a {
+    color: #fff;
+}
+
+.iconForward a:hover {
+    color: crimson;
+   
+}
+
+.iconForward i {
+      font-size: 3rem;
+}
+
+.iconNote_add{
+    line-height: 30px;
+}
