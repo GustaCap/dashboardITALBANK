@@ -16,7 +16,11 @@ class Raiz extends Model
         'nivel_relacion',
         'requerido',
         'frecuencia',
-        'fec_expiracion'
+        'fec_expiracion',
+        //agregados
+         'nombre_doc',
+         'nivel',
+         'tipo_carpeta'
         
     ];
 

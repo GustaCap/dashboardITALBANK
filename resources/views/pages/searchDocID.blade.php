@@ -55,7 +55,7 @@
                           // echo $fechahoy;
                           @endphp
                       @if (!empty($item->fecha_vence) && $fechahoy > strtotime($item->fecha_vence))
-                      <td style="color:red"><strong> {{ $item->fecha_vence }}</strong>
+                      <td style="color:red" class="text-center"><strong> {{ $item->fecha_vence }}</strong><span class="badge badge-danger">Vencido</span>
                         {{-- <button class="btn btn-primary" type="submit">Actualizar</button> --}}
                       </td>
                           

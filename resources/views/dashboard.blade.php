@@ -19,7 +19,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                  <a class="href-style" href="{{ route('dashboarditalDoc') }}"><i class="material-icons">assignment_turned_in</i> Infomacion Detallada</a>
+                  {{-- <a class="href-style" href="{{ route('dashboarditalDoc') }}"><i class="material-icons">assignment_turned_in</i> Infomacion Detallada</a> --}}
                   {{-- <i class="material-icons">assignment_turned_in</i> Infomacion Detallada --}}
 
                 </div>
@@ -40,7 +40,7 @@
             </div>
             <div class="card-footer">
               <div class="stats">
-                <a class="href-style" href="{{ route('home') }}"><i class="material-icons">assignment_turned_in</i> Infomacion Detallada</a>
+                {{-- <a class="href-style" href="{{ route('home') }}"><i class="material-icons">assignment_turned_in</i> Infomacion Detallada</a> --}}
                 {{-- <i class="material-icons">assignment_turned_in</i>Total Clientes --}}
               </div>
             </div>
@@ -90,7 +90,7 @@
         <div class="col-lg-6 col-md-12"><!--Inicio table cell4-->
           <div class="card">
             <div class="card-header card-header-warning">
-              <h4 class="card-title">Plataforma CELL4</h4>
+              <h4 class="card-title">Plataforma SalesFor</h4>
               <p class="card-category">ultimos 50 registros</p>
             </div>
             <div class="card-body table-responsive">

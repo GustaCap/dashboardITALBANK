@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'getClienteCE', 'titlePage' => __('getClienteCE')])
+@extends('layouts.app', ['activePage' => 'getClienteCE', 'titlePage' => __('Carga de Documentos Cliente CE')])
 
 @section('content')
   <div class="content">
@@ -51,24 +51,40 @@
                     <div id="success" class="text-center"></div>
                   </div>
 
-                  <div class="card-body table-responsive-sm">
-                  <table class="table table-hover table-bordered ">
+                  <div class="card-body table-responsive">
+                    <table id="table_id" class="table display table-bordered" style="width:100%">
                     <thead class="thead-dark">
                         <tr>
                           <th>Opción</th>
+                          <th>Frecuencia</th>
+                          <th>Nivel Relación</th>
+                          {{-- <th>Ubicacion</th> --}}
                           <th>Documento</th>
                           <th class="text-center">Requerido</th>
                           <th class="text-center">Vence</th>
                           <th>Archivo</th>
                           <th class="text-center">Cargar</th>
                         </tr>
+                        <td colspan="8">
+                          <input id="buscar" type="text" class="form-control" placeholder="Escriba algo para filtrar" />
+                        </td>
                     </thead>
                     <tbody>
                       @foreach($dataRaices as $item)
                         <tr>
                             <td class="text-center"><input type="radio" id="carpetas" name="carpetas" value="{{ $item->carpeta_raiz }}" required></td>
-                            <td><label for="carpetas">{{ $item->carpeta_raiz }}</label><br></td>
-                            <td class="text-center">{{ $item->requerido }}</td>
+                            <td class="text-center">{{ $item->frecuencia }}</td>
+                            <td>{{ $item->nivel_relacion }}</td>
+                            <td>{{ $item->nombre_doc }}</td>
+                            @if ($item->requerido == 'Obligatorio')
+                            <td class="text-center"><span class="badge badge-success">{{ $item->requerido }}</span></td>
+                            @endif
+                            @if ($item->requerido == 'No Obligatorio')
+                            <td class="text-center"><span class="badge badge-warning">{{ $item->requerido }}</span></td>
+                            @endif
+                            @if ($item->requerido == 'Excepción')
+                            <td class="text-center"><span class="badge badge-info">{{ $item->requerido }}</span></td>
+                            @endif
                             {{-- <td><input type="date" name = "fecEmitido" id="fecEmitido"></td> --}}
                             @if ($item->fec_expiracion == '1')
                             <td><input type="date" name = "fecExpira" id="fecExpira"></td>
@@ -98,6 +114,27 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript">
+
+/*Filtro para la tabla*/
+
+var busqueda = document.getElementById('buscar');
+    var table = document.getElementById("table_id").tBodies[0];
+
+    buscaTabla = function(){
+      texto = busqueda.value.toLowerCase();
+      var r=0;
+      while(row = table.rows[r++])
+      {
+        if ( row.innerText.toLowerCase().indexOf(texto) !== -1 )
+          row.style.display = null;
+        else
+          row.style.display = 'none';
+      }
+    }
+
+    busqueda.addEventListener('keyup', buscaTabla);
+
+/*Final del script para filtrar la tabla*/
 
 $(document).ready(function(){
 
@@ -174,11 +211,11 @@ var fechaFormulario = new Date(document.getElementById("fecExpira").value);
 // Compara solo las fechas => no las horas!!
 hoy.setHours(0,0,0,0);
 
-if (hoy == fechaFormulario) {
-  console.log("Fecha a partir de hoy");
-}
-else {
-  alert('El documento esta vencido');
+// if (hoy === fechaFormulario) {
+//   console.log(hoy);
+//   }
+if(hoy > fechaFormulario){
+    alert('Documento Vencido');
   this.value = '';
   }
 });

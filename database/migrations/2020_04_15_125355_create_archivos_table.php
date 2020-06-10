@@ -15,7 +15,7 @@ class CreateArchivosTable extends Migration
     {
         Schema::create('archivos', function (Blueprint $table) {
             $table->Increments('id');
-            $table->integer('cliente_id');
+            $table->integer('cliente_id')->nullable(); //cambio realizado de not null a null para funcionalidad del api. fecha:08/06/2020
             $table->string('precliente_id')->nullable();     /**Cliente pospecto: No es cliente del banco y no posee numero de cuenta asignada. DATA API */
             $table->string('cliente_id_itbk')->nullable();       /**Cliente del banco */
             $table->string('tipo_cliente')->nullable();

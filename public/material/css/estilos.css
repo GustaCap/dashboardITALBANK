@@ -56,3 +56,87 @@
 .iconNote_add{
     line-height: 30px;
 }
+
+.thumb{
+    position:absolute;
+    border:1px solid #b7e5ff;
+    background:#ccc;
+    padding:5px;
+    display:none;
+    color:#333;
+    }
+
+.hovertable:hover{
+    color: #333;
+}
+
+.bordes{
+    border-radius: 200px 200px 0px 200px;
+-moz-border-radius: 200px 200px 0px 200px;
+-webkit-border-radius: 200px 200px 0px 200px;
+border: 0px solid #000000;
+}
+
+
+/* Tooltip container */
+[data-tooltip].c:before {
+    /* needed - do not touch */
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    
+    /* customizable */
+    transition: all 0.15s ease;
+    padding: 10px;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 2px 2px 1px silver;    
+}
+
+[data-tooltip].c:hover:before {
+    /* needed - do not touch */
+    opacity: 1;
+    
+    /* customizable */
+    background: green;
+    margin-top: -50px;
+    margin-left: 20px;    
+}
+
+/* Tooltip container */
+[data-tooltip].nc:before {
+    /* needed - do not touch */
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    
+    /* customizable */
+    transition: all 0.15s ease;
+    padding: 10px;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 2px 2px 1px silver;    
+}
+
+[data-tooltip].nc:hover:before {
+    /* needed - do not touch */
+    opacity: 1;
+    
+    /* customizable */
+    background: orange;
+    margin-top: -50px;
+    margin-left: 20px;    
+}
+
+/* th.bg-success {
+    background-color: #005aa6 !important;
+} */
+
+th.bg {
+    background-color: #5eb5ff !important;
+}
+
+.inputfiltro {
+    width: 100%;
+    background: #00cfff57;
+}

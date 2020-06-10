@@ -24,7 +24,10 @@ class Archivo extends Model
         'name_archivo',
         'file',
         'fecha_emitido',
-        'fecha_vence'
+        'fecha_vence',
+        'raiz_id',      //Agregado 11/05/2020 para pruebas
+        'estatus_doc',  //Agregado 02/06/2020 para pruebas
+        'usuario'       //Agregado el 08/06/2020 para cargar nombre del usuario...
     ];
 
     // protected $connection = 'italdocv2';

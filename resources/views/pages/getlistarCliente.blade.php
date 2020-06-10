@@ -11,11 +11,15 @@
         <div class="col-lg-12 col-md-12"><!--Inicio table cell4-->
           <div class="card">
             <div class="card-header card-header-warning">
+              {{-- @foreach ($re as $item)
+                  {{ $item->['_token'] }}
+              @endforeach --}}
+      {{-- {{ $value }} --}}
               <h4 class="card-title">Clientes Registrados</h4>
               <p class="card-category">Lista de cliente registrados</p>
             </div>
             <div class="card-body table-responsive">
-              <table id="table_id" class="table display cell-border" style="width:100%">
+              <table id="tablelistarclientes" class="table display cell-border text-center" style="width:100%">
                 {{-- <thead class="text-warning"> --}}
                   <thead class="text-danger">
                   <th style="width:40px"><strong>id</strong></th>
@@ -24,7 +28,7 @@
                   <th style="width:90px"><strong>Dni</strong></th>
                   <th style="width:50px"><strong>Email</strong></th>
                   <th style="width:70px"><strong>ID Italbank</strong></th>
-                  <th style="width:50px"><strong>Tipo Cliente</strong></th>
+                  <th style="width:150px"><strong>Tipo Cliente</strong></th>
                   <th style="width:80px"><strong>Cuenta</strong></th>
                   <th style="width:140px"><strong>Acción</strong></th>
 
@@ -71,6 +75,20 @@
                     </tr>
                     @endforeach
                   </tbody>
+                  <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Dni</th>
+                        <th>Email</th>
+                        <th>Id italbank</th>
+                        <th>Tipo Cliente</th>
+                        <th>Cuenta</th>
+                        <th>Acción</th>
+                        
+                    </tr>
+                </tfoot>
                 
                 {{-- <tbody>
                   <tr>
@@ -109,23 +127,36 @@
 @endsection
 
 @push('js')
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      md.initDashboardPageCharts();
-    });
-  </script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#tablelistarclientes thead tr').clone(true).appendTo( '#tablelistarclientes thead' );
+      $('#tablelistarclientes thead tr:eq(1) th').each( function (i) {
+          var title = $(this).text();
+          $(this).html( '<input class="inputfiltro form-control text-center" type="text" placeholder="'+title+'" />' );
+   
+          $( 'input', this ).on( 'keyup change', function () {
+              if ( table.column(i).search() !== this.value ) {
+                  table
+                      .column(i)
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+  
+      /* Idioma español*/
+       var table = $('#tablelistarclientes').DataTable( {
+          orderCellsTop: true,
+          fixedHeader: true,
+          pageLength : 20,
+          lengthMenu: [[20, 30, 50, 100, -1], [20, 30, 50, 100, 'Todos']]
+          //  order: [[ 3, "asc" ]] /*Ordenar la tabla por numero de columna*/
+       } );
+
+   } );
+  
+    </script>
 @endpush
 
-@push('js')
-  <script>
-    $(document).ready(function() {
-    $('#table_id').DataTable( {
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
-        }
-    } );
-} );
-  </script>
-@endpush
 

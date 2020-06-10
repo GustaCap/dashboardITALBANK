@@ -17882,8 +17882,8 @@ Copyright (c) 2015 Daniel Eden
 .ps-container:hover>.ps-scrollbar-y-rail:hover>.ps-scrollbar-y {
   background-color: #999;
 }
-
-@media all and (max-width: 991px) {
+/* 991 */
+@media all and (max-width: 1360px) {
   [class*="navbar-expand-"]>.container,
   [class*="navbar-expand-"]>.container-fluid {
     padding-left: 15px;
@@ -18063,7 +18063,7 @@ Copyright (c) 2015 Daniel Eden
     display: none !important;
   }
 }
-
+/* 991 */
 @media screen and (max-width: 991px) {
   .presentation-page .section-components .components-macbook {
     max-width: 850px !important;

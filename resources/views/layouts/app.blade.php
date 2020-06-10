@@ -34,13 +34,14 @@
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{-- <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
-            </form>
+            </form> --}}
             @include('layouts.page_templates.auth')
         @endauth
         @guest()
-            @include('layouts.page_templates.guest')
+            @include('layouts.page_templates.auth')
+            {{-- @include('layouts.page_templates.guest') --}}
         @endguest
 
         {{-- <div class="fixed-plugin">
@@ -178,11 +179,6 @@
         {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script> --}}
         
         <script type="text/javascript" charset="utf8" src="https:////cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"></script>
-        
-
-
-
-
         @stack('js')
     </body>
 </html>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Raiz;
 use App\Tipocliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class RutaController extends Controller
 {
@@ -45,20 +46,11 @@ class RutaController extends Controller
             'nivel_relacion' => 'required',
             'requerido' => 'required',
             'frecuencia' => 'required',
-            'fec_expiracion' => 'required'
+            'fec_expiracion' => 'required',
+            'nombre_doc' => 'required'
         ]);
 
-        $carpeta_raiz = $request->nivel1;
-
-        if (!empty($request->nivel2)) {
-
-            $carpeta_raiz = $request->nivel1.'/'.$request->nivel2;
-        }
-
-        if (!empty($request->nivel2) && !empty($request->nivel3)) {
-
-            $carpeta_raiz = $request->nivel1.'/'.$request->nivel2.'/'.$request->nivel3;
-        }
+        $carpeta_raiz = $request->nivel1.'/'.$request->nombre_doc;
 
         $dataraiz = Raiz::create([
 
@@ -67,7 +59,8 @@ class RutaController extends Controller
             'fec_expiracion' => $request->fec_expiracion,
             'tipocliente_id' => $request->tipocliente_id,
             'requerido' => $request->requerido,
-            'frecuencia' =>  $request->frecuencia
+            'frecuencia' =>  $request->frecuencia,
+            'nombre_doc' =>  $request->nombre_doc
 
             ]);
 
@@ -85,7 +78,8 @@ class RutaController extends Controller
     public function show()
     {
         $dataRaices = Raiz::all();
-        return view('pages.getlistarRuta')->with('dataRaices', $dataRaices);
+        $user = Session::get('usuario');
+        return view('pages.getlistarRuta')->with('dataRaices', $dataRaices)->with('user', $user);
 
 
     }
@@ -122,5 +116,12 @@ class RutaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getUsuarioro()
+    {
+        
+        $users = session()->all();
+        return $users;
     }
 }

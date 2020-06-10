@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use App\Archivo;
+use App\Raiz;
 Use App\Tipocliente;
+use App\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Documentidscannedmod;
 use App\Documentroutemod;
-
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
@@ -343,41 +344,45 @@ class DocumentController extends Controller
 
         $this->validate($request, [
 
-            // 'numCuenta' => 'required',
             'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
-            // 'carpeta' => 'required'
+           
         ]);
+        // dd($request);
+        //cartura el usuario de sesion
+        $value = new Usuario();
+        $user = $value->userSesion();
+        $str_user = rtrim($user, '-12345678admin');
+        
 
         /**
          * Validacion para documentos que tengas fecha de expiracion.
          * ****************************************************************************************************
          */
         $carpeta = $request->carpetas;
-         
 
-        // $query = "select fec_expiracion from raices where carpeta_raiz = '$carpeta'";
+        /**agregado 11/05/2020 para pruebas*/
+        $query = "select * from raices where carpeta_raiz = '$carpeta'"; //renombrado para cambios 13/05/2020
 
-        // $validaFecha = DB::connection('italdocv5')->select($query);
+        /**Cambio agregado para obtener todos los datos de la table raices
+         * agregado: 13/05/2020
+        */
+        // $query = "select * from raices where carpeta_raiz = '$carpeta'";
 
-        //print_r($carpeta);
-        // dd($carpeta, $validaFecha);
+        /******************************************************************/
 
-        //  foreach ($validaFecha as $item) {
 
-        //     if ($item->fec_expiracion == 1) {
-
-        //          $this->validate($request, [
-
-        //               'fecExpira' => 'required'
-        //           ]);
-
-        //      }
-
-        // }
-         /**
-         * Fin de la validacion de fecha de Expiracion
-         * ****************************************************************************************************
-         */
+        // $carpeta_id = DB::connection('italdocv6')->select($query);
+        $dataraices = DB::connection('italdocv6')->select($query);
+        foreach ($dataraices as $item) {
+            //  $raiz_id = $item->id;
+            //  $nombree = $item->nombre_doc;
+             //dd($nombree);
+             $raiz_id = $item->id;
+             $nombreinicial = $item->nombre_doc;
+             $nombrefinal = trim($nombreinicial);
+        }
+        // $raiz_id = $dataraices->id;
+        /***********************************************************************/
 
         if ($request->hasfile('file')) {
 
@@ -413,15 +418,27 @@ class DocumentController extends Controller
                 }
     
             }
-            // $datacliente = DB::connection('italdocv6')->select($query1);
-            // dd('$datacliente');
-            //$tipocliente = $request->tipocliente;
+            
             $fecEmitido = $request->fecEmitido;
+
             $fecExpira = $request->fecExpira;
 
-            $nombre = $file->getClientOriginalName();
-            // $nombreimage = date('Y-m-d').'_'.$cliente_id.'_'.$nombre;
-            $nombreimage = date('Y-m-d').'_'.$numCuenta.'_'.$nombre;
+            // dd($request->fecExpira);
+
+            // $nombre = $file->getClientOriginalName(); //comentado por cambios 13/05/2020
+            
+            // $nombreimage = $nombrefinal.'_'.$nombre;
+            // $nombreimage = $numCuenta.'_'.$nombre;
+            //$nombreimage = date('Y-m-d').'_'.$numCuenta.'_'.$nombre; //comentado por canbios 13/05/2020
+
+            //Pruebas para cambiar el nombre de la imagen
+            //**************************************************************************************************/
+
+                $ext = $file->getClientOriginalExtension();
+                $nombreimage = $nombrefinal.'.'.$ext;
+                //$nombreimage = $nombree.'_'.$nombre;
+
+            //**************************************************************************************************/
 
             $ruta = public_path().'/'.$carpeta;
             // $ruta = storage_path().'/'.$carpeta;
@@ -434,19 +451,23 @@ class DocumentController extends Controller
         $data = Archivo::create([
 
             'cliente_id' => $cliente_id,
-            
+            'raiz_id' => $raiz_id,          //agregado 11/05/2020 para pruebas
             'tipo_cliente' => $tipocliente,
-            'name_archivo' => $nombre,
+            'name_archivo' => $nombrefinal,    //comentado por canbios 13/05/2020
+            // 'name_archivo' => $nombree, 
             'n_cuenta' => $numCuenta,
             'fecha_emitido' => $fecEmitido,
             'fecha_vence' => $fecExpira,
-            'file' =>  $rutaFinal
+            'file' =>  $rutaFinal,
+            'estatus_doc' => 1,
+            'usuario' => $str_user
 
             ]);
 
         $data->save();
         $output = array(
             'success' => 'Carga successfully',
+            // 'nombre' => $nombree,
             // 'image'  => '<img src="/dashboard/public/'.$rutaFinal.'" class="img-thumbnail" />'
            );
    
@@ -454,6 +475,10 @@ class DocumentController extends Controller
         // return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
 
     }
+
+
+
+    /********************************************************************************************************************************** */
     
     public function postClienteFiles_backup(Request $request)
     {
@@ -462,6 +487,9 @@ class DocumentController extends Controller
 
             'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048'
         ]);
+
+        //captura el usuario
+        
 
         /**
          * Validacion para documentos que tengas fecha de expiracion.
@@ -526,6 +554,51 @@ class DocumentController extends Controller
         return redirect()->back()->with('status', 'Carga successfully');
 
     }
+
+    /**
+     * Funciones para obtener el tipo de documento asociado al tipo de cliente
+     */
+
+    public function getTipoDocumento(Request $request)
+    {
+        if ($request->ajax()) {
+            $tipoDocumentos = Raiz::where('tipocliente_id', $request->tipocliente_id)->where('tipo_carpeta', '=', 'base') ->get();
+            foreach ($tipoDocumentos as $tipoDocumento) {
+                $tipoDocumentosArray[$tipoDocumento->carpeta_raiz] = $tipoDocumento->nombre_doc;
+            }
+            return response()->json($tipoDocumentosArray);
+        }
+    }
+
+   /**
+     * Deshabilitar documentos cargados sin eliminarlos.
+     *
+     * @param  int  $id -> resibe el parametro del id del documento que vamos a deshabilitar
+     * @return \Illuminate\Http\Response
+     */
+    public function eliminarDocumento($id)
+    {
+        $value = new Usuario();
+        $user = $value->userSesion();
+        $str_user = rtrim($user, '-12345678admin');
+        $query = "update archivos
+                    set estatus_doc = '2', usuario = '$str_user'
+                    where id = '$id'";
+
+        $result = DB::connection('italdocv6')->select($query);
+
+        return redirect()->back()->with('status', 'Documento Eliminado successfully');
+
+    }
+
+    public function tipoDocumentos()
+    {
+
+        $tipos = Raiz::all();
+        return response()->json($tipos, 200);
+    }
+  
+
 
 
 

@@ -6,11 +6,17 @@ use App\Archivo;
 use App\Cliente;
 use App\Raiz;
 use App\Tipocliente;
+use App\Usuario;
+// use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Constraint\Count;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+// use Illuminate\Support\Facades\Session as FacadesSession;
+use Illuminate\Support\Facades\Session;
 
 class ClienteController extends Controller
 {
@@ -22,6 +28,8 @@ class ClienteController extends Controller
     public function index()
     {
         $tipocliente = Tipocliente::all();
+       
+        
         // dd($tipocliente);
         return view('pages.getRegistroCliente')->with('tipocliente', $tipocliente);
     }
@@ -78,32 +86,30 @@ class ClienteController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show()
     {
         $dataCliente = Cliente::all();
-        return view('pages.getlistarCliente')->with('dataCliente', $dataCliente);
+        // $value = Session::get('usuario');
+        $value = new Usuario();
+        $user = $value->userSesion();
+        // $valuess = Str::contains($user, '1');
+        // dd($valuess);
+
+
+        // $users = $this->getUsuariore();
+        // $re = array($users);
+        // dd($user);
+        return view('pages.getlistarCliente')->with('dataCliente', $dataCliente)->with('user', $user);
 
     }
 
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function clienteDetalle($id)
     {
-        $cliente = Cliente::with('archivos')->find($id);
 
-        // // dd($cliente);
+        // $cliente = Cliente::with('archivos')->find($id);
+        $cliente = Cliente::all()->find($id);
 
 
         $tipoCliente = $cliente->tipocliente_id;
@@ -111,7 +117,17 @@ class ClienteController extends Controller
         $query = "select * from raices where tipocliente_id = '$tipoCliente'";
         $result = DB::connection('italdocv6')->select($query);
 
+        /**Este query devuelve el id de las rutas que tengo cargadas por cliente */
+        $query2 = "select raiz_id from archivos where cliente_id = '$id'";
+        $result2 = DB::connection('italdocv6')->select($query2);
+
+        $query3 = "select * from archivos where cliente_id = '$id' and estatus_doc = '1'";
+        $result3 = DB::connection('italdocv6')->select($query3);
+
+
+
         $array = Arr::pluck($result, 'id');
+        $array2 = Arr::pluck($result2, 'raiz_id');
         //dd($array);
 
         // if (in_array('CE Planillas de Verificacion de Requisitos', $result)) {
@@ -135,7 +151,7 @@ class ClienteController extends Controller
 
 
         // return view('pages.getConsultaCliente', compact('cliente', 'result'));
-        return view('pages.getConsultaCliente', compact('cliente', 'array'));
+        return view('pages.getConsultaCliente', compact('cliente', 'result', 'array', 'array2', 'result3'));
     }
 
     public function clienteDetalleBackup($id)
@@ -166,4 +182,28 @@ class ClienteController extends Controller
     {
         //
     }
+
+    public function getUsuario($id)
+    {
+        
+        $user = $id;
+        return $user;
+    }
+
+    public function getUsuariore()
+    {
+        $value = Session::get('usuario');
+        // $users = session()->all();
+        // return $users;
+        return $value;
+    }
+
+    // public function tipoClientes()
+    // {
+
+    //     $tipos = Tipocliente::all();
+    //     return response()->json($tipos, 200);
+    // }
+
+    
 }
