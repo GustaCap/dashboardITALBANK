@@ -7,7 +7,7 @@
         <div class="col-lg-12 col-md-12"><!--Inicio table cell4-->
           <div class="card">
             <div class="card-header card-header-warning">
-              
+              {{-- {{ $usuario }} --}}
               <h4 class="card-title"><strong>Detalle de Cliente</strong> </h4>
               <p class="card-category"><strong>Cliente ID: {{ $cliente->cliente_id_itbk }}</strong> </p>
               <p class="card-category"><strong>Nombre: {{ $cliente->nombre }}, {{ $cliente->apellido }}</strong> </p>
@@ -27,11 +27,11 @@
               <p class="card-category"><strong>Tipo de Cliente: Cliente MSB(CM)</strong> </p>
               @endif
               {{-- <p class="card-category"><strong>Tipo de Cliente: {{ $cliente->tipo_clienteid }}</strong> </p> --}}
-              <div class="iconForward">
+              {{-- <div class="iconForward">
                 <a href="{{ route('getlistarCliente') }}">
                   <i class="material-icons">forward</i>
                 </a>
-                </div>
+                </div> --}}
             </div>
             
             <div class="card-body table-responsive">
@@ -84,8 +84,8 @@
                           <td class="text-center" ><span class="badge badge-primary">No Aplica</span></td>
                         @endif
                         <td class="text-center">{{$items->usuario}}</td>
-                        <td class="text-center"><a class="btn btn-primary" href="{{ route('getEliminarDocumento',$items->id) }}">Eliminar</a></td>
-                       
+                        {{-- <td class="text-center"><a class="btn btn-primary" href="{{ route('getEliminarDocumento',$items->id) }}">Eliminar</a></td> --}}
+                        <td class="text-center"><a class="btn btn-primary" href="{{ route('getEliminarDocumento',array($items->id, $usuario)) }}">Eliminar</a></td>
                       </tr>
                      
                       @endforeach

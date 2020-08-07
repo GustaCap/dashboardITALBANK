@@ -86,7 +86,7 @@
           <i class="material-icons">cloud_upload</i>
             <p>{{ __('Cargar Documentos (CM)') }}</p>
         </a>
-      </li> 
+      </li>
       @endif
       @if ($value_op8 == TRUE || $value_op9 == TRUE)
       <li class="nav-item{{ $activePage == 'audilog' ? ' active' : '' }}">
@@ -96,9 +96,9 @@
         </a>
       </li>
       @endif
-      
-      
-      
+
+
+
       {{-- <li class="nav-item {{ ($activePage == 'getClienteIND' || $activePage == 'getClienteCE' || $activePage == 'getClienteCB' || $activePage == 'getClienteCM') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#cargarDocumentos" >
             <i class="material-icons">cloud_upload</i>
@@ -132,7 +132,7 @@
                   <p>{{ __('MSB(CM)') }}</p>
                 </a>
               </li>
-              
+
           </ul>
         </div>
       </li> --}}

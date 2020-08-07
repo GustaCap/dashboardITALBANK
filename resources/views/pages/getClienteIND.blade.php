@@ -9,10 +9,15 @@
           {{-- <form class="form-horizontal" enctype="multipart/form-data" id="formuploadajax"> --}}
             <form method="post" action="{{ route('postClienteFiles') }}" id="upload_form" enctype="multipart/form-data">
             @csrf
+            {{-- {{ $usuario }} --}}
+            <input type="hidden" name="usuario" id="usuario" value="{{ $usuario }}" />
+            <input type="hidden" name="nombre" id="nombre" value="{{ $nombre }}" />
+            <input type="hidden" name="cliente_id_itbk" id="cliente_id_itbk" value="{{ $cliente_id_itbk }}" />
             <div class="card ">
               <div class="card-header card-header-primary">
                 <h4 class="card-title">{{ __('Carga de Documentos') }}</h4>
-                <p class="card-category">{{ __('Informacion del Cliente') }}</p>
+                <p class="card-category">Cliente Italbank: {{ $nombre }}</p>
+                <p class="card-category">Italbank ID: {{ $cliente_id_itbk }}</p>
               </div>
               <div class="card-body ">
                 @if (session('status'))
@@ -28,18 +33,20 @@
                   </div>
                 @endif
                 <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Selecciona Cuenta Cliente') }}</label>
+                  <label class="col-sm-2 col-form-label">{{ __('Numero de Cuenta') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group">
-                      <select id="numCuenta" name="numCuenta" class="form-control" required>
+                      <select id="n_cuenta" name="n_cuenta" class="form-control seleccion" required>
                           <option> </option>
-                          @foreach($dataClientes as $item)
-                              <option value="{{ $item->n_cuenta }}">{{ $item->n_cuenta }}</option>
+                          @foreach($data as $item)
+                               <option value="{{ $item->n_cuenta }}">{{ $item->n_cuenta }}</option>
                           @endforeach
+
                    </select>
                   </div>
                   </div>
                 </div>
+
                 <div class="row d-flex justify-content-center">
                   <div class="col-lg-10 col-md-12">
                     <div class="progress mt-5 mb-5" style="height: 1.5rem;">
@@ -59,7 +66,7 @@
                             <th>Frecuencia</th>
                             <th>Nivel Relación</th>
                             {{-- <th>Estructura</th> --}}
-                            {{-- <th>Ubicacion</th> --}}
+                            <th>Estructura</th>
                             <th>Documento</th>
                             <th class="text-center">Requerido</th>
                             <th class="text-center">Vence</th>
@@ -71,11 +78,17 @@
                         </td>
                     </thead>
                     <tbody>
-                      @foreach($dataRaices as $item)
+                      @foreach($data2 as $item)
                         <tr>
                             <td class="text-center"><input type="radio" id="carpetas" name="carpetas" value="{{ $item->carpeta_raiz }}" required></td>
                             <td class="text-center">{{ $item->frecuencia }}</td>
-                            <td>{{ $item->nivel_relacion }}</td>
+                            {{-- <td>{{ $item->nivel_relacion }}</td> --}}
+                            @if ($item->nivel_relacion == 'cliente')
+                            <td class="bg-success">{{ $item->nivel_relacion }}</td>
+                            @else
+                            <td class="bg-warning" >{{ $item->nivel_relacion }}</td>
+                            @endif
+                            <td>{{ $item->carpeta_raiz }}</td>
                             <td>{{ $item->nombre_doc }}</td>
                             @if ($item->requerido == 'Obligatorio')
                             <td class="text-center"><span class="badge badge-success">{{ $item->requerido }}</span></td>
@@ -95,9 +108,9 @@
                             {{-- <td><input type="date" name = "fecExpira" id="fecExpira"></td> --}}
                             <td><input id="file" name="file" type="file"></td>
                             <td><button type="submit" class="btn btn-primary" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
-                           
+
                         </tr>
-                        @endforeach      
+                        @endforeach
                     </tbody>
                 </table>
               </div>
@@ -110,10 +123,32 @@
 
     </div>
   </div>
-@push('js')
+  @push('js')
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $('#cliente').on('change', function (){
+            var cliente_id_itbk = $(this).val();
+            if ($.trim(cliente_id_itbk) != '') {
+                $.get('cuentas', {cliente_id_itbk: cliente_id_itbk}, function (cuentas) {
+                    $('#cuenta').empty();
+                    $('#cuenta').append("<option value=''>Seleccione Documento Base</option>");
+                    $.each(cuentas, function (index, value) {
+                        $('#cuenta').append("<option value='"+index+"'>"+value+"</option>");
+
+                    })
+                });
+
+            }
+
+        });
+});
+  </script>
+  @endpush
+  @push('js')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script type="text/javascript">
 
 /*Filtro para la tabla*/
@@ -136,7 +171,7 @@ var busqueda = document.getElementById('buscar');
     busqueda.addEventListener('keyup', buscaTabla);
 
 /*Final del script para filtrar la tabla*/
-  
+
 $(document).ready(function(){
 
 $('form').ajaxForm({
@@ -172,7 +207,7 @@ $('form').ajaxForm({
 $(document).on('change','input[type="file"]',function(){
 	// this.files[0].size recupera el tamaño del archivo
 	// alert(this.files[0].size);
-	
+
 	var fileName = this.files[0].name;
 	var fileSize = this.files[0].size;
 
@@ -183,11 +218,11 @@ $(document).on('change','input[type="file"]',function(){
 	}else{
 		// recuperamos la extensión del archivo
 		var ext = fileName.split('.').pop();
-		
-		// Convertimos en minúscula porque 
+
+		// Convertimos en minúscula porque
 		// la extensión del archivo puede estar en mayúscula
 		ext = ext.toLowerCase();
-    
+
 		// console.log(ext);
 		switch (ext) {
 			case 'jpg':
@@ -202,26 +237,31 @@ $(document).on('change','input[type="file"]',function(){
 	}
 });
 
-/*Valdar fecha */
+
 /*Valdar fecha */
 $(document).on('change','input[type="date"]',function(){
 
 var hoy             = new Date();
-var fechaFormulario = new Date(document.getElementById("fecExpira").value); 
+var fechaFormulario = new Date(document.getElementById("fecExpira").value);
 
 // Compara solo las fechas => no las horas!!
 hoy.setHours(0,0,0,0);
 
-// if (hoy == fechaFormulario) {
-//   console.log(hoy);
-//   }
 if(hoy > fechaFormulario){
     alert('Documento Vencido');
   this.value = '';
   }
 });
+//Fin validar Fecha
 
-  </script>
 
-  @endpush
+// Select dinamico con buscardor, usando la libreria Select2
+$(document).ready(function() {
+    $('.seleccion').select2();
+});
+// Fin Select2
+</script>
+@endpush
+
+
 @endsection

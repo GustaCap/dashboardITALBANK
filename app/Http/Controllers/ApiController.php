@@ -101,5 +101,12 @@ class ApiController extends Controller
 
     }
 
+    public function documentosTipocliente($id)
+    {
+        $tipos = Raiz::all()->where('tipocliente_id', $id);
+        return response()->json($tipos, 200);
+
+    }
+
     
 }

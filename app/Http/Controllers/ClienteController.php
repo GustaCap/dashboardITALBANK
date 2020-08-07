@@ -28,8 +28,8 @@ class ClienteController extends Controller
     public function index()
     {
         $tipocliente = Tipocliente::all();
-       
-        
+
+
         // dd($tipocliente);
         return view('pages.getRegistroCliente')->with('tipocliente', $tipocliente);
     }
@@ -65,7 +65,7 @@ class ClienteController extends Controller
         if (empty($request->cliente_id_itbk) && empty($request->n_cuenta) ) {
 
             return redirect()->back()->with('warning', 'Debe cargar el Id del Cliente ITALBANK o su Número de Cuenta')->withInput($request->input());
-           
+
             # code...
         }
 
@@ -86,73 +86,51 @@ class ClienteController extends Controller
 
     }
 
-    
-    public function show()
+
+    public function show(Request $request, $user)
     {
+
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
         $dataCliente = Cliente::all();
-        // $value = Session::get('usuario');
-        $value = new Usuario();
-        $user = $value->userSesion();
-        // $valuess = Str::contains($user, '1');
-        // dd($valuess);
+        $usuario = $user;
 
-
-        // $users = $this->getUsuariore();
-        // $re = array($users);
-        // dd($user);
-        return view('pages.getlistarCliente')->with('dataCliente', $dataCliente)->with('user', $user);
+        return view('pages.getlistarCliente')->with('dataCliente', $dataCliente)->with('usuario', $usuario);
 
     }
 
 
-    public function clienteDetalle($id)
+    public function clienteDetalle(Request $request, $id, $user)
     {
 
         // $cliente = Cliente::with('archivos')->find($id);
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
         $cliente = Cliente::all()->find($id);
 
 
         $tipoCliente = $cliente->tipocliente_id;
+        $cliente_id_itbk = $cliente->cliente_id_itbk;
 
         $query = "select * from raices where tipocliente_id = '$tipoCliente'";
         $result = DB::connection('italdocv6')->select($query);
 
         /**Este query devuelve el id de las rutas que tengo cargadas por cliente */
-        $query2 = "select raiz_id from archivos where cliente_id = '$id'";
+        // $query2 = "select raiz_id from archivos where cliente_id = '$id'";
+        $query2 = "select raiz_id from archivos where cliente_id_itbk = '$cliente_id_itbk'";
         $result2 = DB::connection('italdocv6')->select($query2);
 
-        $query3 = "select * from archivos where cliente_id = '$id' and estatus_doc = '1'";
+        // $query3 = "select * from archivos where cliente_id = '$id' and estatus_doc = '1'";
+        $query3 = "select * from archivos where cliente_id_itbk = '$cliente_id_itbk' and estatus_doc = '1'";
         $result3 = DB::connection('italdocv6')->select($query3);
-
-
 
         $array = Arr::pluck($result, 'id');
         $array2 = Arr::pluck($result2, 'raiz_id');
-        //dd($array);
 
-        // if (in_array('CE Planillas de Verificacion de Requisitos', $result)) {
-        //     echo 'si esta';
-        // }
-       
-
-        // $total = Count($result);
-
-        //$r = Str::contains('/CE Planillas de Verificacion de Requisitos/2020-05-08_12548796321510_JPG.jpg', 'CE Planillas de Verificacion de Requisitos');
-        //$r = Str::containst
-       //dd($r);
-
-        //dd($cliente, $tipoCliente, $result, $total);
-
-        // $archivos = Archivo::All();
-
-
-
-
-
-
-        // return view('pages.getConsultaCliente', compact('cliente', 'result'));
-        return view('pages.getConsultaCliente', compact('cliente', 'result', 'array', 'array2', 'result3'));
+        return view('pages.getConsultaCliente', compact('cliente', 'result', 'array', 'array2', 'result3', 'usuario'));
     }
+
 
     public function clienteDetalleBackup($id)
     {
@@ -185,7 +163,7 @@ class ClienteController extends Controller
 
     public function getUsuario($id)
     {
-        
+
         $user = $id;
         return $user;
     }
@@ -198,6 +176,46 @@ class ClienteController extends Controller
         return $value;
     }
 
+    public function clienteItbk(Request $request, $id, $user)
+    {
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
+        $query = "select nombre, cliente_id_itbk
+                from clientes
+                where tipocliente_id = '$id'
+                order by nombre asc";
+        $data = DB::connection('italdocv6')->select($query);
+        return view('pages.getSelectClienteItbk')->with('data', $data)->with('usuario', $usuario);
+
+
+    }
+
+    public function postclienteItbk(Request $request)
+    {
+        $usuario = $request->usuario;
+        $cliente_id_itbk = $request->cliente_id_itbk;
+        $query1 = "select * from clientes where cliente_id_itbk = '$cliente_id_itbk' ";
+        $data = DB::connection('italdocv6')->select($query1);
+        foreach ($data as $item) {
+            $tipocliente_id = $item->tipocliente_id;
+            $nombre = $item->nombre;
+            $cliente_id_itbk = $item->cliente_id_itbk;
+        }
+        // $query2 = "select * from raices where tipocliente_id = '$tipocliente_id' order by nivel_relacion asc";
+        $query2 = "select * from raices
+                    where tipocliente_id = '$tipocliente_id'
+                    and tipo_carpeta not like '%base%'
+                    and nivel_relacion not like '%transferencia%'
+                    order by nivel_relacion asc";
+
+        $data2 = DB::connection('italdocv6')->select($query2);
+        $query3 = "select * from archivos where cliente_id_itbk = '$cliente_id_itbk'";
+        $data3 = DB::connection('italdocv6')->select($query3);
+
+        return view('pages.getClienteIND')->with('data', $data)->with('data2', $data2)->with('nombre', $nombre)->with('tipocliente_id', $tipocliente_id)->with('cliente_id_itbk', $cliente_id_itbk)->with('usuario', $usuario);
+    }
+
     // public function tipoClientes()
     // {
 
@@ -205,5 +223,5 @@ class ClienteController extends Controller
     //     return response()->json($tipos, 200);
     // }
 
-    
+
 }

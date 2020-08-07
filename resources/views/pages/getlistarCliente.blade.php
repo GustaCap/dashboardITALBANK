@@ -22,9 +22,10 @@
               <table id="tablelistarclientes" class="table display cell-border text-center" style="width:100%">
                 {{-- <thead class="text-warning"> --}}
                   <thead class="text-danger">
+                    {{-- {{ $usuario }} --}}
                   <th style="width:40px"><strong>id</strong></th>
                   <th style="width:60px"><strong>Nombre</strong></th>
-                  <th style="width:110px"><strong>Apellido</strong></th>
+
                   <th style="width:90px"><strong>Dni</strong></th>
                   <th style="width:50px"><strong>Email</strong></th>
                   <th style="width:70px"><strong>ID Italbank</strong></th>
@@ -33,13 +34,13 @@
                   <th style="width:140px"><strong>Acción</strong></th>
 
                 </thead>
-                
+
                 <tbody>
                     @foreach ($dataCliente as $item)
                     <tr>
                       <td>{{ $item->id }}</td>
                       <td>{{ $item->nombre }}</td>
-                      <td>{{ $item->apellido }}</td>
+
                       <td>{{ $item->dni }}</td>
                       <td>{{ $item->email }}</td>
                       {{-- <td>{{ $item->n_transfer }}</td> --}}
@@ -48,30 +49,71 @@
                       {{-- <td>{{ $item->tipocliente_id }}</td> --}}
                       @if ($item->tipocliente_id == 1)
 
-                      <td>Individuos (IND)</td>
-                          
+                      <td>Individuo</td>
+
                       @endif
                       @if ($item->tipocliente_id == 2)
 
-                      <td>Cliente Empresa (CE)</td>
-                          
+                      <td>Pencionado</td>
+
                       @endif
                       @if ($item->tipocliente_id == 3)
 
-                      <td>Cliente Bancos (CB)</td>
-                          
+                      <td>Fondo Mutual</td>
+
                       @endif
                       @if ($item->tipocliente_id == 4)
 
-                      <td>Cliente MSB (CM)</td>
-                          
+                      <td>BMI</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 5)
+
+                      <td>Empresas</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 6)
+
+                      <td>Instituciones Financieras</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 7)
+
+                      <td>Nomina</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 8)
+
+                      <td>Banco Publico A</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 9)
+
+                      <td>Empresa Publica B</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 10)
+
+                      <td>Empresa Convenio C</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 11)
+
+                      <td>Empresa Convenio D</td>
+
+                      @endif
+                      @if ($item->tipocliente_id == 12)
+
+                      <td>Personal Account</td>
+
                       @endif
 
                       <td>{{ $item->n_cuenta }}</td>
                       <form method="POST" action="{{ route('postRegistroCliente') }}">
-                      <td class="text-center"><a class="btn btn-primary" href="{{ route('getConsultaCliente',$item->id) }}">Ver detalle</a></td>
+                      {{-- <td class="text-center"><a class="btn btn-primary" href="{{ route('getConsultaCliente',$item->id) }}">Ver detalle</a></td> --}}
+                      <td class="text-center"><a class="btn btn-primary" href="{{ route('getConsultaCliente',array($item->id, $usuario)) }}">Ver detalle</a></td>
                       </form>
-                      
+
                     </tr>
                     @endforeach
                   </tbody>
@@ -79,17 +121,17 @@
                     <tr>
                         <th>Id</th>
                         <th>Nombre</th>
-                        <th>Apellido</th>
+
                         <th>Dni</th>
                         <th>Email</th>
                         <th>Id italbank</th>
                         <th>Tipo Cliente</th>
                         <th>Cuenta</th>
                         <th>Acción</th>
-                        
+
                     </tr>
                 </tfoot>
-                
+
                 {{-- <tbody>
                   <tr>
                     <td>1</td>
@@ -134,7 +176,7 @@
       $('#tablelistarclientes thead tr:eq(1) th').each( function (i) {
           var title = $(this).text();
           $(this).html( '<input class="inputfiltro form-control text-center" type="text" placeholder="'+title+'" />' );
-   
+
           $( 'input', this ).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
                   table
@@ -144,7 +186,7 @@
               }
           } );
       } );
-  
+
       /* Idioma español*/
        var table = $('#tablelistarclientes').DataTable( {
           orderCellsTop: true,
@@ -155,7 +197,7 @@
        } );
 
    } );
-  
+
     </script>
 @endpush
 

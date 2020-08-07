@@ -9,6 +9,7 @@
           {{-- <form class="form-horizontal" enctype="multipart/form-data" id="formuploadajax"> --}}
             <form method="post" action="{{ route('postClienteFiles') }}" id="upload_form" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="usuario" id="usuario" value="{{ $usuario }}" />
             <div class="card ">
               <div class="card-header card-header-primary">
                 <h4 class="card-title">{{ __('Carga de Documentos') }}</h4>

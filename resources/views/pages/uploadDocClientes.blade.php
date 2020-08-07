@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'getClienteCM', 'titlePage' => __('Carga de Documentos Cliente MSB')])
+@extends('layouts.app', ['activePage' => 'getClienteIND', 'titlePage' => __('Carga de Documentos Cliente IND')])
 
 @section('content')
   <div class="content">
@@ -9,11 +9,11 @@
           {{-- <form class="form-horizontal" enctype="multipart/form-data" id="formuploadajax"> --}}
             <form method="post" action="{{ route('postClienteFiles') }}" id="upload_form" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="usuario" id="usuario" value="{{ $usuario }}" />
+            <input type="hidden" name="usuario" id="usuario" value="{{$usuario}}" />
             <div class="card ">
               <div class="card-header card-header-primary">
                 <h4 class="card-title">{{ __('Carga de Documentos') }}</h4>
-                <p class="card-category">{{ __('Informacion del Cliente tipo MSB (CM)') }}</p>
+                <p class="card-category">{{ __('Informacion del Cliente') }}</p>
               </div>
               <div class="card-body ">
                 @if (session('status'))
@@ -48,30 +48,24 @@
                       aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                         0%
                       </div>
-                      
                     </div>
                     <div id="success" class="text-center"></div>
                   </div>
-                  {{-- <div class="row d-flex justify-content-center">
-                    <div class="col-lg-10">
-                      <div id="success"></div>
-                    </div>
-                  </div> --}}
-                  
-                  
+
                   <div class="card-body table-responsive">
-                    <table id="table_id" class="table display table-bordered" style="width:100%">
+                    <table id="table_id" class="table display table-bordered text-center" style="width:100%">
                     <thead class="thead-dark">
                         <tr>
-                          <th>Opción</th>
-                          <th>Frecuencia</th>
-                          <th>Nivel Relación</th>
-                          {{-- <th>Ubicacion</th> --}}
-                          <th>Documento</th>
-                          <th class="text-center">Requerido</th>
-                          <th class="text-center">Vence</th>
-                          <th>Archivo</th>
-                          <th class="text-center">Cargar</th>
+                            <th>Opción</th>
+                            <th>Frecuencia</th>
+                            <th>Nivel Relación</th>
+                            {{-- <th>Estructura</th> --}}
+                            {{-- <th>Ubicacion</th> --}}
+                            <th>Documento</th>
+                            <th class="text-center">Requerido</th>
+                            <th class="text-center">Vence</th>
+                            <th>Archivo</th>
+                            <th class="text-center">Cargar</th>
                         </tr>
                         <td colspan="8">
                           <input id="buscar" type="text" class="form-control" placeholder="Escriba algo para filtrar" />
@@ -80,8 +74,7 @@
                     <tbody>
                       @foreach($dataRaices as $item)
                         <tr>
-                          
-                            <td class="text-center"><input type="radio" id="carpetas" name="carpetas" value="{{ $item->carpeta_raiz }}" ></td>
+                            <td class="text-center"><input type="radio" id="carpetas" name="carpetas" value="{{ $item->carpeta_raiz }}" required></td>
                             <td class="text-center">{{ $item->frecuencia }}</td>
                             <td>{{ $item->nivel_relacion }}</td>
                             <td>{{ $item->nombre_doc }}</td>
@@ -94,21 +87,22 @@
                             @if ($item->requerido == 'Excepción')
                             <td class="text-center"><span class="badge badge-info">{{ $item->requerido }}</span></td>
                             @endif
+                            {{-- <td><input type="date" name = "fecEmitido" id="fecEmitido"></td> --}}
                             @if ($item->fec_expiracion == '1')
                             <td><input type="date" name = "fecExpira" id="fecExpira"></td>
                             @else
                             <td class="text-center">No Aplica</td>
                             @endif
+                            {{-- <td><input type="date" name = "fecExpira" id="fecExpira"></td> --}}
                             <td><input id="file" name="file" type="file"></td>
                             <td><button type="submit" class="btn btn-primary" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
-                           
+
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-                
               </div>
-                </div>
+            </div>
                 </div>
             </div>
           </form>
@@ -143,7 +137,7 @@ var busqueda = document.getElementById('buscar');
     busqueda.addEventListener('keyup', buscaTabla);
 
 /*Final del script para filtrar la tabla*/
-  
+
 $(document).ready(function(){
 
 $('form').ajaxForm({
@@ -169,7 +163,6 @@ $('form').ajaxForm({
       $('.progress-bar').css('width', '100%');
       $('#success').html('<span class="text-success"><b>'+data.success+'</b></span><br /><br />');
       $('#success').append(data.image);
-      
     }
   }
 });
@@ -180,7 +173,7 @@ $('form').ajaxForm({
 $(document).on('change','input[type="file"]',function(){
 	// this.files[0].size recupera el tamaño del archivo
 	// alert(this.files[0].size);
-	
+
 	var fileName = this.files[0].name;
 	var fileSize = this.files[0].size;
 
@@ -191,11 +184,11 @@ $(document).on('change','input[type="file"]',function(){
 	}else{
 		// recuperamos la extensión del archivo
 		var ext = fileName.split('.').pop();
-		
-		// Convertimos en minúscula porque 
+
+		// Convertimos en minúscula porque
 		// la extensión del archivo puede estar en mayúscula
 		ext = ext.toLowerCase();
-    
+
 		// console.log(ext);
 		switch (ext) {
 			case 'jpg':
@@ -211,15 +204,16 @@ $(document).on('change','input[type="file"]',function(){
 });
 
 /*Valdar fecha */
+/*Valdar fecha */
 $(document).on('change','input[type="date"]',function(){
 
 var hoy             = new Date();
-var fechaFormulario = new Date(document.getElementById("fecExpira").value); 
+var fechaFormulario = new Date(document.getElementById("fecExpira").value);
 
 // Compara solo las fechas => no las horas!!
 hoy.setHours(0,0,0,0);
 
-// if (hoy === fechaFormulario) {
+// if (hoy == fechaFormulario) {
 //   console.log(hoy);
 //   }
 if(hoy > fechaFormulario){
@@ -227,16 +221,6 @@ if(hoy > fechaFormulario){
   this.value = '';
   }
 });
-
-/** Muestra barra de progreso*/
-// function mostrar() {
-//     var x = document.getElementById('ajaxSubmit');
-//     if (x.style.display === 'none') {
-//         x.style.display = 'block';
-//     } else {
-//         x.style.display = 'none';
-//     }
-// }
 
   </script>
 

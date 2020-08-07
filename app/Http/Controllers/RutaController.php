@@ -14,8 +14,10 @@ class RutaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $ip = $request->ip();
+        $navegador = $request->header('User-Agent');
         $tipocliente = Tipocliente::all();
         // dd($tipocliente);
         return view('pages.getRegistroRuta')->with('tipocliente', $tipocliente);
@@ -60,7 +62,8 @@ class RutaController extends Controller
             'tipocliente_id' => $request->tipocliente_id,
             'requerido' => $request->requerido,
             'frecuencia' =>  $request->frecuencia,
-            'nombre_doc' =>  $request->nombre_doc
+            'nombre_doc' =>  $request->nombre_doc,
+            'tipo_carpeta' => 'subnivel'
 
             ]);
 
@@ -75,11 +78,15 @@ class RutaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Request $request, $user)
     {
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
         $dataRaices = Raiz::all();
-        $user = Session::get('usuario');
-        return view('pages.getlistarRuta')->with('dataRaices', $dataRaices)->with('user', $user);
+        // $user = Session::get('usuario');
+        // return view('pages.getlistarRuta')->with('dataRaices', $dataRaices)->with('user', $user);
+        return view('pages.getlistarRuta')->with('dataRaices', $dataRaices);
 
 
     }
@@ -120,7 +127,7 @@ class RutaController extends Controller
 
     public function getUsuarioro()
     {
-        
+
         $users = session()->all();
         return $users;
     }

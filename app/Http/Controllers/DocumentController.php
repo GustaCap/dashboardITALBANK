@@ -185,16 +185,19 @@ class DocumentController extends Controller
         // dd($dataCliente);
     }
 
-    public function getClienteIND()
+    public function getClienteIND(Request $request, $user)
     {
 
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
         $query1 = "select * from clientes where tipocliente_id = '1'";
         $query2 = "select * from raices where tipocliente_id = '1' ";
         // $dataCliente = DB::connection('italdocv2')->select($query1);
         $dataClientes = DB::connection('italdocv6')->select($query1);
         $dataRaices = DB::connection('italdocv6')->select($query2);
         // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
-        return view('pages.getClienteIND')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
+        return view('pages.getClienteIND')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices)->with('usuario', $usuario);
 
 
         // dd($dataCliente);
@@ -214,42 +217,51 @@ class DocumentController extends Controller
 
     }
 
-    public function getClienteCE()
+    public function getClienteCE(Request $request, $user)
     {
 
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
         $query1 = "select * from clientes where tipocliente_id = '2'";
         $query2 = "select * from raices where tipocliente_id = '2' ";
         // $dataCliente = DB::connection('italdocv2')->select($query1);
         $dataClientes = DB::connection('italdocv6')->select($query1);
         $dataRaices = DB::connection('italdocv6')->select($query2);
         // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
-        return view('pages.getClienteCE')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
+        return view('pages.getClienteCE')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices)->with('usuario', $usuario);
 
     }
 
-    public function getClienteCB()
+    public function getClienteCB(Request $request, $user)
     {
 
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
         $query1 = "select * from clientes where tipocliente_id = '3'";
         $query2 = "select * from raices where tipocliente_id = '3' ";
         // $dataCliente = DB::connection('italdocv2')->select($query1);
         $dataClientes = DB::connection('italdocv6')->select($query1);
         $dataRaices = DB::connection('italdocv6')->select($query2);
         // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
-        return view('pages.getClienteCB')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
+        return view('pages.getClienteCB')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices)->with('usuario', $usuario);
 
     }
 
-    public function getClienteCM()
+    public function getClienteCM(Request $request, $user)
     {
 
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
         $query1 = "select * from clientes where tipocliente_id = '4'";
         $query2 = "select * from raices where tipocliente_id = '4' ";
         // $dataCliente = DB::connection('italdocv2')->select($query1);
         $dataClientes = DB::connection('italdocv6')->select($query1);
         $dataRaices = DB::connection('italdocv6')->select($query2);
         // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
-        return view('pages.getClienteCM')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices);
+        return view('pages.getClienteCM')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices)->with('usuario', $usuario);
 
     }
 
@@ -345,33 +357,20 @@ class DocumentController extends Controller
         $this->validate($request, [
 
             'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
-           
+
         ]);
-        // dd($request);
-        //cartura el usuario de sesion
-        $value = new Usuario();
-        $user = $value->userSesion();
-        $str_user = rtrim($user, '-12345678admin');
-        
+        // $usuario = $request->usuario;
+
 
         /**
          * Validacion para documentos que tengas fecha de expiracion.
          * ****************************************************************************************************
          */
+        $usuario = $request->usuario;
         $carpeta = $request->carpetas;
 
         /**agregado 11/05/2020 para pruebas*/
         $query = "select * from raices where carpeta_raiz = '$carpeta'"; //renombrado para cambios 13/05/2020
-
-        /**Cambio agregado para obtener todos los datos de la table raices
-         * agregado: 13/05/2020
-        */
-        // $query = "select * from raices where carpeta_raiz = '$carpeta'";
-
-        /******************************************************************/
-
-
-        // $carpeta_id = DB::connection('italdocv6')->select($query);
         $dataraices = DB::connection('italdocv6')->select($query);
         foreach ($dataraices as $item) {
             //  $raiz_id = $item->id;
@@ -389,49 +388,34 @@ class DocumentController extends Controller
 
             $file = $request->file('file');
 
-            $numCuenta = $request->numCuenta;
-            $query1 = "select * from clientes where n_cuenta = '$numCuenta' ";
+            // $numCuenta = $request->numCuenta;
+            // $query1 = "select * from clientes where n_cuenta = '$numCuenta' ";
+            $cliente_id_itbk = $request->cliente_id_itbk;
+            $numCuenta = $request->n_cuenta;
+
+            // $query1 = "select * from clientes where cliente_id_itbk = '$cliente_id_itbk' ";
+
+            $query1 = "select * from clientes where n_cuenta = '$numCuenta' "; /**query de prueba */
             $datotipocliente = DB::connection('italdocv6')->select($query1);
             foreach ($datotipocliente as $item) {
 
                 $cliente_id = $item->id;
+                $tipocliente = $item->tipocliente_id;
 
-                if ($item->tipocliente_id == 1) {
-    
-                     $tipocliente = 1;
-    
-                 }
-                 if ($item->tipocliente_id == 2) {
-    
-                    $tipocliente = 2;
-   
-                }
-                if ($item->tipocliente_id == 3) {
-    
-                    $tipocliente = 3;
-   
-                }
-                if ($item->tipocliente_id == 4) {
-    
-                    $tipocliente = 4;
-   
-                }
-    
             }
-            
-            $fecEmitido = $request->fecEmitido;
 
+            $fecEmitido = $request->fecEmitido;
             $fecExpira = $request->fecExpira;
 
             // dd($request->fecExpira);
 
             // $nombre = $file->getClientOriginalName(); //comentado por cambios 13/05/2020
-            
+
             // $nombreimage = $nombrefinal.'_'.$nombre;
             // $nombreimage = $numCuenta.'_'.$nombre;
             //$nombreimage = date('Y-m-d').'_'.$numCuenta.'_'.$nombre; //comentado por canbios 13/05/2020
 
-            //Pruebas para cambiar el nombre de la imagen
+            //cambiar el nombre de la imagen
             //**************************************************************************************************/
 
                 $ext = $file->getClientOriginalExtension();
@@ -454,13 +438,15 @@ class DocumentController extends Controller
             'raiz_id' => $raiz_id,          //agregado 11/05/2020 para pruebas
             'tipo_cliente' => $tipocliente,
             'name_archivo' => $nombrefinal,    //comentado por canbios 13/05/2020
-            // 'name_archivo' => $nombree, 
+            // 'name_archivo' => $nombree,
             'n_cuenta' => $numCuenta,
+            'cliente_id_itbk' => $cliente_id_itbk,
             'fecha_emitido' => $fecEmitido,
             'fecha_vence' => $fecExpira,
             'file' =>  $rutaFinal,
             'estatus_doc' => 1,
-            'usuario' => $str_user
+            // 'usuario' => $str_user
+            'usuario' => $usuario
 
             ]);
 
@@ -470,7 +456,7 @@ class DocumentController extends Controller
             // 'nombre' => $nombree,
             // 'image'  => '<img src="/dashboard/public/'.$rutaFinal.'" class="img-thumbnail" />'
            );
-   
+
            return response()->json($output);
         // return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
 
@@ -479,7 +465,7 @@ class DocumentController extends Controller
 
 
     /********************************************************************************************************************************** */
-    
+
     public function postClienteFiles_backup(Request $request)
     {
 
@@ -489,7 +475,7 @@ class DocumentController extends Controller
         ]);
 
         //captura el usuario
-        
+
 
         /**
          * Validacion para documentos que tengas fecha de expiracion.
@@ -570,19 +556,33 @@ class DocumentController extends Controller
         }
     }
 
+    public function getCuenta(Request $request)
+    {
+        if ($request->ajax()) {
+            $tipoCuentas = Cliente::where('cliente_id_itbk', $request->cliente_id_itbk)->get();
+            foreach ($tipoCuentas as $tipoCuentas) {
+                $tipoCuentasArray[$tipoCuentas->id] = $tipoCuentas->n_cuenta;
+            }
+            return response()->json($tipoCuentasArray);
+        }
+    }
+
    /**
      * Deshabilitar documentos cargados sin eliminarlos.
      *
      * @param  int  $id -> resibe el parametro del id del documento que vamos a deshabilitar
      * @return \Illuminate\Http\Response
      */
-    public function eliminarDocumento($id)
+    public function eliminarDocumento(Request $request, $id, $user)
     {
-        $value = new Usuario();
-        $user = $value->userSesion();
-        $str_user = rtrim($user, '-12345678admin');
+        // $value = new Usuario();
+        // $user = $value->userSesion();
+        // $str_user = rtrim($user, '-12345678admin');
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
         $query = "update archivos
-                    set estatus_doc = '2', usuario = '$str_user'
+                    set estatus_doc = '2', usuario = '$usuario'
                     where id = '$id'";
 
         $result = DB::connection('italdocv6')->select($query);
@@ -597,7 +597,45 @@ class DocumentController extends Controller
         $tipos = Raiz::all();
         return response()->json($tipos, 200);
     }
-  
+
+    public function uploadIndex(Request $request, $user)
+    {
+        $ip = $request->ip();
+        $navegador = $request->header('User-Agent');
+        $usuario = $user;
+        $tipocliente = Tipocliente::all();
+        return view('pages.upload')->with('tipocliente', $tipocliente)->with('usuario', $usuario);
+    }
+
+    public function uploadDocClientes(Request $request, $id, $user)
+    {
+
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        dd($id);
+        $usuario = $user;
+        $query1 = "select * from clientes where tipocliente_id = '$id'";
+
+        $queryprueba = "select distinct nombre, cliente_id_itbk
+                        from clientes
+                        where tipocliente_id = '$id'
+                        order by nombre asc";
+
+        $queryprueba2 = "select * from clientes where cliente_id_itbk = '$id'";
+        // $query2 = "select * from raices where tipocliente_id = '$id' ";
+        $query2 = "select * from raices where tipocliente_id = '$tcid' ";
+        // $dataCliente = DB::connection('italdocv2')->select($query1);
+        $dataClientes = DB::connection('italdocv6')->select($query1);
+        $dataClientes2 = DB::connection('italdocv6')->select($queryprueba);
+        $datacuentas = DB::connection('italdocv6')->select($queryprueba2);
+        $dataRaices = DB::connection('italdocv6')->select($query2);
+        // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
+        return view('pages.getClienteIND')->with('dataClientes2', $dataClientes2)->with('dataRaices', $dataRaices)->with('usuario', $usuario)->with('datacuentas', $datacuentas);
+
+
+        // dd($dataCliente);
+    }
+
 
 
 

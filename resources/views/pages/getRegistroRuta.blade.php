@@ -14,12 +14,13 @@
               </ul>
             </div>
             @endif
+            {{-- {{ $ip }} --}}
           <form method="POST" action="{{ route('postRegistroRuta') }}" class="form-horizontal" enctype="multipart/form-data">
             @csrf
             <div class="card ">
               <div class="card-header card-header-primary">
-                <h4 class="card-title">{{ __('Registro de Documentos') }}</h4>
-                <p class="card-category">{{ __('Información principal de los tipos de documentos') }}</p>
+                <h4 class="card-title">{{ __('Asociar Documentos a Estructura') }}</h4>
+                <p class="card-category">{{ __('') }}</p>
               </div>
               <div class="card-body ">
                 @if (session('status'))
@@ -46,7 +47,7 @@
                     </div>
                   </div>
                 @endif
-               
+
                 <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
                     <div class="col-sm-7">
@@ -61,7 +62,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <label class="col-sm-2 col-form-label">{{ __('Tipo de Documento') }}</label>
+                    <label class="col-sm-2 col-form-label">{{ __('Tipo de Estructura') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
                           <select name="nivel1" id="tipoDocumentos" class="form-control" required></select>
@@ -90,10 +91,8 @@
                       <div class="form-group">
                           <select id="requerido" name="requerido" class="form-control" required>
                               <option> </option>
-                              {{-- @foreach($tipocliente as $item) --}}
                                   <option value="Obligatorio">Obligatorio</option>
                                   <option value="No Obligatorio">No Obligatorio</option>
-                              {{-- @endforeach --}}
                           </select>
                       </div>
                     </div>
@@ -107,6 +106,7 @@
                               {{-- @foreach($tipocliente as $item) --}}
                                   <option value="cliente">Cliente</option>
                                   <option value="cuenta">Cuenta</option>
+                                  <option value="transferencia">Transferencia</option>
                               {{-- @endforeach --}}
                           </select>
                       </div>
@@ -138,13 +138,14 @@
                                   <option value="3 años">3 años</option>
                                   <option value="4 años">4 años</option>
                                   <option value="5 años">5 años</option>
+                                  <option value="5 años">No Aplica</option>
                               {{-- @endforeach --}}
                           </select>
                       </div>
                     </div>
                   </div>
-                
-                
+
+
                 {{-- <div class="row">
                   <label class="col-sm-2 col-form-label">{{ __('Nombre del Documento') }}</label>
                   <div class="col-sm-7">
@@ -195,6 +196,6 @@
     $('#tipocliente_id').on('change', loadtipoDocumentos);
 });
 </script>
-    
+
 @endpush
 @endsection

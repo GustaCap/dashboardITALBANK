@@ -18,6 +18,7 @@ class Archivo extends Model
         'email',
         'p_cliente_id',
         'cliente_id',
+        'cliente_id_itbk',
         'tipo_cliente',
         'n_cuenta',
         'n_transfer',
@@ -27,7 +28,13 @@ class Archivo extends Model
         'fecha_vence',
         'raiz_id',      //Agregado 11/05/2020 para pruebas
         'estatus_doc',  //Agregado 02/06/2020 para pruebas
-        'usuario'       //Agregado el 08/06/2020 para cargar nombre del usuario...
+        'usuario',              //Agregado el 08/06/2020 para cargar nombre del usuario...
+        'via_payment',
+        'channel',
+        'cuenta_bene',
+        'nombre_bene',
+        'banco_bene',
+        'proposito'
     ];
 
     // protected $connection = 'italdocv2';

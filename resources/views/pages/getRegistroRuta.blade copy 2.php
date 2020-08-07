@@ -14,6 +14,7 @@
               </ul>
             </div>
             @endif
+            {{-- {{ $ip }} --}}
           <form method="POST" action="{{ route('postRegistroRuta') }}" class="form-horizontal" enctype="multipart/form-data">
             @csrf
             <div class="card ">
@@ -46,7 +47,7 @@
                     </div>
                   </div>
                 @endif
-               
+
                 <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
                     <div class="col-sm-7">
@@ -60,6 +61,30 @@
                       </div>
                     </div>
                   </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Tipo de Documento') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                          <select name="nivel1" id="tipoDocumentos" class="form-control" required></select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Nombre del Documento') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                          <input type="text" id="nombre_doc" name = "nombre_doc" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  {{-- <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Nivel 3') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                          <input type="text" id="nivel3" name = "nivel3" class="form-control">
+                      </div>
+                    </div>
+                  </div> --}}
                   <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Requerimiento') }}</label>
                     <div class="col-sm-7">
@@ -114,43 +139,22 @@
                                   <option value="3 años">3 años</option>
                                   <option value="4 años">4 años</option>
                                   <option value="5 años">5 años</option>
+                                  <option value="5 años">No Aplica</option>
                               {{-- @endforeach --}}
                           </select>
                       </div>
                     </div>
                   </div>
-                <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Nivel 1') }}</label>
-                  <div class="col-sm-7">
-                    <div class="form-group">
-                        <input type="text" id="nivel1" name = "nivel1" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Nivel 2') }}</label>
-                  <div class="col-sm-7">
-                    <div class="form-group">
-                        <input type="text" id="nivel2" name = "nivel2" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Nivel 3') }}</label>
-                  <div class="col-sm-7">
-                    <div class="form-group">
-                        <input type="text" id="nivel3" name = "nivel3" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
+
+
+                {{-- <div class="row">
                   <label class="col-sm-2 col-form-label">{{ __('Nombre del Documento') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group">
                         <input type="text" id="nombre_doc" name = "nombre_doc" class="form-control">
                     </div>
                   </div>
-                </div>
+                </div> --}}
                 <div class="card-footer ml-auto mr-auto">
                   <button type="submit" class="btn btn-primary mb-4">{{ __('Registrar') }}</button>
                 </div>
@@ -169,4 +173,30 @@
     } );
 </script>
 @endpush --}}
+@push('js')
+<script>
+  $(document).ready(function(){
+    function loadtipoDocumentos() {
+        var tipocliente_id = $('#tipocliente_id').val();
+        if ($.trim(tipocliente_id) != '') {
+          /*$.get('nombredelaruta', {variableRequest: variableFormvalue}, funcion)*/
+            $.get('getTipoDocumento', {tipocliente_id: tipocliente_id}, function (tipoDocumentos) {
+
+                var old = $('#tipoDocumentos').data('old') != '' ? $('#tipoDocumentos').data('old') : '';
+
+                $('#tipoDocumentos').empty();
+                $('#tipoDocumentos').append("<option value=''>Seleccione Documento Base</option>");
+
+                $.each(tipoDocumentos, function (index, value) {
+                    $('#tipoDocumentos').append("<option value='" + index + "'" + (old == index ? 'selected' : '') + ">" + value +"</option>");
+                })
+            });
+        }
+    }
+    loadtipoDocumentos();
+    $('#tipocliente_id').on('change', loadtipoDocumentos);
+});
+</script>
+
+@endpush
 @endsection

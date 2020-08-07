@@ -30,7 +30,7 @@ Route::get('/', function () {
  Route::get('/home', 'HomeController@index')->name('home');
 
 //  Route::get('/', 'HomeController@prueba')->name('prueba');
- 
+
 
 // Route::get('listarCliente', 'ClienteController@show')-> name('getlistarCliente');
 
@@ -59,7 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     * Controlador: 'DocumentController'
     */
     Route::get('cargarDocumentos', 'DocumentController@getData');
-    
+
     Route::post('cargarDocumentos', 'DocumentController@cargarDocumentos') -> name('cargarDocumentos');
 
     Route::get('getClienteIND', 'DocumentController@getClienteIND') -> name('getClienteIND');
@@ -79,10 +79,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('registroCliente', 'ClienteController@index')-> name('getRegistroCliente');
     Route::post('registroCliente', 'ClienteController@store')-> name('postRegistroCliente');
+    //  Route::get('cliente/listar', 'ClienteController@show')-> name('getlistarCliente');
      Route::get('listarCliente', 'ClienteController@show')-> name('getlistarCliente');
 
-    Route::get('registroRuta', 'RutaController@index')-> name('getRegistroRuta');
+    // Route::get('registroRuta', 'RutaController@index')-> name('getRegistroRuta');
     Route::post('registroRuta', 'RutaController@store')-> name('postRegistroRuta');
+    // Route::get('documentos/listar', 'RutaController@show')-> name('getlistarRuta');
     Route::get('listarRuta', 'RutaController@show')-> name('getlistarRuta');
 
     Route::get('consultaCliente/{id}/detalle', 'ClienteController@clienteDetalle')-> name('getConsultaCliente');
@@ -90,7 +92,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-Route::get('getTipoDocumento', 'DocumentController@getTipoDocumento')-> name('getTipoDocumento');
+Route::get('registro/ruta/getTipoDocumento', 'DocumentController@getTipoDocumento')-> name('getTipoDocumento');
+
+Route::get('cuentas', 'DocumentController@getCuenta');
 
 
 Route::get('eliminar/{id}/documento', 'DocumentController@eliminarDocumento')-> name('getEliminarDocumento');
@@ -103,7 +107,7 @@ Route::get('usuariore', 'ClienteController@getUsuariore')-> name('getUsuariore')
 
 Route::get('usuarioro', 'RutaController@getUsuarioro')-> name('getUsuarioro');
 
-Route::get('audilog', 'AudilogController@doceliminados')-> name('audilog');
+// Route::get('audilog', 'AudilogController@doceliminados')-> name('audilog');
 
 
 
@@ -122,10 +126,139 @@ Route::get('/user/{user}', function ($user = '') {
     // $fun = new Usuario();
     // $fun->userString();
     return redirect()->back();
+    // return redirect('/');
+    // return view('pages.getlistarCliente');
+    // return redirect()->view('welcome');
 });
 
 /*****************************************************/
 
+//prueba
+// Route::get('registroRuta/{user}', 'RutaController@index')-> name('getRegistroRuta');
+Route::get('registro/ruta/{user}', 'RutaController@index')-> name('getRegistroRuta');
+//  Route::get('registro/ruta', 'RutaController@index')-> name('getRegistroRuta');
+// Route::get('listarRuta/{user}', 'RutaController@show')-> name('getlistarRuta');
+Route::get('listar/ruta/{user}', 'RutaController@show')-> name('getlistarRuta');
+// Route::get('listarCliente/{user}', 'ClienteController@show')-> name('getlistarCliente');
+Route::get('listar/cliente/{user}', 'ClienteController@show')-> name('getlistarCliente');
+// Route::get('getClienteIND/{user}', 'DocumentController@getClienteIND') -> name('getClienteIND');
+Route::get('cliente/IND/{user}', 'DocumentController@getClienteIND') -> name('getClienteIND');
+// Route::get('getClienteCE/{user}', 'DocumentController@getClienteCE') -> name('getClienteCE');
+Route::get('cliente/CE/{user}', 'DocumentController@getClienteCE') -> name('getClienteCE');
+// Route::get('getClienteCB/{user}', 'DocumentController@getClienteCB') -> name('getClienteCB');
+Route::get('cliente/CB/{user}', 'DocumentController@getClienteCB') -> name('getClienteCB');
+// Route::get('getClienteCM/{user}', 'DocumentController@getClienteCM') -> name('getClienteCM');
+Route::get('cliente/CM/{user}', 'DocumentController@getClienteCM') -> name('getClienteCM');
+
+/**
+ * Ruta para CONSULTAR los documentos cargados por cada tipo de cliente
+ * @param {id} del cliente
+ * @param {user}, nombre de usuario
+ */
+
+Route::get('consulta/cliente/{id}/detalle/{user}', 'ClienteController@clienteDetalle')-> name('getConsultaCliente');
+
+
+/**
+ * Ruta para ELIMINAR los documentos cargados por cada tipo de cliente
+ * @param {id} del cliente
+ * @param {user}, nombre de usuario
+ */
+Route::get('eliminar/cliente/{id}/documento/{user}', 'DocumentController@eliminarDocumento')-> name('getEliminarDocumento');
+
+Route::get('audilog/{user}', 'AudilogController@doceliminados')-> name('audilog');
+
+Route::get('crear/estructura/{user}', 'EstructuraController@index')-> name('getCrearEstructura');
+
+Route::get('crear/cliente/{user}', 'TipoclienteController@index')-> name('getCrearTipocliente');
+
+Route::post('crear/estructura', 'EstructuraController@store')-> name('postCreaEstructura');
+
+Route::post('crear/cliente', 'TipoclienteController@store')-> name('postCrearTipocliente');
+
+Route::get('upload/documentos/{user}', 'DocumentController@uploadIndex')-> name('uploadDocumentos');
+
+Route::get('upload/tipo/cliente/{id}/documentos/carga/{user}', 'DocumentController@uploadDocClientes')-> name('uploadDocClientes');
+// Route::get('upload/tipocliente/{tcid}/cliente/{id}/documentos/carga/{user}', 'DocumentController@uploadDocClientes')-> name('uploadDocClientes');
+
+// Route::get('upload/documentos', 'DocumentController@getDocumentos')-> name('getDocumentos');
+Route::get('upload/documentos/getTipoDocumento', 'DocumentController@getDocumento')-> name('getTipoDocumento');
+
+
+/**
+ * Rutas para el manejo de transferencias
+ * Agregadas: 23/07/2020
+ * Requerido por: Daniel Ledesma
+ */
+Route::get('cargar/transferencia/{user}', 'TransferenciaController@index')-> name('getCargarTransferencia');
+
+Route::post('upload/transferencia', 'TransferenciaController@store')-> name('postUploadTransferencia');
+
+Route::get('listar/transferencias/{user}', 'TransferenciaController@show')-> name('getListarTransferencias');
+
+Route::get('eliminar/transferencia/{id}/{user}', 'TransferenciaController@eliminarTransferencia')-> name('getEliminarTransferencia');
+
+
+/**
+ * Rutas Agregadas para prueba de funcionalidad
+ */
+
+Route::get('tipocliente/{id}/cliente/italbank/{user}', 'ClienteController@clienteItbk')-> name('getClienteItbk');
+
+Route::post('cuenta/cliente', 'ClienteController@postclienteItbk')-> name('postClienteItbk');
+
+
+
+
+Route::get('prueba45', function () {
+
+
+//Directorio
+$dir = getcwd();
+// dd($dir);
+$directorio = opendir($dir);
+
+$archivos = array();
+$carpetas = array();
+
+//Carpetas y Archivos a excluir
+$excluir = array('.', '..', 'index.php', 'favicon.ico','folder.png','file.png','.dropbox.cache','.dropbox');
+
+while ($f = readdir($directorio)) {
+    if (is_dir("$dir/$f") && !in_array($f, $excluir)) {
+        $carpetas[] = $f;
+    } else if (!in_array($f, $excluir)){
+        //No es una carpeta, por ende lo mandamos a archivos
+        $archivos[] = $f;
+    }
+}
+closedir($directorio);
+
+sort($carpetas,SORT_NATURAL | SORT_FLAG_CASE);
+sort($archivos,SORT_NATURAL | SORT_FLAG_CASE);
+
+$i = 1;
+                        foreach ($carpetas as $c) {
+                            echo '<p class="carpeta"><a href="' . $c . '">' . $c . '</a></p>';
+                            if (($i % 6) == 0 && ($i % 18) != 0) {
+                                echo '</div><div class="col">';
+                            }
+                            if (($i % 18) == 0) {
+                                echo '</div></div><div class="row"><div class="col">';
+                            }
+                            $i++;
+                        }
+
+// return view('pages.pruebaCarpetas')->with('carpetas', $carpetas)->with('archvios', $archivos);
+
+// dd($dir, $carpetas, $archivos);
+
+});
+
+
+Route::get('prueba6767', function () {
+    return view('pages.pruebaIframe');
+});
 
 
 
