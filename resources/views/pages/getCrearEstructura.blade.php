@@ -51,7 +51,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="tipocliente_id" name="tipocliente_id" class="form-control" required>
+                          <select id="tipocliente_id" name="tipocliente_id" class="form-control seleccion" required>
                               <option> </option>
                               @foreach($tipocliente as $item)
                                   <option value="{{ $item->id }}">{{ $item->tipo }}</option>
@@ -74,11 +74,11 @@
                     <label class="col-sm-2 col-form-label">{{ __('Nivel de Relación') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="nivel_relacion" name="nivel_relacion" class="form-control" required>
+                          <select id="nivel_relacion" name="nivel_relacion" class="form-control seleccion" required>
                               <option> </option>
                               {{-- @foreach($tipocliente as $item) --}}
                                   <option value="cliente">Cliente</option>
-                                  <option value="cuenta">Cuenta</option>
+                                  <option value="producto">Producto</option>
                                   <option value="transferencia">Transferencia</option>
                               {{-- @endforeach --}}
                           </select>
@@ -95,12 +95,13 @@
 
     </div>
   </div>
-{{-- @push('js')
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
-    $( function() {
-      $( "#datepicker1" ).datepicker();
-      $( "#datepicker2" ).datepicker();
-    } );
+//Select Dinamico
+$(document).ready(function() {
+    $('.seleccion').select2();
+});
 </script>
-@endpush --}}
+@endpush
 @endsection

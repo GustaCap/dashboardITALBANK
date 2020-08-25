@@ -46,7 +46,7 @@
 
 .iconForward a:hover {
     color: crimson;
-   
+
 }
 
 .iconForward i {
@@ -84,23 +84,23 @@ border: 0px solid #000000;
     content: attr(data-tooltip);
     position: absolute;
     opacity: 0;
-    
+
     /* customizable */
     transition: all 0.15s ease;
     padding: 10px;
     color: rgb(255, 255, 255);
     border-radius: 10px;
-    box-shadow: 2px 2px 1px silver;    
+    box-shadow: 2px 2px 1px silver;
 }
 
 [data-tooltip].c:hover:before {
     /* needed - do not touch */
     opacity: 1;
-    
+
     /* customizable */
     background: green;
     margin-top: -50px;
-    margin-left: 20px;    
+    margin-left: 20px;
 }
 
 /* Tooltip container */
@@ -109,23 +109,23 @@ border: 0px solid #000000;
     content: attr(data-tooltip);
     position: absolute;
     opacity: 0;
-    
+
     /* customizable */
     transition: all 0.15s ease;
     padding: 10px;
     color: rgb(255, 255, 255);
     border-radius: 10px;
-    box-shadow: 2px 2px 1px silver;    
+    box-shadow: 2px 2px 1px silver;
 }
 
 [data-tooltip].nc:hover:before {
     /* needed - do not touch */
     opacity: 1;
-    
+
     /* customizable */
     background: orange;
     margin-top: -50px;
-    margin-left: 20px;    
+    margin-left: 20px;
 }
 
 /* th.bg-success {
@@ -140,3 +140,9 @@ th.bg {
     width: 100%;
     background: #00cfff57;
 }
+
+.unselectable{
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+

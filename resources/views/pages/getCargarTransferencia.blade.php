@@ -52,10 +52,10 @@
                     <label class="col-sm-2 col-form-label">{{ __('Selecione Cuenta Cliente') }}</label>
                     <div class="col-sm-7">
                         <div class="form-group">
-                          <select id="numCuenta" name="numCuenta" class="form-control seleccion" required>
+                          <select id="cliente_id_itbk" name="cliente_id_itbk" class="form-control seleccion" required>
                               <option> </option>
                               @foreach($clientes as $item)
-                                  <option value="{{ $item->n_cuenta }}">{{ $item->nombre }} - {{ $item->n_cuenta }}</option>
+                                  <option value="{{ $item->cliente_id_itbk }}">{{ $item->nombre }} - {{ $item->cliente_id_itbk }}</option>
                               @endforeach
                        </select>
                       </div>
@@ -74,7 +74,7 @@
                     <label class="col-sm-2 col-form-label mt-2">{{ __('Estructura Documental') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                        <select id="nombredoc" name="nombredoc" class="form-control" required>
+                        <select id="nombredoc" name="nombredoc" class="form-control seleccion" required>
                             <option> </option>
                             @foreach($dataRaices as $item)
                                 <option value="{{ $item->nombre_doc }}">{{ $item->nombre_doc }}</option>
@@ -88,7 +88,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Vía Payment') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="viaPayment" name="viaPayment" class="form-control" required>
+                          <select id="viaPayment" name="viaPayment" class="form-control seleccion" required>
                               <option> </option>
                                   <option value="FED">FED</option>
                                   <option value="SWIFT">SWIFT</option>
@@ -101,7 +101,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Channel') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="channel" name="channel" class="form-control" required>
+                          <select id="channel" name="channel" class="form-control seleccion" required>
                               <option> </option>
                                   <option value="FED">FED</option>
                                   <option value="BBN">BBN</option>

@@ -22,12 +22,38 @@
                             <option> </option>
                             @foreach($data as $item)
                                 {{-- <option value="{{ $item->n_cuenta }}">{{ $item->nombre }} - {{ $item->n_cuenta }}</option> --}}
-                                 <option value="{{ $item->cliente_id_itbk }}">{{ $item->nombre }}</option>
+                                 <option value="{{ $item->cliente_id_itbk }}">{{ $item->nombre }} - {{ $item->cliente_id_itbk }}</option>
                             @endforeach
                      </select>
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Productos Asociados') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                          <select id="carpeta_raiz" name="carpeta_raiz" class="form-control seleccion" required>
+                              <option> </option>
+                              @foreach($data2 as $item)
+                                  {{-- <option value="{{ $item->n_cuenta }}">{{ $item->nombre }} - {{ $item->n_cuenta }}</option> --}}
+                                   <option value="{{ $item->carpeta_raiz }}">{{ $item->carpeta_raiz }}</option>
+                              @endforeach
+                       </select>
+                      </div>
+                    </div>
+                  </div>
+                {{-- <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Nivel de Relación') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                          <select id="nivel_relacion" name="nivel_relacion" class="form-control seleccion" required>
+                              <option> </option>
+                              <option value="cliente" >Cliente</option>
+                              <option value="producto" >Producto</option>
+                       </select>
+                      </div>
+                    </div>
+                  </div> --}}
                  <input type="hidden" name="usuario" id="usuario" value="{{ $usuario }}" />
 
                 <div class="card-footer ml-auto mr-auto">

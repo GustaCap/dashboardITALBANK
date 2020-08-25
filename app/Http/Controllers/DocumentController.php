@@ -379,6 +379,7 @@ class DocumentController extends Controller
              $raiz_id = $item->id;
              $nombreinicial = $item->nombre_doc;
              $nombrefinal = trim($nombreinicial);
+             $nivel_relacion = $item->nivel_relacion;
         }
         // $raiz_id = $dataraices->id;
         /***********************************************************************/
@@ -446,7 +447,8 @@ class DocumentController extends Controller
             'file' =>  $rutaFinal,
             'estatus_doc' => 1,
             // 'usuario' => $str_user
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'nivel_relacion' => $nivel_relacion
 
             ]);
 
@@ -635,6 +637,123 @@ class DocumentController extends Controller
 
         // dd($dataCliente);
     }
+
+    public function reportePerDoc(Request $request, $user)
+    {
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
+        $query = "select distinct nombre, cliente_id_itbk
+        from clientes
+        order by nombre asc";
+        $data = DB::connection('italdocv6')->select($query);
+        return view('pages.repoDocumentos')->with('data', $data)->with('usuario', $usuario);
+    }
+
+    public function reportePerTrans(Request $request, $user)
+    {
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
+        $query = "select distinct nombre, cliente_id_itbk
+        from clientes
+        order by nombre asc";
+        $data = DB::connection('italdocv6')->select($query);
+        return view('pages.repoTransferencias')->with('data', $data)->with('usuario', $usuario);
+    }
+
+
+
+
+
+    public function postDocClienteFiles(Request $request)
+    {
+
+        $this->validate($request, [
+
+            'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
+
+        ]);
+
+        $usuario = $request->usuario;
+        $carpeta = $request->carpetas;
+
+
+        $query = "select * from raices where carpeta_raiz = '$carpeta'"; //renombrado para cambios 13/05/2020
+        $dataraices = DB::connection('italdocv6')->select($query);
+        foreach ($dataraices as $item) {
+
+             $raiz_id = $item->id;
+             $nombreinicial = $item->nombre_doc;
+             $nombrefinal = trim($nombreinicial);
+             $nivel_relacion = $item->nivel_relacion;
+        }
+
+        if ($request->hasfile('file')) {
+
+
+            $file = $request->file('file');
+            $cliente_id_itbk = $request->cliente_id_itbk;
+            // $numCuenta = $request->n_cuenta;
+
+            // $query1 = "select * from clientes where n_cuenta = '$cliente_id_itbk' "; /**query de prueba */
+            $query1 = "select * from clientes where cliente_id_itbk = '$cliente_id_itbk' FETCH FIRST 1 ROWS ONLY";
+            $datotipocliente = DB::connection('italdocv6')->select($query1);
+
+            foreach ($datotipocliente as $item) {
+
+                $cliente_id = $item->id;
+                $tipocliente = $item->tipocliente_id;
+
+            }
+
+            $fecEmitido = $request->fecEmitido;
+            $fecExpira = $request->fecExpira;
+
+            //cambiar el nombre de la imagen
+            //**************************************************************************************************/
+
+                $ext = $file->getClientOriginalExtension();
+                $nombreimage = $nombrefinal.'.'.$ext;
+
+            //**************************************************************************************************/
+
+            $ruta = public_path().'/'.$carpeta;
+
+            $file->move($ruta, $nombreimage);
+        }
+
+        $rutaFinal = '/'.$carpeta.'/'.$nombreimage;
+
+        $data = Archivo::create([
+
+            'cliente_id' => $cliente_id,
+            'raiz_id' => $raiz_id,          //agregado 11/05/2020 para pruebas
+            'tipo_cliente' => $tipocliente,
+            'name_archivo' => $nombrefinal,    //comentado por canbios 13/05/2020
+            // 'n_cuenta' => $numCuenta,
+            'cliente_id_itbk' => $cliente_id_itbk,
+            'fecha_emitido' => $fecEmitido,
+            'fecha_vence' => $fecExpira,
+            'file' =>  $rutaFinal,
+            'estatus_doc' => 1,
+            'usuario' => $usuario,
+            'nivel_relacion' => $nivel_relacion
+
+            ]);
+
+        $data->save();
+        $output = array(
+            'success' => 'Carga successfully',
+            // 'nombre' => $nombree,
+            // 'image'  => '<img src="/dashboard/public/'.$rutaFinal.'" class="img-thumbnail" />'
+           );
+
+           return response()->json($output);
+        // return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
+
+    }
+
 
 
 

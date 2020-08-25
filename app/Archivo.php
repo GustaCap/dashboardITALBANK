@@ -34,7 +34,8 @@ class Archivo extends Model
         'cuenta_bene',
         'nombre_bene',
         'banco_bene',
-        'proposito'
+        'proposito',
+        'nivel_relacion' //agregado 17/08/2020 para pruebas
     ];
 
     // protected $connection = 'italdocv2';

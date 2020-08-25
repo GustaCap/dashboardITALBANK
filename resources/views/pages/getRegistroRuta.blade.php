@@ -52,7 +52,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="tipocliente_id" name="tipocliente_id" class="form-control" required>
+                          <select id="tipocliente_id" name="tipocliente_id" class="form-control seleccion" required>
                               <option> </option>
                               @foreach($tipocliente as $item)
                                   <option value="{{ $item->id }}">{{ $item->tipo }}</option>
@@ -65,7 +65,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Estructura') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select name="nivel1" id="tipoDocumentos" class="form-control" required></select>
+                          <select name="nivel1" id="tipoDocumentos" class="form-control seleccion" required></select>
                       </div>
                     </div>
                   </div>
@@ -89,7 +89,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Tipo de Requerimiento') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="requerido" name="requerido" class="form-control" required>
+                          <select id="requerido" name="requerido" class="form-control seleccion" required>
                               <option> </option>
                                   <option value="Obligatorio">Obligatorio</option>
                                   <option value="No Obligatorio">No Obligatorio</option>
@@ -97,26 +97,26 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  {{-- <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Nivel de Relación') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
                           <select id="nivel_relacion" name="nivel_relacion" class="form-control" required>
                               <option> </option>
-                              {{-- @foreach($tipocliente as $item) --}}
+
                                   <option value="cliente">Cliente</option>
-                                  <option value="cuenta">Cuenta</option>
+                                  <option value="producto">Producto</option>
                                   <option value="transferencia">Transferencia</option>
-                              {{-- @endforeach --}}
+
                           </select>
                       </div>
                     </div>
-                  </div>
+                  </div> --}}
                   <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Fecha de Expiración') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="fec_expiracion" name="fec_expiracion" class="form-control" required>
+                          <select id="fec_expiracion" name="fec_expiracion" class="form-control seleccion" required>
                               <option> </option>
                               {{-- @foreach($tipocliente as $item) --}}
                                   <option value="1">Aplica</option>
@@ -130,7 +130,7 @@
                     <label class="col-sm-2 col-form-label">{{ __('Frecuencia') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="frecuencia" name="frecuencia" class="form-control" required>
+                          <select id="frecuencia" name="frecuencia" class="form-control seleccion" required>
                               <option> </option>
                               {{-- @foreach($tipocliente as $item) --}}
                                   <option value="Anual">Anual</option>
@@ -138,7 +138,7 @@
                                   <option value="3 años">3 años</option>
                                   <option value="4 años">4 años</option>
                                   <option value="5 años">5 años</option>
-                                  <option value="5 años">No Aplica</option>
+                                  <option value="No Aplica">No Aplica</option>
                               {{-- @endforeach --}}
                           </select>
                       </div>
@@ -173,6 +173,7 @@
 </script>
 @endpush --}}
 @push('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
   $(document).ready(function(){
     function loadtipoDocumentos() {
@@ -195,6 +196,11 @@
     loadtipoDocumentos();
     $('#tipocliente_id').on('change', loadtipoDocumentos);
 });
+
+//Select Dinamico
+$(document).ready(function() {
+      $('.seleccion').select2();
+  });
 </script>
 
 @endpush

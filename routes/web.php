@@ -83,7 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
      Route::get('listarCliente', 'ClienteController@show')-> name('getlistarCliente');
 
     // Route::get('registroRuta', 'RutaController@index')-> name('getRegistroRuta');
-    Route::post('registroRuta', 'RutaController@store')-> name('postRegistroRuta');
+    // Route::post('registroRuta', 'RutaController@store')-> name('postRegistroRuta');
     // Route::get('documentos/listar', 'RutaController@show')-> name('getlistarRuta');
     Route::get('listarRuta', 'RutaController@show')-> name('getlistarRuta');
 
@@ -136,6 +136,7 @@ Route::get('/user/{user}', function ($user = '') {
 //prueba
 // Route::get('registroRuta/{user}', 'RutaController@index')-> name('getRegistroRuta');
 Route::get('registro/ruta/{user}', 'RutaController@index')-> name('getRegistroRuta');
+Route::post('registroRuta', 'RutaController@store')-> name('postRegistroRuta');
 //  Route::get('registro/ruta', 'RutaController@index')-> name('getRegistroRuta');
 // Route::get('listarRuta/{user}', 'RutaController@show')-> name('getlistarRuta');
 Route::get('listar/ruta/{user}', 'RutaController@show')-> name('getlistarRuta');
@@ -208,66 +209,42 @@ Route::get('tipocliente/{id}/cliente/italbank/{user}', 'ClienteController@client
 Route::post('cuenta/cliente', 'ClienteController@postclienteItbk')-> name('postClienteItbk');
 
 
-
-
-Route::get('prueba45', function () {
-
-
-//Directorio
-$dir = getcwd();
-// dd($dir);
-$directorio = opendir($dir);
-
-$archivos = array();
-$carpetas = array();
-
-//Carpetas y Archivos a excluir
-$excluir = array('.', '..', 'index.php', 'favicon.ico','folder.png','file.png','.dropbox.cache','.dropbox');
-
-while ($f = readdir($directorio)) {
-    if (is_dir("$dir/$f") && !in_array($f, $excluir)) {
-        $carpetas[] = $f;
-    } else if (!in_array($f, $excluir)){
-        //No es una carpeta, por ende lo mandamos a archivos
-        $archivos[] = $f;
-    }
-}
-closedir($directorio);
-
-sort($carpetas,SORT_NATURAL | SORT_FLAG_CASE);
-sort($archivos,SORT_NATURAL | SORT_FLAG_CASE);
-
-$i = 1;
-                        foreach ($carpetas as $c) {
-                            echo '<p class="carpeta"><a href="' . $c . '">' . $c . '</a></p>';
-                            if (($i % 6) == 0 && ($i % 18) != 0) {
-                                echo '</div><div class="col">';
-                            }
-                            if (($i % 18) == 0) {
-                                echo '</div></div><div class="row"><div class="col">';
-                            }
-                            $i++;
-                        }
-
-// return view('pages.pruebaCarpetas')->with('carpetas', $carpetas)->with('archvios', $archivos);
-
-// dd($dir, $carpetas, $archivos);
-
-});
-
-
 Route::get('prueba6767', function () {
     return view('pages.pruebaIframe');
 });
 
 
 
+/**
+ * Rutas Agregadas para prueba de pdf
+ */
+
+
+Route::get('pdf', function() {
+
+    $pdf = App::make('dompdf.wrapper');
+
+    $pdf->loadView('pages.generate_pdf');
+
+    return $pdf->stream();
+
+});
+
+Route::get('estructuras/pdf','PdfController@estructurasPDF');
+Route::get('cliente/tipos/pdf','PdfController@tipoclientesPDF');
+Route::get('documentos/pdf','PdfController@documentosPDF');
+Route::get('transferencias/pdf','PdfController@transferenciasPDF');
+
+Route::get('reporte/per/doc/{user}','DocumentController@reportePerDoc')->name('getrepoperdoc');
+Route::post('reporte/per/doc','PdfController@generarepoPerDoc')->name('postrepoperdoc');
+
+Route::get('reporte/per/trans/{user}','DocumentController@reportePerTrans')->name('getrepopertrans');
+Route::post('reporte/per/trans','PdfController@generarepoPerTrans')->name('postrepopertrans');
 
 
 
 
-
-
+Route::post('postDocClienteFiles', 'DocumentController@postDocClienteFiles') -> name('postDocClienteFiles');
 
 
 

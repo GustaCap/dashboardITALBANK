@@ -17,7 +17,7 @@ class TransferenciaController extends Controller
         $ip = $request->ip();
         $usuario = $user;
         $clientes = Cliente::all();
-        $query = "select * from raices where nivel_relacion = 'transferencia'";
+        $query = "select * from raices where nivel_relacion = 'transferencia' and tipo_carpeta = 'subnivel'";
         $dataRaices = DB::connection('italdocv6')->select($query);
         return view('pages.getCargarTransferencia')->with('usuario', $usuario)->with('clientes', $clientes)->with('dataRaices', $dataRaices);
         # code...
@@ -34,7 +34,7 @@ class TransferenciaController extends Controller
 
         ]);
 
-        $querycliente = "select * from clientes where n_cuenta = '$request->numCuenta'";
+        $querycliente = "select * from clientes where cliente_id_itbk = '$request->cliente_id_itbk' FETCH FIRST 1 ROWS ONLY";
         $data = DB::connection('italdocv6')->select($querycliente);
         foreach ($data as $item) {
             $cliente_id_itbk = $item->cliente_id_itbk;
@@ -44,13 +44,17 @@ class TransferenciaController extends Controller
 
         // $carpeta = 'Transferencias';
         $carpeta = $request->nombredoc;
-        $query = "select * from raices where carpeta_raiz = '$carpeta'";
+        $query = "select * from raices where carpeta_raiz like '%$carpeta%'";
         $dataraices = DB::connection('italdocv6')->select($query);
+        // dd($dataraices);
         foreach ($dataraices as $item) {
              $raiz_id = $item->id;
              $nombreinicial = $item->nombre_doc;
+            //  dd($nombreinicial);
              $nombrefinal = trim($nombreinicial); /**Elimino los espacios en blanco con trim() */
+             $nivel_relacion = $item->nivel_relacion;
         }
+        // dd($nombrefinal);
 
         if ($request->hasfile('file')) {
 
@@ -84,7 +88,8 @@ class TransferenciaController extends Controller
                 'cuenta_bene' => $request->cuenta_bene,
                 'nombre_bene' => $request->nombre_bene,
                 'banco_bene' => $request->banco_bene,
-                'proposito' => $request->proposito
+                'proposito' => $request->proposito,
+                'nivel_relacion'=>$nivel_relacion
 
             ]);
 

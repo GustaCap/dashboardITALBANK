@@ -6,6 +6,7 @@ use App\Raiz;
 use App\Tipocliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class RutaController extends Controller
 {
@@ -45,7 +46,7 @@ class RutaController extends Controller
 
             'nivel1' => 'required',
             'tipocliente_id' => 'required',
-            'nivel_relacion' => 'required',
+            // 'nivel_relacion' => 'required',
             'requerido' => 'required',
             'frecuencia' => 'required',
             'fec_expiracion' => 'required',
@@ -54,10 +55,20 @@ class RutaController extends Controller
 
         $carpeta_raiz = $request->nivel1.'/'.$request->nombre_doc;
 
+        //Agregado para mejorar funcionalidad
+        $query = "select * from raices where carpeta_raiz = '$request->nivel1'";
+        $data = DB::connection('italdocv6')->select($query);
+        foreach ($data as $item) {
+
+            $nivel_relacion = $item->nivel_relacion;
+
+        }
+
         $dataraiz = Raiz::create([
 
             'carpeta_raiz' => $carpeta_raiz,
-            'nivel_relacion' => $request->nivel_relacion,
+            // 'nivel_relacion' => $request->nivel_relacion,
+            'nivel_relacion' => $nivel_relacion,
             'fec_expiracion' => $request->fec_expiracion,
             'tipocliente_id' => $request->tipocliente_id,
             'requerido' => $request->requerido,

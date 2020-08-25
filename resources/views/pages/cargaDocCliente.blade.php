@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'getClienteIND', 'titlePage' => __('Carga de Documentos Cliente IND')])
+@extends('layouts.app', ['activePage' => 'cargaDocCliente', 'titlePage' => __('Carga de Documentos asociados al cliente')])
 
 @section('content')
   <div class="content">
@@ -7,7 +7,7 @@
         <div class="col-md-12">
           <div class="alert alert-success" style="display:none"></div>
           {{-- <form class="form-horizontal" enctype="multipart/form-data" id="formuploadajax"> --}}
-            <form method="post" action="{{ route('postClienteFiles') }}" id="upload_form" enctype="multipart/form-data">
+            <form method="post" action="{{ route('postDocClienteFiles') }}" id="upload_form" enctype="multipart/form-data">
             @csrf
             {{-- {{ $usuario }} --}}
             <input type="hidden" name="usuario" id="usuario" value="{{ $usuario }}" />
@@ -32,21 +32,6 @@
                     </div>
                   </div>
                 @endif
-                <div class="row">
-                  <label class="col-sm-2 col-form-label">{{ __('Numero de Cuenta') }}</label>
-                  <div class="col-sm-7">
-                    <div class="form-group">
-                      <select id="n_cuenta" name="n_cuenta" class="form-control seleccion" required>
-                          <option> </option>
-                          @foreach($data as $item)
-                               <option value="{{ $item->n_cuenta }}">{{ $item->n_cuenta }}</option>
-                          @endforeach
-
-                   </select>
-                  </div>
-                  </div>
-                </div>
-
                 <div class="row d-flex justify-content-center">
                   <div class="col-lg-10 col-md-12">
                     <div class="progress mt-5 mb-5" style="height: 1.5rem;">
@@ -59,21 +44,21 @@
                   </div>
 
                   <div class="card-body table-responsive">
-                    <table id="table_id" class="table display text-center table-striped table-sm" style="width:100%">
+                    <table id="table_id" class="table display cell-bordered text-center" style="width:100%">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Opción</th>
+                            <th>Carpeta Raiz</th>
                             <th>Frecuencia</th>
-                            <th>Relación</th>
+                            <th>Nivel Relación</th>
+                            {{-- <th>Estructura</th> --}}
                             <th>Estructura</th>
                             <th>Documento</th>
                             <th class="text-center">Requerido</th>
                             <th class="text-center">Vence</th>
                             <th>Archivo</th>
-                            <th class="text-center">Acción</th>
-                            <th class="text-center">Estatus</th>
+                            <th class="text-center">Cargar</th>
                         </tr>
-                        <td colspan="10">
+                        <td colspan="8">
                           <input id="buscar" type="text" class="form-control" placeholder="Escriba algo para filtrar" />
                         </td>
                     </thead>
@@ -106,20 +91,8 @@
                             <td class="text-center">No Aplica</td>
                             @endif
                             {{-- <td><input type="date" name = "fecExpira" id="fecExpira"></td> --}}
-                            {{-- comentado por pruebas --}}
-                            {{-- <td><input id="file" name="file" type="file"></td> --}}
-
-                            @if (in_array($item->id, $array2))
-                            <td><input id="file" name="file" type="file"></td>
-                            <td><button type="submit" class="btn btn-info" id="ajaxSubmit">{{ __('Actualizar') }}</button></td>
-                            <td class="text-center"><span class="badge badge-success">CARGADO</span></td>
-                            @else
                             <td><input id="file" name="file" type="file"></td>
                             <td><button type="submit" class="btn btn-primary" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
-                            <td class="text-center"><span class="badge badge-warning">NO CARGADO</span></td>
-                            @endif
-
-                            {{-- <td><button type="submit" class="btn btn-primary" id="ajaxSubmit">{{ __('Cargar') }}</button></td> --}}
 
                         </tr>
                         @endforeach

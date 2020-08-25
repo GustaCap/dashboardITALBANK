@@ -156,7 +156,7 @@ return [
         'italdocv6' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
-            'host' => env('ITALDOCV6_HOST', '10.200.0.77'),
+            'host' => env('ITALDOCV6_HOST', '127.0.0.1'),
             'port' => env('ITALDOCV6_PORT', '5432'),
             'database' => env('ITALDOCV6_DATABASE', 'forge'),
             'username' => env('ITALDOCV6_USERNAME', 'forge'),

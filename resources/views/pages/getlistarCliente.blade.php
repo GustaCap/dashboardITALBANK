@@ -23,10 +23,10 @@
                 {{-- <thead class="text-warning"> --}}
                   <thead class="text-danger">
                     {{-- {{ $usuario }} --}}
-                  <th style="width:40px"><strong>id</strong></th>
+                  {{-- <th style="width:40px"><strong>id</strong></th> --}}
                   <th style="width:60px"><strong>Nombre</strong></th>
 
-                  <th style="width:90px"><strong>Dni</strong></th>
+                  <th style="width:90px"><strong>DNI</strong></th>
                   <th style="width:50px"><strong>Email</strong></th>
                   <th style="width:70px"><strong>ID Italbank</strong></th>
                   <th style="width:150px"><strong>Tipo Cliente</strong></th>
@@ -38,7 +38,7 @@
                 <tbody>
                     @foreach ($dataCliente as $item)
                     <tr>
-                      <td>{{ $item->id }}</td>
+                      {{-- <td>{{ $item->id }}</td> --}}
                       <td>{{ $item->nombre }}</td>
 
                       <td>{{ $item->dni }}</td>
@@ -119,7 +119,7 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                        <th>Id</th>
+                        {{-- <th>Id</th> --}}
                         <th>Nombre</th>
 
                         <th>Dni</th>
@@ -171,32 +171,31 @@
 @push('js')
 <script type="text/javascript">
   $(document).ready(function() {
-      // Setup - add a text input to each footer cell
-      $('#tablelistarclientes thead tr').clone(true).appendTo( '#tablelistarclientes thead' );
-      $('#tablelistarclientes thead tr:eq(1) th').each( function (i) {
-          var title = $(this).text();
-          $(this).html( '<input class="inputfiltro form-control text-center" type="text" placeholder="'+title+'" />' );
+    // Setup - add a text input to each footer cell
+    $('#tablelistarclientes thead tr').clone(true).appendTo( '#tablelistarclientes thead' );
+    $('#tablelistarclientes thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input class="inputfiltro form-control text-center" type="text" placeholder="'+title+'" />' );
 
-          $( 'input', this ).on( 'keyup change', function () {
-              if ( table.column(i).search() !== this.value ) {
-                  table
-                      .column(i)
-                      .search( this.value )
-                      .draw();
-              }
-          } );
-      } );
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
 
-      /* Idioma español*/
-       var table = $('#tablelistarclientes').DataTable( {
-          orderCellsTop: true,
-          fixedHeader: true,
-          pageLength : 20,
-          lengthMenu: [[20, 30, 50, 100, -1], [20, 30, 50, 100, 'Todos']]
-          //  order: [[ 3, "asc" ]] /*Ordenar la tabla por numero de columna*/
-       } );
-
-   } );
+    /* Idioma español*/
+     var table = $('#tablelistarclientes').DataTable( {
+        orderCellsTop: true,
+        fixedHeader: true,
+        order: [[ 0, "asc" ]],
+        pageLength : 20,
+        lengthMenu: [[20, 30, 50, 100, -1], [20, 30, 50, 100, 'Todos']]
+     } );
+ } );
 
     </script>
 @endpush
