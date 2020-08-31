@@ -34,9 +34,9 @@ Route::get('1.0/documento/tipos', 'ApiController@tipoDocumentos');
 /**
  * Ruta: 1.0/documento/tipos/{id}/cliente
  * Devuelve los documentos asociados al tipo de cliente.
- * 
+ *
  * @param {id} parametro que refiere al campo 'tipocliente_id' tabla:raices, y al campo 'id' en tabla:tipoclientes
- * 
+ *
  * Agregada el 10/06/2020
  */
 Route::get('1.0/documento/tipos/{id}/cliente', 'ApiController@documentosTipocliente');
@@ -45,7 +45,7 @@ Route::get('1.0/documento/tipos/{id}/cliente', 'ApiController@documentosTipoclie
 /**
  * Ruta: 1.0/documentos/carga
  * Para la carga de documentos
- * 
+ *
  * @param precliente_id
  * @param cliente_id_itbk
  * @param numCuenta
@@ -57,6 +57,9 @@ Route::get('1.0/documento/tipos/{id}/cliente', 'ApiController@documentosTipoclie
  * @param usuario
  */
 Route::post('1.0/documentos/carga', 'ApiController@cargaDocumentos');
+
+
+// Route::get('productos/estructuras/{id}', 'RutaController@productosDinamicos');
 
 
 

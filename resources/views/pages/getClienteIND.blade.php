@@ -110,6 +110,7 @@
                             {{-- <td><input id="file" name="file" type="file"></td> --}}
 
                             @if (in_array($item->id, $array2))
+                            {{-- @if (in_array($item->n_cuenta, $array2)) --}}
                             <td><input id="file" name="file" type="file"></td>
                             <td><button type="submit" class="btn btn-info" id="ajaxSubmit">{{ __('Actualizar') }}</button></td>
                             <td class="text-center"><span class="badge badge-success">CARGADO</span></td>

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'getSelecionarCliente', 'titlePage' => __('Seleccionar Cliente Italbank')])
+@extends('layouts.app', ['activePage' => 'getdocumentos', 'titlePage' => __('Carga de Documentos')])
 
 @section('content')
   <div class="content">
@@ -8,8 +8,8 @@
         <div class="col-md-12">
             <div class="card ">
               <div class="card-header card-header-primary">
-                <h4 class="card-title">{{ __('Cliente Italbank') }}</h4>
-                <p class="card-category">{{ __('Seleccion de Cliente Italbank') }}</p>
+                <h4 class="card-title">{{ __('Carga de Documentos Italbank') }}</h4>
+
               </div>
               <div class="card-body ">
                 <form method="post" action="{{ route('postClienteItbk') }}">
@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <select id="cliente_id_itbk" name="cliente_id_itbk" class="form-control seleccion" required>
                             <option> </option>
-                            @foreach($data as $item)
+                            @foreach($clientes as $item)
                                 {{-- <option value="{{ $item->n_cuenta }}">{{ $item->nombre }} - {{ $item->n_cuenta }}</option> --}}
                                  <option value="{{ $item->cliente_id_itbk }}">{{ $item->nombre }} - {{ $item->cliente_id_itbk }}</option>
                             @endforeach
@@ -29,7 +29,7 @@
                   </div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-2 col-form-label">{{ __('Cuenta') }}</label>
+                    <label class="col-sm-2 col-form-label">{{ __('Cuentas Asociadas') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
                           <select id="n_cuenta" name="n_cuenta" class="form-control seleccion" required>
@@ -38,20 +38,17 @@
                       </div>
                     </div>
                   </div>
-                <div class="row">
+                {{-- <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Productos Asociados') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
                           <select id="carpeta_raiz" name="carpeta_raiz" class="form-control seleccion" required>
                               <option> </option>
-                              @foreach($data2 as $item)
-                                  {{-- <option value="{{ $item->n_cuenta }}">{{ $item->nombre }} - {{ $item->n_cuenta }}</option> --}}
-                                   <option value="{{ $item->carpeta_raiz }}">{{ $item->carpeta_raiz }}</option>
-                              @endforeach
+
                        </select>
                       </div>
                     </div>
-                  </div>
+                  </div> --}}
                 {{-- <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Nivel de Relación') }}</label>
                     <div class="col-sm-7">
@@ -93,7 +90,7 @@
         var cliente_id_itbk = jQuery(this).val();
         if (cliente_id_itbk) {
             jQuery.ajax({
-                url:'getcuentas/'+cliente_id_itbk,
+                url:'getdocumentosJson/'+cliente_id_itbk,
                 type:"GET",
                 dataType:"JSON",
                 success:function(data){

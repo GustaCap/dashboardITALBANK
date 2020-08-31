@@ -168,8 +168,8 @@
 
 
         {{-- Agregados para renderizar el almanaque en la busqueda de la vista searchFechaRegistro.blade.php --}}
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        {{-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
 
         {{-- Agregados para pluging DataTables --}}
         {{-- AGREGADO --}}
@@ -180,7 +180,7 @@
         {{-- AGREGADO --}}
         {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script> --}}
 
-        <script type="text/javascript" charset="utf8" src="https:////cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"></script>
+        {{-- <script type="text/javascript" charset="utf8" src="https:////cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"></script> --}}
 
          {{-- AGREGADO para select 2 --}}
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>

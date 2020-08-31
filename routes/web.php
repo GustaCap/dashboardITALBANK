@@ -246,6 +246,28 @@ Route::post('reporte/per/trans','PdfController@generarepoPerTrans')->name('postr
 
 Route::post('postDocClienteFiles', 'DocumentController@postDocClienteFiles') -> name('postDocClienteFiles');
 
+//pruebas
+Route::get('asociar/productos/{user}', 'ClienteController@asociarProductos')-> name('asociarProductos');
+Route::post('asociacion/productos', 'ClienteController@asociaciones')-> name('asociaciones');
+Route::get('asociar/productos/getcuentasJson/{id}', 'ClienteController@getcuentasJson')-> name('getcuentasJson');
+
+
+
+Route::get('asociar', 'RutaController@getTipoDocumento')-> name('asociar');
+
+Route::get('tipocliente/1/cliente/italbank/getcuentas', 'ClienteController@getcuentas')-> name('getcuentas');
+Route::get('tipocliente/1/cliente/italbank/getcuentas/{id}', 'ClienteController@getcuentas')-> name('getcuentas');
+
+
+
+
+
+
+Route::get('documentos/{user}', 'DocumentController@getdocumentos')-> name('getdocumentos');
+Route::get('documentos/getdocumentosJson/{id}', 'DocumentController@getdocumentosJson')-> name('getdocumentosJson');
+
+
+
 
 
 

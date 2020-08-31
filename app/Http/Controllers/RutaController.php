@@ -142,4 +142,21 @@ class RutaController extends Controller
         $users = session()->all();
         return $users;
     }
+
+    public function productosDinamicos($id)
+    {
+        return Raiz::where('tipocliente_id', $id)->get();
+
+    }
+
+    public function getTipoDocumento(Request $request)
+    {
+        if ($request->ajax()) {
+            $tipoDocumentos = Raiz::where('tipocliente_id', $request->tipocliente_id)->where('tipo_carpeta', '=', 'base') ->get();
+            foreach ($tipoDocumentos as $tipoDocumento) {
+                $tipoDocumentosArray[$tipoDocumento->carpeta_raiz] = $tipoDocumento->nombre_doc;
+            }
+            return response()->json($tipoDocumentosArray);
+        }
+    }
 }

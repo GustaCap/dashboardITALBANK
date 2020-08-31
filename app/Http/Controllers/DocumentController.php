@@ -754,6 +754,30 @@ class DocumentController extends Controller
 
     }
 
+    public function getdocumentos(Request $request, $user)
+    {
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
+        $query = "select distinct * from clientes";
+        $clientes = DB::connection('italdocv6')->select($query);
+        return view('pages.documentos')->with('clientes', $clientes)->with('usuario', $usuario);
+        # code...
+    }
+
+    public function getdocumentosJson($id)
+    {
+
+            $documentosJson = Cliente::where('cliente_id_itbk', $id)->get();
+            foreach ($documentosJson as $item) {
+                $documentosJsonArray[$item->n_cuenta] = $item->n_cuenta;
+            }
+            return response()->json($documentosJsonArray);
+
+    }
+
+
+
 
 
 
