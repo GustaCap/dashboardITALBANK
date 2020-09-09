@@ -15,10 +15,16 @@ class Asociacion extends Model
         'cliente_id_itbk',
         'n_cuenta',
         'tipocliente_id',
-        'carpeta_raiz'
+        'carpeta_raiz',
+        'estatus'
     ];
 
     protected $connection = 'italdocv6';
+
+    public function raices()
+    {
+        return $this->hasMany('App\Raiz');
+    }
 
 
 

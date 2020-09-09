@@ -20,8 +20,9 @@ class Raiz extends Model
         //agregados
          'nombre_doc',
          'nivel',
-         'tipo_carpeta'
-        
+         'tipo_carpeta',
+         'estatus'
+
     ];
 
     // protected $connection = 'italdocv2';
@@ -32,6 +33,11 @@ class Raiz extends Model
     public function tipocliente()
     {
         return $this->belongsTo('App\Tipocliente');
+    }
+
+    public function asociacion()
+    {
+        return $this->belongsTo('App\Asociacion');
     }
 
 

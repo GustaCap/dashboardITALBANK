@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTipoclientesTable extends Migration
+class CreateAsociacionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,16 @@ class CreateTipoclientesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipoclientes', function (Blueprint $table) {
+        Schema::create('asociaciones', function (Blueprint $table) {
             $table->Increments('id');
-            $table->string('tipo');
+            $table->integer('raiz_id');
+            $table->string('cliente_id_itbk');
+            $table->string('n_cuenta');
+            $table->string('tipocliente_id');
+            $table->string('usuario');
+            $table->string('carpeta_raiz');
             $table->string('estatus');
+            $table->foreign('raiz_id')->references('id')->on('raices')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -95,11 +95,6 @@ class ClienteController extends Controller
         $ip = $request->ip();
         $dataCliente = Cliente::all();
         $usuario = $user;
-        // $query = "select distinct nombre, cliente_id_itbk
-        // from clientes
-        // where tipocliente_id = '$id'
-        // order by nombre asc";
-        // $dataCliente = DB::connection('italdocv6')->select($query);
 
         return view('pages.getlistarCliente')->with('dataCliente', $dataCliente)->with('usuario', $usuario);
 
@@ -119,12 +114,34 @@ class ClienteController extends Controller
         $tipoCliente = $cliente->tipocliente_id;
         $cliente_id_itbk = $cliente->cliente_id_itbk;
 
-        $query = "select * from raices where tipocliente_id = '$tipoCliente' order by nivel_relacion asc";
+        $queryCuenta = "select * from clientes where cliente_id_itbk = '$cliente_id_itbk' FETCH FIRST 1 ROWS ONLY";
+        $cuentaCliente = DB::connection('italdocv6')->select($queryCuenta);
+        foreach ($cuentaCliente as $item)
+        {
+            $n_cuenta = $item->n_cuenta;
+        }
+
+        // $query = "select * from raices where tipocliente_id = '$tipoCliente' order by nivel_relacion asc";
+        $query = "select ra.id, ra.carpeta_raiz, ra.nivel_relacion, ra.fec_expiracion, ra.requerido, ra.frecuencia, ra.nombre_doc
+        from raices as ra
+        join asociaciones as aso
+        on ra.id = aso.raiz_id
+        and aso.n_cuenta = '$n_cuenta'
+        union
+        select id, carpeta_raiz, nivel_relacion, fec_expiracion, requerido, frecuencia, nombre_doc
+        from raices
+        where nivel_relacion = 'cliente'
+        and tipo_carpeta = 'subnivel'
+        and tipocliente_id = '$tipoCliente'
+        order by nivel_relacion asc";
         $result = DB::connection('italdocv6')->select($query);
 
         /**Este query devuelve el id de las rutas que tengo cargadas por cliente */
         // $query2 = "select raiz_id from archivos where cliente_id = '$id'";
-        $query2 = "select raiz_id from archivos where cliente_id_itbk = '$cliente_id_itbk'";
+        // $query2 = "select raiz_id from archivos where cliente_id_itbk = '$cliente_id_itbk'";
+        $query2 = "select raiz_id from archivos where cliente_id_itbk = '$cliente_id_itbk' and nivel_relacion = 'cliente'
+        union
+        select raiz_id from archivos where n_cuenta = '$n_cuenta' and nivel_relacion = 'producto'";
         $result2 = DB::connection('italdocv6')->select($query2);
 
         // $query3 = "select * from archivos where cliente_id = '$id' and estatus_doc = '1'";
@@ -197,37 +214,6 @@ class ClienteController extends Controller
             $nombre = $item->nombre;
             $cliente_id_itbk = $item->cliente_id_itbk;
         }
-        //Original fecha: 20082020
-        // $query2 = "select * from raices
-        //             where tipocliente_id = '$tipocliente_id'
-        //             and tipo_carpeta not like '%base%'
-        //             and nivel_relacion not like '%transferencia%'
-        //             order by nivel_relacion asc";
-
-        //Cambio fecha: 20082020
-        // $query2 = "select * from raices
-        //             where tipocliente_id = '$tipocliente_id'
-        //             and tipo_carpeta not like '%base%'
-        //             and nivel_relacion between 'cliente' and '$nivel_relacion'
-        //             order by nivel_relacion asc";
-
-        // $query2 = "select * from raices
-        //             where tipocliente_id = '$tipocliente_id'
-        //             and tipo_carpeta not like '%base%'
-        //             and nivel_relacion = '$nivel_relacion'
-        //             order by nivel_relacion asc";
-
-        //Cambio fecha: 27082020
-        // $query2 = "select * from raices
-        //                 where tipocliente_id = '$tipocliente_id'
-        //                 and tipo_carpeta = 'subnivel'
-		// 			    and nivel_relacion = 'cliente'
-        //             union
-        //             select * from raices
-        //                 where tipocliente_id = '$tipocliente_id'
-        //                 and tipo_carpeta = 'subnivel'
-		// 			    and nivel_relacion = 'producto'
-        //                 and carpeta_raiz like '%$carpeta_raiz%'";
 
         $query2 =   "select ra.id, ra.carpeta_raiz, ra.nivel_relacion, ra.fec_expiracion, ra.requerido, ra.frecuencia, ra.nombre_doc
                     from raices as ra
@@ -239,7 +225,8 @@ class ClienteController extends Controller
                     from raices
                     where nivel_relacion = 'cliente'
                     and tipo_carpeta = 'subnivel'
-                    and tipocliente_id = '$tipocliente_id'";
+                    and tipocliente_id = '$tipocliente_id'
+                    order by nivel_relacion asc";
 
         $data2 = DB::connection('italdocv6')->select($query2);
 
@@ -256,17 +243,6 @@ class ClienteController extends Controller
         $query3 = "select * from archivos where cliente_id_itbk = '$cliente_id_itbk'";
         $data3 = DB::connection('italdocv6')->select($query3);
 
-        //data para comparar con el query3 y saber cuales doc estan cargados
-        // $query4 = "select raiz_id from archivos where cliente_id_itbk = '$cliente_id_itbk'";
-        // $query4 = "select raiz_id from archivos where n_cuenta = '$n_cuenta'";
-
-
-
-        /**
-         * Arreglo para buscar en la tabla de archivos
-         */
-
-        // $query4 = "select raiz_id from archivos where raiz_id = $raiz_id;";
         $query4 = "select raiz_id from archivos where cliente_id_itbk = '$cliente_id_itbk' and nivel_relacion = 'cliente'
         union
         select raiz_id from archivos where n_cuenta = '$n_cuenta' and nivel_relacion = 'producto'";
@@ -279,16 +255,6 @@ class ClienteController extends Controller
         //comparacion de ambos arreglos
         $array = Arr::pluck($data2, 'id');
         $array2 = Arr::pluck($data4, 'raiz_id');
-
-        // if ($nivel_relacion == 'cliente') {
-
-        //     return view('pages.cargaDocCliente')->with('data', $data)->with('data2', $data2)->with('nombre', $nombre)->with('tipocliente_id', $tipocliente_id)->with('cliente_id_itbk', $cliente_id_itbk)->with('usuario', $usuario);
-
-        // } else {
-
-        //     return view('pages.getClienteIND')->with('data', $data)->with('data2', $data2)->with('nombre', $nombre)->with('tipocliente_id', $tipocliente_id)->with('cliente_id_itbk', $cliente_id_itbk)->with('usuario', $usuario);
-
-        // }
 
 
          return view('pages.getClienteIND')->with('data', $data)
@@ -309,14 +275,13 @@ class ClienteController extends Controller
         // $clientes = Cliente::distinct();
         $queryClientes = "select distinct * from clientes";
         $clientes = DB::connection('italdocv6')->select($queryClientes);
-        $query = "select * from raices where nivel_relacion = 'producto' and tipo_carpeta = 'subnivel'";
+        // $query = "select * from raices where nivel_relacion = 'producto' and tipo_carpeta = 'subnivel'";
+        $query = "select * from raices where nivel_relacion = 'producto' and tipo_carpeta = 'base'";
         $raices = DB::connection('italdocv6')->select($query);
         $tipocliente = Tipocliente::all();
         return view('pages.asociarProductos')->with('clientes', $clientes)
                                              ->with('raices', $raices);
 
-
-        # code...
     }
 
     public function asociaciones(Request $request)
@@ -324,51 +289,37 @@ class ClienteController extends Controller
         $usuario = $request->usuario;
         $query = "select * from clientes where cliente_id_itbk = '$request->cliente_id_itbk' FETCH FIRST 1 ROWS ONLY";
         $tipocliente = DB::connection('italdocv6')->select($query);
+
         foreach ($tipocliente as $item) {
-                $tipocliente_id = $item->tipocliente_id;
-            }
-        $count = collect($request->id);
-        for ($i=0; $i < $count->count(); $i++) {
+            $tipocliente_id = $item->tipocliente_id;
+        }
 
-            $dataasociacion = Asociacion::create([
+        $queryPrueba = "select id from
+                        raices where
+                        carpeta_raiz like '%$request->carpeta_raiz%'
+                        and tipo_carpeta = 'subnivel'";
+        $carperasAsociadas = DB::connection('italdocv6')->select($queryPrueba);
+        foreach ($carperasAsociadas as $item) {
+            $subniveles[] = $item->id;
+        }
+        // dd($p);
 
-            'raiz_id' => $request->id[$i],
-            'n_cuenta' => $request->n_cuenta,
-            'cliente_id_itbk' => $request->cliente_id_itbk,
-            'tipocliente_id' => $tipocliente_id
+        $countPrueba = collect($carperasAsociadas);
+        for ($i=0; $i < $countPrueba->count(); $i++) {
 
-            ]);
-            $dataasociacion->save();
+                $dataasociacion = Asociacion::create([
+
+                    'raiz_id' => $subniveles[$i],
+                    'n_cuenta' => $request->n_cuenta,
+                    'cliente_id_itbk' => $request->cliente_id_itbk,
+                    'tipocliente_id' => $tipocliente_id
+
+                    ]);
+                    $dataasociacion->save();
+
         }
         return redirect()->back()->with('status', 'Carga successfully');
 
-        // $carpeta_raiz = $request->carpeta_raiz;
-        // $n_cuenta = $request->n_cuenta;
-        // $query = "select * from raices where carpeta_raiz = '$carpeta_raiz'";
-        // $raices = DB::connection('italdocv6')->select($query);
-        // foreach ($raices as $item) {
-        //     $raiz_id = $item->id;
-        // }
-        // $query2 = "select * from clientes where n_cuenta = '$n_cuenta' FETCH FIRST 1 ROWS ONLY";
-        // $cliente = DB::connection('italdocv6')->select($query2);
-        // foreach ($raices as $item) {
-        //     $tipocliente_id = $item->tipocliente_id;
-        // }
-
-        // $dataasociacion = Asociacion::create([
-
-        //     'raiz_id' => $raiz_id,
-        //     'n_cuenta' => $n_cuenta,
-        //     'tipocliente_id' => $tipocliente_id,
-        //     'carpeta_raiz' => $carpeta_raiz
-
-        //     ]);
-
-        // $dataasociacion->save();
-        // return redirect()->back()->with('status', 'Carga successfully');
-
-
-        # code...
     }
 
     public function getcuentas($id)
@@ -387,6 +338,24 @@ class ClienteController extends Controller
                 $cuentasJsonArray[$item->n_cuenta] = $item->n_cuenta;
             }
             return response()->json($cuentasJsonArray);
+
+    }
+
+    public function getProductosJson($n_cuenta)
+    {
+
+            $query = "select * from clientes where n_cuenta = '$n_cuenta'";
+            $cuenta = DB::connection('italdocv6')->select($query);
+            foreach ($cuenta as $item) {
+                $tipocliente_id = $item->tipocliente_id;
+                # code...
+            }
+
+            $productosJson = Raiz::where('tipocliente_id', $tipocliente_id)->where('tipo_carpeta', 'base')->get();
+            foreach ($productosJson as $item) {
+                $productosJsonArray[$item->carpeta_raiz] = $item->carpeta_raiz;
+            }
+            return response()->json($productosJsonArray);
 
     }
 

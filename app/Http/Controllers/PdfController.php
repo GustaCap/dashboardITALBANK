@@ -64,16 +64,29 @@ class PdfController extends Controller
     public function generarepoPerDoc(Request $request)
     {
         $cliente_id_itbk = $request->cliente_id_itbk;
-        $nivel_relacion = $request->nivel_relacion;
+        $n_cuenta = $request->n_cuenta;
         $fechaini = $request->fechaini;
         $fechafin = $request->fechafin;
         $usuario = $request->usuario;
         // dd($cliente_id_itbk, $fechaini, $fechafin, $nivel_relacion);
-        $query = "select * from archivos where cliente_id_itbk = '$cliente_id_itbk'
-                    and nivel_relacion = '$nivel_relacion'
-                    and created_at
-                    between '$fechaini' and '$fechafin 24:00:00'";
-                    dd($query);
+        // $query = "select * from archivos where cliente_id_itbk = '$cliente_id_itbk'
+        //             and nivel_relacion = '$nivel_relacion'
+        //             and created_at
+        //             between '$fechaini' and '$fechafin 24:00:00'";
+        //             dd($query);
+
+        $query = "select * from archivos
+        where n_cuenta = '$n_cuenta'
+        and cliente_id_itbk = '$cliente_id_itbk'
+        and created_at
+        between '$fechaini' and '$fechafin 24:00:00'
+        union
+        select * from archivos
+        where cliente_id_itbk = '$cliente_id_itbk'
+        and nivel_relacion = 'cliente'
+        and created_at
+        between '$fechaini' and '$fechafin 24:00:00'
+        order by nivel_relacion asc";
         $data = DB::connection('italdocv6')->select($query);
         $query2 = "select * from clientes where cliente_id_itbk = '$cliente_id_itbk'";
         $dataCliente = DB::connection('italdocv6')->select($query2);

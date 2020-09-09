@@ -27,9 +27,6 @@ class EstructuraController extends Controller
             'tipocliente_id' => 'required',
             'carpeta_raiz' => 'required',
             'nivel_relacion' => 'required',
-            // 'requerido' => 'required',
-            // 'frecuencia' => 'required',
-            // 'fec_expiracion' => 'required'
         ]);
 
         // $carpeta_raiz = $request->nivel1.'/'.$request->nombre_doc;
@@ -40,9 +37,6 @@ class EstructuraController extends Controller
             'carpeta_raiz' => $request->carpeta_raiz,
             'tipo_carpeta' => 'base',
             'nivel_relacion' => $request->nivel_relacion,
-            // 'fec_expiracion' => $request->fec_expiracion,
-            // 'requerido' => $request->requerido,
-            // 'frecuencia' =>  $request->frecuencia,
             'nombre_doc' =>  $request->carpeta_raiz
 
             ]);

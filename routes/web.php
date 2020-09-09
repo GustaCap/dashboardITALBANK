@@ -216,9 +216,9 @@ Route::get('prueba6767', function () {
 
 
 /**
- * Rutas Agregadas para prueba de pdf
+ * Ruta de prueba para el manejo de los reportes en pdf
+ * -------------------------------------------
  */
-
 
 Route::get('pdf', function() {
 
@@ -230,12 +230,29 @@ Route::get('pdf', function() {
 
 });
 
+//--------------------------------------------//
+
+
+/**
+ * Rutas para generar los reportes en pdf
+ * -------------------------------------------
+ */
+
 Route::get('estructuras/pdf','PdfController@estructurasPDF');
+
 Route::get('cliente/tipos/pdf','PdfController@tipoclientesPDF');
+
 Route::get('documentos/pdf','PdfController@documentosPDF');
+
 Route::get('transferencias/pdf','PdfController@transferenciasPDF');
 
 Route::get('reporte/per/doc/{user}','DocumentController@reportePerDoc')->name('getrepoperdoc');
+
+Route::get('reporte/per/doc/repoCuentasClienteJson/{id}','DocumentController@repoCuentasClienteJson')->name('repoCuentasClienteJson');
+
+//---------------------------------------------------------------------------------------------------------------------------------------//
+
+
 Route::post('reporte/per/doc','PdfController@generarepoPerDoc')->name('postrepoperdoc');
 
 Route::get('reporte/per/trans/{user}','DocumentController@reportePerTrans')->name('getrepopertrans');
@@ -246,25 +263,51 @@ Route::post('reporte/per/trans','PdfController@generarepoPerTrans')->name('postr
 
 Route::post('postDocClienteFiles', 'DocumentController@postDocClienteFiles') -> name('postDocClienteFiles');
 
-//pruebas
+
+/**
+ * Rutas para Asociacion de productos a Clientes.
+ * ----------------------------------------------
+ */
+
 Route::get('asociar/productos/{user}', 'ClienteController@asociarProductos')-> name('asociarProductos');
+
 Route::post('asociacion/productos', 'ClienteController@asociaciones')-> name('asociaciones');
+
 Route::get('asociar/productos/getcuentasJson/{id}', 'ClienteController@getcuentasJson')-> name('getcuentasJson');
+
+Route::get('asociar/productos/getProductosJson/{n_cuenta}', 'ClienteController@getProductosJson')-> name('getProductosJson');
+
+//---------------------------------------------------------------------------------------------------------------------------//
+
+
+/**
+ * Rutas para la seleccion de cliente y su numero de cuenta
+ * para poder listar los documentos asociaciones su cuenta.
+ * ----------------------------------------------------------
+ */
+
+Route::get('documentos/{user}', 'DocumentController@getdocumentos')-> name('getdocumentos');
+
+Route::get('documentos/getdocumentosJson/{id}', 'DocumentController@getdocumentosJson')-> name('getdocumentosJson');
+
+//-------------------------------------------------------------------------------------------------------------------//
+
+
 
 
 
 Route::get('asociar', 'RutaController@getTipoDocumento')-> name('asociar');
 
 Route::get('tipocliente/1/cliente/italbank/getcuentas', 'ClienteController@getcuentas')-> name('getcuentas');
+
 Route::get('tipocliente/1/cliente/italbank/getcuentas/{id}', 'ClienteController@getcuentas')-> name('getcuentas');
 
 
 
 
 
-
-Route::get('documentos/{user}', 'DocumentController@getdocumentos')-> name('getdocumentos');
-Route::get('documentos/getdocumentosJson/{id}', 'DocumentController@getdocumentosJson')-> name('getdocumentosJson');
+//prueba para log
+Route::get('pruebalog', 'ApiController@pruebalog')-> name('pruebalog');
 
 
 

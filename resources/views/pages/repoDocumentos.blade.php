@@ -61,7 +61,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  {{-- <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Nivel de Relación') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
@@ -73,7 +73,20 @@
                           </select>
                       </div>
                     </div>
+                  </div> --}}
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label">{{ __('Cuentas Asociadas') }}</label>
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                          <select id="n_cuenta" name="n_cuenta" class="form-control seleccion" required>
+                            <option> </option>
+                       </select>
+                      </div>
+                    </div>
                   </div>
+
+
+
                   <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Fecha Inico') }}</label>
                     <div class="col-sm-7">
@@ -113,6 +126,35 @@
   <script src="http://malsup.github.com/jquery.form.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
   <script type="text/javascript">
+
+jQuery(document).ready(function () {
+    jQuery('select[name="cliente_id_itbk"]').on('change', function (){
+        var cliente_id_itbk = jQuery(this).val();
+        if (cliente_id_itbk) {
+            jQuery.ajax({
+                url:'repoCuentasClienteJson/'+cliente_id_itbk,
+                type:"GET",
+                dataType:"JSON",
+                success:function(data){
+                    // alert(data);
+                    jQuery('select[name="n_cuenta"]').empty();
+                    jQuery.each(data, function(key,value){
+                        $('select[name="n_cuenta"]').append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }
+            });
+
+        }
+        else{
+            $('select[name="n_cuenta"]').empty();
+        }
+    });
+});
+
+
+
+
+
   // Select dinamico con buscardor, usando la libreria Select2
   $(document).ready(function() {
       $('.seleccion').select2();

@@ -16,7 +16,7 @@ use App\Documentroutemod;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
-
+use Illuminate\Support\Facades\Validator;
 
 // use App\Exceptions\Handler;
 
@@ -354,12 +354,11 @@ class DocumentController extends Controller
     public function postClienteFiles(Request $request)
     {
 
-        $this->validate($request, [
+            $this->validate($request, [
 
-            'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
+                'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
 
-        ]);
-        // $usuario = $request->usuario;
+            ]);
 
 
         /**
@@ -373,9 +372,7 @@ class DocumentController extends Controller
         $query = "select * from raices where carpeta_raiz = '$carpeta'"; //renombrado para cambios 13/05/2020
         $dataraices = DB::connection('italdocv6')->select($query);
         foreach ($dataraices as $item) {
-            //  $raiz_id = $item->id;
-            //  $nombree = $item->nombre_doc;
-             //dd($nombree);
+
              $raiz_id = $item->id;
              $nombreinicial = $item->nombre_doc;
              $nombrefinal = trim($nombreinicial);
@@ -388,9 +385,6 @@ class DocumentController extends Controller
 
 
             $file = $request->file('file');
-
-            // $numCuenta = $request->numCuenta;
-            // $query1 = "select * from clientes where n_cuenta = '$numCuenta' ";
             $cliente_id_itbk = $request->cliente_id_itbk;
             $numCuenta = $request->n_cuenta;
 
@@ -420,7 +414,8 @@ class DocumentController extends Controller
             //**************************************************************************************************/
 
                 $ext = $file->getClientOriginalExtension();
-                $nombreimage = $nombrefinal.'.'.$ext;
+                // $nombreimage = $nombrefinal.'.'.$ext; comentado por pruebas 01092020
+                $nombreimage = date('Y-m-d:H:m:s').'_'.$cliente_id_itbk.'_'.$nombrefinal.'.'.$ext;
                 //$nombreimage = $nombree.'_'.$nombre;
 
             //**************************************************************************************************/
@@ -429,6 +424,14 @@ class DocumentController extends Controller
             // $ruta = storage_path().'/'.$carpeta;
 
             $file->move($ruta, $nombreimage);
+        }
+        else
+        {
+            $errors = array(
+                'errors' => 'FILED UPLOAD - Debe seleccionar un archvio valido',
+               );
+
+               return response()->json($errors);
         }
 
         $rutaFinal = '/'.$carpeta.'/'.$nombreimage;
@@ -455,8 +458,6 @@ class DocumentController extends Controller
         $data->save();
         $output = array(
             'success' => 'Carga successfully',
-            // 'nombre' => $nombree,
-            // 'image'  => '<img src="/dashboard/public/'.$rutaFinal.'" class="img-thumbnail" />'
            );
 
            return response()->json($output);
@@ -773,6 +774,17 @@ class DocumentController extends Controller
                 $documentosJsonArray[$item->n_cuenta] = $item->n_cuenta;
             }
             return response()->json($documentosJsonArray);
+
+    }
+
+    public function repoCuentasClienteJson($id)
+    {
+
+            $cuentasJson = Cliente::where('cliente_id_itbk', $id)->get();
+            foreach ($cuentasJson as $item) {
+                $cuentasJsonArray[$item->n_cuenta] = $item->n_cuenta;
+            }
+            return response()->json($cuentasJsonArray);
 
     }
 

@@ -78,10 +78,11 @@
                     <label class="col-sm-2 col-form-label">{{ __('Producto') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <select id="id" name="id[]" class="form-control seleccion" multiple required>
+                          {{-- <select id="id" name="id[]" class="form-control seleccion" multiple required> --}}
+                            <select id="carpeta_raiz" name="carpeta_raiz" class="form-control seleccion" required>
                               <option> </option>
                               @foreach($raices as $item)
-                                  <option value="{{ $item->id }}">{{ $item->carpeta_raiz }}</option>
+                                  <option value="{{ $item->carpeta_raiz }}">{{ $item->carpeta_raiz }}</option>
                               @endforeach
                           </select>
                       </div>
@@ -101,7 +102,6 @@
 
 @push('js')
 <script>
-
 jQuery(document).ready(function () {
     jQuery('select[name="cliente_id_itbk"]').on('change', function (){
         var cliente_id_itbk = jQuery(this).val();
@@ -125,11 +125,44 @@ jQuery(document).ready(function () {
         }
     });
 });
-  //Select Dinamico
-  $(document).ready(function() {
+</script>
+@endpush
+
+@push('js')
+<script>
+jQuery(document).ready(function () {
+    jQuery('select[name="n_cuenta"]').on('change', function (){
+        var n_cuenta = jQuery(this).val();
+        if (n_cuenta) {
+            jQuery.ajax({
+                url:'getcuentasJson/'+n_cuenta,
+                type:"GET",
+                dataType:"JSON",
+                success:function(data){
+                    // alert(data);
+                    jQuery('select[name="carpeta_raiz"]').empty();
+                    jQuery.each(data, function(key,value){
+                        $('select[name="carpeta_raiz"]').append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }
+            });
+
+        }
+        else{
+            $('select[name="n_cuenta"]').empty();
+        }
+    });
+});
+</script>
+@endpush
+
+@push('js')
+<script>
+$(document).ready(function() {
         $('.seleccion').select2();
     });
   </script>
+</script>
 @endpush
 @endsection
 

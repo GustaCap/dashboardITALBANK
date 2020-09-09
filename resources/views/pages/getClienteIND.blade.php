@@ -111,11 +111,11 @@
 
                             @if (in_array($item->id, $array2))
                             {{-- @if (in_array($item->n_cuenta, $array2)) --}}
-                            <td><input id="file" name="file" type="file"></td>
+                            <td><input id="file" name="file" type="file" ></td>
                             <td><button type="submit" class="btn btn-info" id="ajaxSubmit">{{ __('Actualizar') }}</button></td>
                             <td class="text-center"><span class="badge badge-success">CARGADO</span></td>
                             @else
-                            <td><input id="file" name="file" type="file"></td>
+                            <td><input id="file" name="file" type="file" ></td>
                             <td><button type="submit" class="btn btn-primary" id="ajaxSubmit">{{ __('Cargar') }}</button></td>
                             <td class="text-center"><span class="badge badge-warning">NO CARGADO</span></td>
                             @endif
@@ -136,8 +136,8 @@
 
     </div>
   </div>
-  @push('js')
-  <script type="text/javascript">
+@push('js')
+<script type="text/javascript">
     $(document).ready(function(){
         $('#cliente').on('change', function (){
             var cliente_id_itbk = $(this).val();
@@ -155,9 +155,11 @@
 
         });
 });
-  </script>
-  @endpush
-  @push('js')
+</script>
+@endpush
+
+
+@push('js')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -184,6 +186,7 @@ var busqueda = document.getElementById('buscar');
     busqueda.addEventListener('keyup', buscaTabla);
 
 /*Final del script para filtrar la tabla*/
+
 
 $(document).ready(function(){
 
@@ -222,13 +225,16 @@ $(document).on('change','input[type="file"]',function(){
 	// alert(this.files[0].size);
 
 	var fileName = this.files[0].name;
-	var fileSize = this.files[0].size;
+    var fileSize = this.files[0].size;
 
-	if(fileSize > 204800000000){
+    if(fileSize > 204800000000)
+    {
 		alert('El archivo no debe superar los 2GB');
 		this.value = '';
 		this.files[0].name = '';
-	}else{
+    }
+    else
+    {
 		// recuperamos la extensión del archivo
 		var ext = fileName.split('.').pop();
 
@@ -250,7 +256,6 @@ $(document).on('change','input[type="file"]',function(){
 	}
 });
 
-
 /*Valdar fecha */
 $(document).on('change','input[type="date"]',function(){
 
@@ -260,7 +265,7 @@ var fechaFormulario = new Date(document.getElementById("fecExpira").value);
 // Compara solo las fechas => no las horas!!
 hoy.setHours(0,0,0,0);
 
-if(hoy > fechaFormulario){
+if(hoy >= fechaFormulario){
     alert('Documento Vencido');
   this.value = '';
   }
@@ -275,6 +280,4 @@ $(document).ready(function() {
 // Fin Select2
 </script>
 @endpush
-
-
 @endsection

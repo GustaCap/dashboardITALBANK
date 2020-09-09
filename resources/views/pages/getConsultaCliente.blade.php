@@ -33,7 +33,7 @@
                 </a>
                 </div> --}}
             </div>
-            
+
             <div class="card-body table-responsive">
               <table id="tableDocCliente" class="table display cell-border text-center" style="width:100%">
                   <thead class="text-danger">
@@ -53,17 +53,17 @@
                     @if ($item->estatus_doc === 'activo') --}}
 
                       @foreach($result3 as $items)
-                     
+
                       <tr>
-                        
+
                         <td class="text-center">{{$items->id}}</td>
                         <td class="text-center">{{$items->name_archivo}}</td>
                         {{-- <td>{{$items->file}}</td> --}}
                         @if (Str::endsWith($items->name_archivo, '.pdf'))
-                          <td class="text-center"><embed width="191" height="207" name="plugin" src="{{ '/dashboard/public'.$items->file }}" type="application/pdf"></td>  
+                          <td class="text-center"><embed width="191" height="207" name="plugin" src="{{ '/dashboard/public'.$items->file }}" type="application/pdf"></td>
                             {{-- <td class="text-center"><embed width="191" height="207" name="plugin" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png" type="application/pdf"></td> --}}
                         @else
-                          <td class="text-center"><img src="{{ '/dashboard/public'.$items->file }}" width=120 height=90 /> </td> 
+                          <td class="text-center"><img src="{{ '/dashboard/public'.$items->file }}" width=120 height=90 /> </td>
                         @endif
                         <td class="text-center"><a href="{{ '/dashboard/public'.$items->file }}" target="_blank"><i class="material-icons">get_app</i></a></td>
                         {{-- <td><img src="{{ '/dashboard/public'.$items->file }}" width=120 height=90 /> </td>  --}}
@@ -87,9 +87,9 @@
                         {{-- <td class="text-center"><a class="btn btn-primary" href="{{ route('getEliminarDocumento',$items->id) }}">Eliminar</a></td> --}}
                         <td class="text-center"><a class="btn btn-primary" href="{{ route('getEliminarDocumento',array($items->id, $usuario)) }}">Eliminar</a></td>
                       </tr>
-                     
+
                       @endforeach
-   
+
                     </tbody>
               </table>
             </div>
@@ -113,7 +113,7 @@
             <table id="tableDocCargados" class="table display cell-border" style="width:100%">
               {{-- <thead class="text-warning"> --}}
                 <thead class="text-danger">
-                
+
                 <th style="width:40px" class="text-center"><strong>id</strong></th>
                 <th style="width:110px" class="text-center"><strong>Nivel Relación</strong></th>
                 <th style="width:110px"><strong>Documento</strong></th>
@@ -121,10 +121,10 @@
                 <th style="width:110px" class="text-center"><strong>Requerido</strong></th>
                 <th style="width:110px" class="text-center"><strong>status</strong></th>
               </thead>
-              
+
               <tbody>
                   {{-- @foreach ($cliente as $item) --}}
-                  
+
                   @foreach($result as $item)
                     <tr>
                       <td class="text-center">{{$item->id}}</td>
@@ -132,7 +132,7 @@
                       <td>{{$item->carpeta_raiz}}</td>
                       <td class="text-center">{{$item->frecuencia}}</td>
                       <td class="text-center">{{$item->requerido}}</td>
-                     
+
                       @if (in_array($item->id, $array2))
                       <td class="text-center">
                         <div data-tooltip="Cargado" class="c">
@@ -152,15 +152,15 @@
                     @endforeach
                 </tbody>
             </table>
-           
+
           </div>
           {{-- {{ $array }} --}}
         </div>
       </div><!--fin table cell4-->
   </div>
   {{-- ************************************************************************************************************************ --}}
-    
-   
+
+
   </div>
 @endsection
 {{-- @push('js')
@@ -176,7 +176,7 @@
       $('#tableDocCliente thead tr:eq(1) th').each( function (i) {
           var title = $(this).text();
           $(this).html( '<input class="inputfiltro form-control text-center" type="text" placeholder="'+title+'" />' );
-   
+
           $( 'input', this ).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
                   table
@@ -186,7 +186,7 @@
               }
           } );
       } );
-  
+
       /* Idioma español*/
        var table = $('#tableDocCliente').DataTable( {
            orderCellsTop: true,
@@ -194,7 +194,7 @@
            order: [[ 4, "desc" ]]
        } );
    } );
-  
+
     </script>
     <script type="text/javascript">
       $(document).ready(function() {
@@ -203,7 +203,7 @@
           $('#tableDocCargados thead tr:eq(1) th').each( function (i) {
               var title = $(this).text();
               $(this).html( '<input class="inputfiltro form-control text-center" type="text" placeholder="'+title+'" />' );
-       
+
               $( 'input', this ).on( 'keyup change', function () {
                   if ( table.column(i).search() !== this.value ) {
                       table
@@ -213,7 +213,7 @@
                   }
               } );
           } );
-      
+
           /* Idioma español*/
            var table = $('#tableDocCargados').DataTable( {
                orderCellsTop: true,
@@ -221,6 +221,6 @@
                order: [[ 5, "desc" ]]
            } );
        } );
-      
+
         </script>
 @endpush

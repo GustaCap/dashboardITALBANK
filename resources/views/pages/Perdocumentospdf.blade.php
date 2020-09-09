@@ -67,9 +67,10 @@
             <table class="table table-striped table-sm table-bordered">
                 <thead >
                   <tr>
-                    <th>ID Cliente Italbank</th>
+                    {{-- <th>ID Cliente Italbank</th> --}}
                     <th>Tipo de Cliente</th>
-                    {{-- <th>Cuenta Italbank</th> --}}
+                    <th>Cuenta Italbank</th>
+                    <th>Relacion</th>
                     <th>Estructura</th>
                     <th>Documento</th>
                     <th>Vencimiento</th>
@@ -80,9 +81,10 @@
                 <tbody class="text-center">
                     @foreach($data as $item)
                     <tr>
-                    <td valign="middle" class="text-center">{{ $item->cliente_id_itbk }}</td>
+                    {{-- <td valign="middle" class="text-center">{{ $item->cliente_id_itbk }}</td> --}}
                     <td valign="middle">{{ $item->tipo_cliente}}</td>
-                    {{-- <td valign="middle">{{ $item->n_cuenta}}</td> --}}
+                    <td valign="middle">{{ $item->n_cuenta}}</td>
+                    <td valign="middle">{{ $item->nivel_relacion}}</td>
                     <td valign="middle">{{ $item->file }}</td>
                     <td valign="middle">{{ $item->name_archivo }}</td>
                     <td valign="middle">{{ $item->fecha_vence }}</td>
