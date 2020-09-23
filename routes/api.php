@@ -38,6 +38,7 @@ Route::get('v1.0/producto/{id}', 'ApiController@productoid')->name('api.v1.0.pro
 Route::get('v1.0/estructuras', 'ApiController@estructuras');
 Route::get('v1.0/estructura/{id}', 'ApiController@estructuraid')->name('api.v1.0.estructura.id');
 
+
 /**
  * Ruta: v1.0/productos/{carpeta_raiz}/documentos
  * Devuelve todos los documentos asociados a un producto en particular
@@ -63,6 +64,14 @@ Route::get('v1.0/requerimiento/tipos', 'ApiController@requerimientos');
 Route::get('v1.0/fecha/expiracion', 'ApiController@fechaExpiracion');
 
 Route::get('v1.0/frecuencia', 'ApiController@frecuencia');
+
+
+//Estructuras Documentales
+Route::get('v1.0/estructuras/documentales', 'ApiController@estructurasDocumentales')->name('api.v1.0.estructuras.documentales');
+Route::post('v1.0/estructura/documental/create', 'ApiController@createEstructuraDoc')->name('api.v1.0.estructura.documental.create');
+Route::put('v1.0/estructura/documental/{id}/update', 'ApiController@updateEstructuraDoc')->name('api.v1.0.estructura.documental.update.id');
+Route::delete('v1.0/estructura/documental/{id}/delete', 'ApiController@deleteEstructuraDoc')->name('api.v1.0.estructura.documental.delete.id');
+
 
 
 

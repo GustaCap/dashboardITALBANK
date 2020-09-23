@@ -16,6 +16,7 @@ class Asociacion extends Model
         'n_cuenta',
         'tipocliente_id',
         'carpeta_raiz',
+        'usuario',
         'estatus'
     ];
 

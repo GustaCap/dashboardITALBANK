@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'getCrearEstructura', 'titlePage' => __('Crear Estructura Documental')])
+@extends('layouts.app', ['activePage' => 'getHistorico', 'titlePage' => __('Historicos')])
 
 @section('content')
   <div class="content">
@@ -14,13 +14,13 @@
               </ul>
             </div>
             @endif
-          <form method="POST" action="{{ route('postCreaEstructura') }}" class="form-horizontal" enctype="multipart/form-data">
+          <form method="POST" action="{{ route('historico.italdocumentos') }}" class="form-horizontal" enctype="multipart/form-data">
             @csrf
             <input name="usuario" value="{{ $usuario }}" hidden>
             <div class="card ">
               <div class="card-header card-header-primary">
-                <h4 class="card-title">{{ __('Creación de Estructura Documental') }}</h4>
-                <p class="card-category">{{ __('Sección para crear la base de una Estructura Documental') }}</p>
+                <h4 class="card-title">{{ __('Historicos Italdocumentos') }}</h4>
+                <p class="card-category">{{ __('Historicos') }}</p>
               </div>
               <div class="card-body ">
                 @if (session('status'))
@@ -48,46 +48,20 @@
                   </div>
                 @endif
 
-                <div class="row">
-                    <label class="col-sm-2 col-form-label">{{ __('Tipo de Cliente') }}</label>
-                    <div class="col-sm-7">
-                      <div class="form-group">
-                          <select id="tipocliente_id" name="tipocliente_id" class="form-control seleccion" required>
-                              <option> </option>
-                              @foreach($tipocliente as $item)
-                                  <option value="{{ $item->id }}">{{ $item->tipo }}</option>
-                              @endforeach
-                          </select>
-                      </div>
-                    </div>
-                  </div>
+
                   <div class="row">
-                    <label class="col-sm-2 col-form-label">{{ __('Nombre de la Estructura') }}</label>
+                    <label class="col-sm-2 col-form-label">{{ __('Cliente id') }}</label>
                     <div class="col-sm-7">
                       <div class="form-group">
-                          <input type="text" id="carpeta_raiz" name = "carpeta_raiz" class="form-control">
+                          <input type="text" id="cliente_id_itbk" name = "cliente_id_itbk" class="form-control">
                       </div>
                     </div>
                   </div>
 
 
-                  <div class="row">
-                    <label class="col-sm-2 col-form-label">{{ __('Nivel de Relación') }}</label>
-                    <div class="col-sm-7">
-                      <div class="form-group">
-                          <select id="nivel_relacion" name="nivel_relacion" class="form-control seleccion" required>
-                              <option> </option>
-                              {{-- @foreach($tipocliente as $item) --}}
-                                  <option value="cliente">Cliente</option>
-                                  <option value="producto">Producto</option>
-                                  <option value="transferencia">Transferencia</option>
-                              {{-- @endforeach --}}
-                          </select>
-                      </div>
-                    </div>
-                  </div>
+
                 <div class="card-footer ml-auto mr-auto">
-                  <button type="submit" class="btn btn-primary mb-4">{{ __('Registrar') }}</button>
+                  <button type="submit" class="btn btn-primary mb-4">{{ __('Consultar') }}</button>
                 </div>
             </div>
           </form>

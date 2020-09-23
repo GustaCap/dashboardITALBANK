@@ -14,9 +14,10 @@ class EstructuraController extends Controller
     public function index(Request $request, $user)
     {
         $ip = $request->ip();
+        $usuario = $user;
         $navegador = $request->header('User-Agent');
-        $tipocliente = Tipocliente::all();
-        return view('pages.getCrearEstructura')->with('tipocliente', $tipocliente);
+        $tipocliente = Tipocliente::all()->where('estatus', '1');
+        return view('pages.getCrearEstructura')->with('tipocliente', $tipocliente)->with('usuario', $usuario);
 
     }
 
@@ -29,15 +30,15 @@ class EstructuraController extends Controller
             'nivel_relacion' => 'required',
         ]);
 
-        // $carpeta_raiz = $request->nivel1.'/'.$request->nombre_doc;
-
         $dataraiz = Raiz::create([
 
             'tipocliente_id' => $request->tipocliente_id,
             'carpeta_raiz' => $request->carpeta_raiz,
             'tipo_carpeta' => 'base',
             'nivel_relacion' => $request->nivel_relacion,
-            'nombre_doc' =>  $request->carpeta_raiz
+            'nombre_doc' =>  $request->carpeta_raiz,
+            'usuario' => $request->usuario,
+            'estatus' => 1
 
             ]);
 
@@ -45,6 +46,8 @@ class EstructuraController extends Controller
         return redirect()->back()->with('status', 'Carga successfully');
 
     }
+
+
 
 
 

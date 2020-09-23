@@ -19,8 +19,8 @@ class CreateAsociacionesTable extends Migration
             $table->string('cliente_id_itbk');
             $table->string('n_cuenta');
             $table->string('tipocliente_id');
-            $table->string('usuario');
             $table->string('carpeta_raiz');
+            $table->string('usuario');
             $table->string('estatus');
             $table->foreign('raiz_id')->references('id')->on('raices')->onDelete('cascade');
             $table->timestamps();

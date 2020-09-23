@@ -9,7 +9,11 @@ class Tipocliente extends Model
 
     protected $table = 'tipoclientes';
 
-    protected $fillable = ['id','tipo','estatus'];
+    protected $fillable = [
+        'id',
+        'tipo',
+        'usuario',
+        'estatus'];
 
     // protected $connection = 'italdocv2';
     protected $connection = 'italdocv6';

@@ -81,7 +81,7 @@ return [
         'italsis' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
-            'host' => env('ITALSIS_HOST', '10.200.0.77'),
+            'host' => env('ITALSIS_HOST', '10.200.0.70'),
             'port' => env('ITALSIS_PORT', '5432'),
             'database' => env('ITALSIS_DATABASE', 'forge'),
             'username' => env('ITALSIS_USERNAME', 'forge'),
@@ -89,7 +89,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'schema' => 'public',
+            'schema' => 'dolgram',
             'sslmode' => 'prefer',
         ],
 

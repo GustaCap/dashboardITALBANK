@@ -47,6 +47,7 @@
                     </div>
                   </div>
                 @endif
+                <input name="usuario" value="{{ $usuario }}" hidden>
                 <div class="row">
                   <label class="col-sm-2 col-form-label">{{ __('Nombre Tipo de Cliente') }}</label>
                   <div class="col-sm-7">
@@ -73,11 +74,14 @@
                 <table id="tablelistarclientes" class="table display cell-border" style="width:100%">
                     <thead class="text-danger">
                     <th style="width:60px"><strong>Tipo de Cliente</strong></th>
+                    <th class="text-center" style="width:60px"><strong>Opciones</strong></th>
+
                     </thead>
                 <tbody>
                       @foreach ($tipocliente as $item)
                       <tr>
                         <td>{{ $item->tipo }}</td>
+                        <td class="text-center"><a class="btn btn-primary" href="{{ route('eliminar.tipo.cliente',array($item->id, $usuario)) }}">Eliminar</a></td>
                       </tr>
                       @endforeach
                     </tbody>

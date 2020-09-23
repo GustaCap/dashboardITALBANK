@@ -17,6 +17,9 @@ use GuzzleHttp\Psr7\Response;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Expr\FuncCall;
+// use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class ApiController extends Controller
 {
@@ -34,6 +37,9 @@ class ApiController extends Controller
                     ],
                     'links' => [
                         'self' => '{{baseUrl}}/cliente/tipo/'.$tipocliente->getRouteKey()
+                    ],
+                    'jsonapi' => [
+                        'version' => '1.0'
                     ]
                 ];
             })
@@ -42,8 +48,19 @@ class ApiController extends Controller
 
     public function tipoClienteid($id)
     {
-
         $tipoclienteid = Tipocliente::find($id);
+        //validacion
+        if (is_null($tipoclienteid)) {
+
+            return response()->json([
+                'errors' => [
+                      'status' => '404',
+                      'title' => 'Resource not found',
+                      'detail'=> 'The requested resource is not registered in the database.'
+                  ]
+                ],HttpFoundationResponse::HTTP_NOT_FOUND);
+        }
+
         // return response()->json($tipos, 200);
         return response()->json([
             'data' =>  [
@@ -52,6 +69,9 @@ class ApiController extends Controller
                     'attributes' => [
                         'tipo' => $tipoclienteid->tipo
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ]
         ]);
     }
@@ -84,6 +104,9 @@ class ApiController extends Controller
                     'links' => [
                         'end point' => '{{baseUrl}}/producto/'.$productos->getRouteKey(),
                         'self' => route('api.v1.0.producto.id', $productos->getRouteKey())
+                    ],
+                    'jsonapi' => [
+                        'version' => '1.0'
                     ]
                 ];
             })
@@ -95,6 +118,18 @@ class ApiController extends Controller
     public function productoid($id)
     {
         $productoid = Raiz::find($id);
+
+        if (is_null($productoid)) {
+
+            return response()->json([
+                'errors' => [
+                      'status' => '404',
+                      'title' => 'Resource not found',
+                      'detail'=> 'The requested resource is not registered in the database.'
+                  ]
+                ],HttpFoundationResponse::HTTP_NOT_FOUND);
+        }
+
         return response()->json([
             'data' =>  [
                     'type' => 'Producto',
@@ -114,6 +149,9 @@ class ApiController extends Controller
                         'updated_at' => $productoid->updated_at
 
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ]
         ]);
     }
@@ -146,6 +184,9 @@ class ApiController extends Controller
                         'Api' => '{{baseUrl}}/estructura/'.$estructuras->getRouteKey(),
                         'self' => route('api.v1.0.estructura.id', $estructuras->getRouteKey()),
                         'Api documentos' => '{{baseUrl}}/estructura/'.$estructuras->carpeta_raiz.'/documentos'
+                    ],
+                    'jsonapi' => [
+                        'version' => '1.0'
                     ]
                 ];
             })
@@ -155,6 +196,18 @@ class ApiController extends Controller
     public function estructuraid($id)
     {
         $estructuraid = Raiz::find($id);
+
+        if (is_null($estructuraid)) {
+
+            return response()->json([
+                'errors' => [
+                      'status' => '404',
+                      'title' => 'Resource not found',
+                      'detail'=> 'The requested resource is not registered in the database.'
+                  ]
+                ],HttpFoundationResponse::HTTP_NOT_FOUND);
+        }
+
         return response()->json([
             'data' =>  [
                     'type' => 'Estructura',
@@ -174,6 +227,9 @@ class ApiController extends Controller
                         'updated_at'        => $estructuraid->updated_at
 
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ]
         ]);
     }
@@ -183,6 +239,18 @@ class ApiController extends Controller
 
         $query = "select * from raices where carpeta_raiz like '%$carpeta_raiz/%' and tipo_carpeta = 'subnivel'";
         $documentos = DB::connection('italdocv6')->select($query);
+        $cantidadDoc = count($documentos);
+        if ($cantidadDoc == 0) {
+
+            return response()->json([
+                'errors' => [
+                      'status' => '404',
+                      'title' => 'Not Content',
+                      'detail'=> 'The requested product has no associated documents.'
+                  ]
+                ],HttpFoundationResponse::HTTP_NOT_FOUND);
+        }
+
         $collect = collect($documentos);
         return response()->json([
             'data' => $collect->map(function ($productodoc)
@@ -205,6 +273,9 @@ class ApiController extends Controller
                         'updated_at'        => $productodoc->updated_at
 
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ];
             })
         ]);
@@ -214,6 +285,17 @@ class ApiController extends Controller
     {
         $query = "select * from raices where carpeta_raiz like '%$carpeta_raiz/%' and tipo_carpeta = 'subnivel'";
         $documentos = DB::connection('italdocv6')->select($query);
+        $cantidadDoc = count($documentos);
+        if ($cantidadDoc == 0) {
+
+            return response()->json([
+                'errors' => [
+                      'status' => '404',
+                      'title' => 'Not Content',
+                      'detail'=> 'The requested structure has no associated documents.'
+                  ]
+                ],HttpFoundationResponse::HTTP_NOT_FOUND);
+        }
         $collect = collect($documentos);
         return response()->json([
             'data' => $collect->map(function ($estructuradoc)
@@ -236,6 +318,9 @@ class ApiController extends Controller
                         'updated_at'        => $estructuradoc->updated_at
 
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ];
             })
         ]);
@@ -245,12 +330,15 @@ class ApiController extends Controller
     {
         return response()->json([
             'data' =>  [
-                    'type' => 'Niveles de Relacion',
+                    'type' => 'Relationship levels.',
                     'attributes' => [
                         'opcion1' => 'cliente',
                         'opcion2' => 'producto',
                         'opcion3' => 'transferencia'
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ]
         ]);
     }
@@ -259,11 +347,14 @@ class ApiController extends Controller
     {
         return response()->json([
             'data' =>  [
-                    'type' => 'Tipos de Requerimiento',
+                    'type' => 'Types of requirement.',
                     'attributes' => [
                         'opcion1' => 'obligatorio',
                         'opcion2' => 'no obligatorio'
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ]
         ]);
     }
@@ -272,11 +363,14 @@ class ApiController extends Controller
     {
         return response()->json([
             'data' =>  [
-                    'type' => 'Atributo para uso de fecha de expiracion',
+                    'type' => 'Attribute for use of expiration date.',
                     'attributes' => [
                         'opcion1' => 'aplica',
                         'opcion2' => 'no aplica'
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ]
         ]);
     }
@@ -285,7 +379,7 @@ class ApiController extends Controller
     {
         return response()->json([
             'data' =>  [
-                    'type' => 'Atributo para la frecuencia de exigencia del documento',
+                    'type' => 'Attribute for the frequency of requirement of the document.',
                     'attributes' => [
                         'opcion1' => 'anual',
                         'opcion2' => '2 años',
@@ -294,10 +388,208 @@ class ApiController extends Controller
                         'opcion5' => '5 años',
                         'opcion6' => 'no aplica'
                     ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
                 ]
         ]);
 
     }
+
+    public function estructurasDocumentales()
+    {
+        return response()->json([
+            // 'data' => Raiz::where('estatus', 1)->map(function ($raices)
+            'data' => Raiz::all()->map(function ($raices)
+            {
+                return [
+
+                    'type' => 'Estructuras Documentales',
+                    'id'   => (string) $raices->getRouteKey(),
+                    'attributes' => [
+                        'carpeta_raiz'      => $raices->carpeta_raiz,
+                        'nivel_relacion'    => $raices->nivel_relacion,
+                        'fec_expiracion'    => $raices->fec_expiracion,
+                        'tipocliente_id'    => $raices->tipocliente_id,
+                        'requerido'         => $raices->requerido,
+                        'frecuencia'        => $raices->frecuencia,
+                        'nombre_doc'        => rtrim($raices->nombre_doc),
+                        'nivel'             => $raices->nivel,
+                        'tipo_carpeta'      => rtrim($raices->tipo_carpeta),
+                        'usuario'           => $raices->usuario,
+                        'estatus'           => $raices->estatus,
+                        'created_at'        => $raices->created_at,
+                        'updated_at'        => $raices->updated_at
+                    ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
+
+                ];
+            })
+        ]);
+    }
+
+    public function createEstructuraDoc(Request $request)
+    {
+        $this->validate($request, [
+
+            'tipocliente_id' => 'required',
+            'name' => 'required',
+            'nivel_relacion' => 'required',
+            'usuario' => 'required'
+        ]);
+
+        $data = Raiz::create([
+
+            'tipocliente_id' => $request->tipocliente_id,
+            'carpeta_raiz' => $request->name,
+            'tipo_carpeta' => 'base',
+            'nivel_relacion' => $request->nivel_relacion,
+            'nombre_doc' =>  $request->name,
+            'usuario' => $request->usuario,
+            'estatus' => '1'
+
+            ]);
+
+        $data->save();
+        return response()->json([
+            'data' =>  [
+                    'type' => 'Estructura documental',
+                    'id' => (string) $data->id,
+                    'attributes' => [
+                        'tipo carpeta' => $data->tipo_carpeta,
+                        'nombre' => $data->nombre_doc,
+                        'created_at' => $data->created_at,
+                        'updated_at' => $data->updated_at,
+
+                    ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
+                ]
+        ]);
+        // return response()->json($dataraiz);
+
+    }
+
+    public function updateEstructuraDoc(Request $request, $id)
+    {
+        $query = "update raices
+                    set tipocliente_id = '$request->tipocliente_id',
+                    carpeta_raiz = '$request->name',
+                    nivel_relacion = '$request->nivel_relacion'
+                    where id = '$id'";
+        $result = DB::connection('italdocv6')->select($query);
+        $data = Raiz::find($id);
+        return response()->json([
+            'data' =>  [
+                'type' => 'Estructura documental actualizada.',
+                'id' => (string) $data->id,
+                'attributes' => [
+                    'carpeta_raiz'      => $data->carpeta_raiz,
+                    'nivel_relacion'    => $data->nivel_relacion,
+                    'fec_expiracion'    => $data->fec_expiracion,
+                    'tipocliente_id'    => $data->tipocliente_id,
+                    'requerido'         => $data->requerido,
+                    'frecuencia'        => $data->frecuencia,
+                    'nombre_doc'        => rtrim($data->nombre_doc),
+                    'nivel'             => $data->nivel,
+                    'tipo_carpeta'      => rtrim($data->tipo_carpeta),
+                    'usuario'           => $data->usuario,
+                    'estatus'           => $data->estatus,
+                    'created_at'        => $data->created_at,
+                    'updated_at'        => $data->updated_at
+                ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
+            ]
+        ]);
+
+    }
+
+    public function deleteEstructuraDoc(Request $request, $id)
+    {
+        $prueba = $request->all();
+        return response()->json($id, 200);
+        // dd($prueba, $id);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function pruebalog(Request $request)
     {
@@ -305,31 +597,6 @@ class ApiController extends Controller
         $navegador = $request->header('User-Agent');
         $prueba = $request->server('REMOTE_ADDR');
         dd($ip, $navegador, $request,$prueba);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function tipoDocumentos()
-    {
-
-        $tipos = Raiz::all();
-        return response()->json($tipos, 200);
     }
 
     public function cargaDocumentos(Request $request)

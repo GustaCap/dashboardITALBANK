@@ -17,6 +17,7 @@
             {{-- {{ $ip }} --}}
           <form method="POST" action="{{ route('postRegistroRuta') }}" class="form-horizontal" enctype="multipart/form-data">
             @csrf
+            <input name="usuario" value="{{ $usuario }}" hidden>
             <div class="card ">
               <div class="card-header card-header-primary">
                 <h4 class="card-title">{{ __('Asociar Documentos a Estructura') }}</h4>

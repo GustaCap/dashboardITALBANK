@@ -16,6 +16,7 @@ class CreateTipoclientesTable extends Migration
         Schema::create('tipoclientes', function (Blueprint $table) {
             $table->Increments('id');
             $table->string('tipo');
+            $table->string('usuario');
             $table->string('estatus');
             $table->timestamps();
         });

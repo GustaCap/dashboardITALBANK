@@ -151,7 +151,12 @@ class ClienteController extends Controller
         $array = Arr::pluck($result, 'id');
         $array2 = Arr::pluck($result2, 'raiz_id');
 
-        return view('pages.getConsultaCliente', compact('cliente', 'result', 'array', 'array2', 'result3', 'usuario'));
+        /**prueba */
+        $query4 = "select * from dolgram.documentidscannedmod where documentid = '$cliente_id_itbk'";
+        $result4 = DB::connection('italsis')->select($query4);
+
+
+        return view('pages.getConsultaCliente', compact('cliente', 'result', 'array', 'array2', 'result3', 'usuario', 'result4'));
     }
 
 
@@ -276,7 +281,7 @@ class ClienteController extends Controller
         $queryClientes = "select distinct * from clientes";
         $clientes = DB::connection('italdocv6')->select($queryClientes);
         // $query = "select * from raices where nivel_relacion = 'producto' and tipo_carpeta = 'subnivel'";
-        $query = "select * from raices where nivel_relacion = 'producto' and tipo_carpeta = 'base'";
+        $query = "select * from raices where nivel_relacion = 'producto' and tipo_carpeta = 'base' and estatus = '1'";
         $raices = DB::connection('italdocv6')->select($query);
         $tipocliente = Tipocliente::all();
         return view('pages.asociarProductos')->with('clientes', $clientes)

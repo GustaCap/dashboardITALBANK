@@ -140,6 +140,7 @@ Route::post('registroRuta', 'RutaController@store')-> name('postRegistroRuta');
 //  Route::get('registro/ruta', 'RutaController@index')-> name('getRegistroRuta');
 // Route::get('listarRuta/{user}', 'RutaController@show')-> name('getlistarRuta');
 Route::get('listar/ruta/{user}', 'RutaController@show')-> name('getlistarRuta');
+Route::get('eliminar/{id}/ruta/{user}', 'RutaController@eliminarRuta')-> name('eliminar.ruta');
 // Route::get('listarCliente/{user}', 'ClienteController@show')-> name('getlistarCliente');
 Route::get('listar/cliente/{user}', 'ClienteController@show')-> name('getlistarCliente');
 // Route::get('getClienteIND/{user}', 'DocumentController@getClienteIND') -> name('getClienteIND');
@@ -184,6 +185,9 @@ Route::get('upload/tipo/cliente/{id}/documentos/carga/{user}', 'DocumentControll
 
 // Route::get('upload/documentos', 'DocumentController@getDocumentos')-> name('getDocumentos');
 Route::get('upload/documentos/getTipoDocumento', 'DocumentController@getDocumento')-> name('getTipoDocumento');
+
+Route::get('eliminar/{id}/tipocliente/{user}', 'TipoclienteController@eliminartipocliente')-> name('eliminar.tipo.cliente');
+
 
 
 /**
@@ -308,6 +312,11 @@ Route::get('tipocliente/1/cliente/italbank/getcuentas/{id}', 'ClienteController@
 
 //prueba para log
 Route::get('pruebalog', 'ApiController@pruebalog')-> name('pruebalog');
+
+//prueba para historicos
+Route::get('consulta/historicos/{user}', 'HistoricoController@index')-> name('historico.index');
+Route::post('historico/italdocumentos', 'HistoricoController@show')-> name('historico.italdocumentos');
+
 
 
 

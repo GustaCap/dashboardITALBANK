@@ -3,10 +3,6 @@
 @section('content')
   <div class="content">
     <div class="container-fluid">
-      {{--  --}}
-
-
-    {{--tablas cell4 y sharedfield--}}
         <div class="row">
         <div class="col-lg-12 col-md-12"><!--Inicio table cell4-->
           <div class="card">
@@ -16,103 +12,33 @@
 
               <p class="card-category">Lista de documentos registrados</p>
             </div>
+            @if ($errors->any())
+            <div class="alert alert-danger">
+              <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+            @endif
             <div class="card-body table-responsive">
               <table id="tabletipodoc" class="table display cell-border text-center" style="width:100%">
                 {{-- <thead class="text-warning"> --}}
                   <thead class="text-danger">
-                  {{-- <th style="width:35px"><strong>id</strong></th>
-                  <th style="width:60px"><strong>Carpeta</strong></th>
-                  <th style="width:60px"><strong>Documento</strong></th>
-                  <th style="width:80px"><strong>Nivel Relación</strong></th>
-                  <th style="width:70px"><strong>Vence</strong></th>
-                  <th style="width:50px"><strong>Tipo Cliente</strong></th>
-                  <th style="width:70px"><strong>Requerido</strong></th>
-                  <th style="width:40px"><strong>Frecuencia</strong></th>
-                  <th style="width:50px"><strong>Creado</strong></th> --}}
-
-
-
-                  <th style="width:35px"><strong>Tipo Cliente</strong></th>
                   <th style="width:80px"><strong>Nivel Relación</strong></th>
                   <th style="width:80px"><strong>Estructura</strong></th>
-                  <th style="width:60px"><strong>Documento</strong></th>
                   <th style="width:70px"><strong>Requerido</strong></th>
                   <th style="width:40px"><strong>Frecuencia</strong></th>
                   <th style="width:70px"><strong>Vence</strong></th>
                   <th style="width:50px"><strong>Creado</strong></th>
+                  <th style="width:50px"><strong>Eliminar</strong></th>
                   </thead>
 
                 <tbody>
                     @foreach ($dataRaices as $item)
                     <tr>
-                      {{-- <td>{{ $item->id }}</td>
-                      <td>{{ $item->carpeta_raiz }}</td>
-                      <td>{{ $item->nombre_doc }}</td>
-                      <td>{{ $item->nivel_relacion }}</td>
-
-                      @if ($item->fec_expiracion == 0)
-
-                      <td>No Aplica</td>
-
-                      @endif
-                      @if ($item->fec_expiracion == 1)
-
-                      <td>Aplica</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 1)
-
-                      <td>Individuos (IND)</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 2)
-
-                      <td>Cliente Empresa (CE)</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 3)
-
-                      <td>Cliente Bancos (CB)</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 4)
-
-                      <td>Cliente MSB (CM)</td>
-
-                      @endif
-
-                      <td>{{ $item->requerido }}</td>
-                      <td>{{ $item->frecuencia }}</td>
-                      <td>{{ $item->created_at }}</td> --}}
-
-                      @if ($item->tipocliente_id == 1)
-
-                      <td>Individuos (IND)</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 2)
-
-                      <td>Cliente Empresa (CE)</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 3)
-
-                      <td>Cliente Bancos (CB)</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 4)
-
-                      <td>Cliente MSB (CM)</td>
-
-                      @endif
-                      @if ($item->tipocliente_id == 5)
-
-                      <td>Empresas</td>
-
-                      @endif
                       <td>{{ $item->nivel_relacion }}</td>
                       <td>{{ $item->carpeta_raiz }}</td>
-                      <td>{{ $item->nombre_doc }}</td>
                       <td>{{ $item->requerido }}</td>
                       <td>{{ $item->frecuencia }}</td>
                       @if ($item->fec_expiracion == 0)
@@ -126,19 +52,20 @@
 
                       @endif
                       <td>{{ $item->created_at }}</td>
+                      <td class="text-center"><a class="btn btn-primary" href="{{ route('eliminar.ruta',array($item->id, $usuario)) }}">Eliminar</a></td>
                     </tr>
                     @endforeach
                   </tbody>
                   <tfoot>
                     <tr>
-                      <th>Tipo Cliente</th>
+
                       <th>Nivel Relación</th>
                       <th>Estructura</th>
-                      <th>Documento</th>
                       <th>Requerido</th>
                       <th>Frecuencia</th>
                       <th>Vence</th>
                       <th>Creado</th>
+                      <th>Eliminar</th>
                     </tr>
                 </tfoot>
               </table>
@@ -175,7 +102,7 @@ $(document).ready(function() {
      var table = $('#tabletipodoc').DataTable( {
         orderCellsTop: true,
         fixedHeader: true,
-        order: [[ 7, "desc" ]],
+        order: [[ 5, "desc" ]],
         pageLength : 20,
         lengthMenu: [[20, 30, 50, 100, -1], [20, 30, 50, 100, 'Todos']]
      } );

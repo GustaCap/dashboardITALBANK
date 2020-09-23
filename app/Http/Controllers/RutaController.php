@@ -7,6 +7,7 @@ use App\Tipocliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 class RutaController extends Controller
 {
@@ -15,13 +16,14 @@ class RutaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $user)
     {
         $ip = $request->ip();
+        $usuario = $user;
         $navegador = $request->header('User-Agent');
-        $tipocliente = Tipocliente::all();
+        $tipocliente = Tipocliente::all()->where('estatus', '1');
         // dd($tipocliente);
-        return view('pages.getRegistroRuta')->with('tipocliente', $tipocliente);
+        return view('pages.getRegistroRuta')->with('tipocliente', $tipocliente)->with('usuario', $usuario);
     }
 
     /**
@@ -46,7 +48,6 @@ class RutaController extends Controller
 
             'nivel1' => 'required',
             'tipocliente_id' => 'required',
-            // 'nivel_relacion' => 'required',
             'requerido' => 'required',
             'frecuencia' => 'required',
             'fec_expiracion' => 'required',
@@ -67,14 +68,15 @@ class RutaController extends Controller
         $dataraiz = Raiz::create([
 
             'carpeta_raiz' => $carpeta_raiz,
-            // 'nivel_relacion' => $request->nivel_relacion,
             'nivel_relacion' => $nivel_relacion,
             'fec_expiracion' => $request->fec_expiracion,
             'tipocliente_id' => $request->tipocliente_id,
             'requerido' => $request->requerido,
             'frecuencia' =>  $request->frecuencia,
             'nombre_doc' =>  $request->nombre_doc,
-            'tipo_carpeta' => 'subnivel'
+            'tipo_carpeta' => 'subnivel',
+            'usuario' => $request->usuario,
+            'estatus' => 1
 
             ]);
 
@@ -94,10 +96,10 @@ class RutaController extends Controller
         $navegador = $request->header('User-Agent');
         $ip = $request->ip();
         $usuario = $user;
-        $dataRaices = Raiz::all();
+        $dataRaices = Raiz::all()->where('estatus', '1');
         // $user = Session::get('usuario');
         // return view('pages.getlistarRuta')->with('dataRaices', $dataRaices)->with('user', $user);
-        return view('pages.getlistarRuta')->with('dataRaices', $dataRaices);
+        return view('pages.getlistarRuta')->with('dataRaices', $dataRaices)->with('usuario', $usuario);
 
 
     }
@@ -159,4 +161,15 @@ class RutaController extends Controller
             return response()->json($tipoDocumentosArray);
         }
     }
+
+    public function eliminarRuta($id, $usuario)
+    {
+        $query = "update
+                    raices
+                    set estatus = '2', usuario = '$usuario'
+                    where id = '$id'";
+        $data = DB::connection('italdocv6')->select($query);
+        return redirect()->back()->with('status', 'Delete successfully');
+    }
+
 }

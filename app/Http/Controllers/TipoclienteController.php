@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\DB;
+// use App\Http\Controllers\DB;
 use App\Tipocliente;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class TipoclienteController extends Controller
 {
@@ -13,9 +14,10 @@ class TipoclienteController extends Controller
     public function index(Request $request, $user)
     {
         $ip = $request->ip();
+        $usuario = $user;
         $navegador = $request->header('User-Agent');
-        $tipocliente = Tipocliente::all()->sortBy('tipo');
-        return view('pages.getCrearTipocliente')->with('tipocliente', $tipocliente);
+        $tipocliente = Tipocliente::all()->where('estatus', '1');
+        return view('pages.getCrearTipocliente')->with('tipocliente', $tipocliente)->with('usuario', $usuario);
 
     }
 
@@ -28,13 +30,25 @@ class TipoclienteController extends Controller
 
         $dataTipocliente = Tipocliente::create([
 
-            'tipo' => $request->tipo
+            'tipo' => $request->tipo,
+            'estatus' => 1,
+            'usuario' => $request->usuario
 
             ]);
 
         $dataTipocliente->save();
         return redirect()->back()->with('status', 'Carga successfully');
 
+    }
+
+    public function eliminartipocliente($id, $usuario)
+    {
+        $query = "update
+                    tipoclientes
+                    set estatus = '2', usuario = '$usuario'
+                    where id = '$id'";
+        $data = DB::connection('italdocv6')->select($query);
+        return redirect()->back()->with('status', 'Delete successfully');
     }
 
 
