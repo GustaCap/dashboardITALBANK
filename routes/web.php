@@ -1,11 +1,13 @@
 <?php
 
 use GuzzleHttp\Client;
+
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use App\Usuario;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +31,6 @@ Route::get('/', function () {
 
  Route::get('/home', 'HomeController@index')->name('home');
 
-//  Route::get('/', 'HomeController@prueba')->name('prueba');
-
-
-// Route::get('listarCliente', 'ClienteController@show')-> name('getlistarCliente');
 
 
 Route::get('/dashboarditalDoc', 'HomeController@indexItalDoc')->name('dashboarditalDoc')->middleware('auth');
@@ -106,13 +104,6 @@ Route::get('usuario/{id}', 'ClienteController@getUsuario')-> name('getUsuario');
 Route::get('usuariore', 'ClienteController@getUsuariore')-> name('getUsuariore');
 
 Route::get('usuarioro', 'RutaController@getUsuarioro')-> name('getUsuarioro');
-
-// Route::get('audilog', 'AudilogController@doceliminados')-> name('audilog');
-
-
-
-
-
 
 /**
  * Ruta para el de Sesion del Usuario
@@ -212,13 +203,6 @@ Route::get('tipocliente/{id}/cliente/italbank/{user}', 'ClienteController@client
 
 Route::post('cuenta/cliente', 'ClienteController@postclienteItbk')-> name('postClienteItbk');
 
-
-Route::get('prueba6767', function () {
-    return view('pages.pruebaIframe');
-});
-
-
-
 /**
  * Ruta de prueba para el manejo de los reportes en pdf
  * -------------------------------------------
@@ -260,10 +244,8 @@ Route::get('reporte/per/doc/repoCuentasClienteJson/{id}','DocumentController@rep
 Route::post('reporte/per/doc','PdfController@generarepoPerDoc')->name('postrepoperdoc');
 
 Route::get('reporte/per/trans/{user}','DocumentController@reportePerTrans')->name('getrepopertrans');
+
 Route::post('reporte/per/trans','PdfController@generarepoPerTrans')->name('postrepopertrans');
-
-
-
 
 Route::post('postDocClienteFiles', 'DocumentController@postDocClienteFiles') -> name('postDocClienteFiles');
 
@@ -316,6 +298,32 @@ Route::get('pruebalog', 'ApiController@pruebalog')-> name('pruebalog');
 //prueba para historicos
 Route::get('consulta/historicos/{user}', 'HistoricoController@index')-> name('historico.index');
 Route::post('historico/italdocumentos', 'HistoricoController@show')-> name('historico.italdocumentos');
+
+
+
+Route::get('/prueba/costumers', function () {
+
+    // $client = new Client([
+    //     'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+    // ]);
+    // $id = 1776;
+    // $response = $client->request('POST', 'CustomerInfo', ['json' => ['param' => $id]]);
+    // $data = json_decode($response->getBody()->getContents());
+
+    $client = new Client([
+        'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+    ]);
+    $id = 18259;
+    $response = $client->request('POST', 'CustomerInfo', ['json' => ['param' => $id]]);
+    $data = json_decode($response->getBody()->getContents());
+    print_r($data);
+
+
+
+});
+
+
+
 
 
 

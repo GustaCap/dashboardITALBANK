@@ -15,10 +15,15 @@ use Illuminate\Support\Str;
 use App\Documentidscannedmod;
 use App\Documentroutemod;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request as Psr7Request;
+use GuzzleHttp\Psr7\Response;
 
 
 class HistoricoController extends Controller
@@ -37,11 +42,19 @@ class HistoricoController extends Controller
 
     public function show(Request $request)
     {
-        // dd( $request->cliente_id_itbk);
-        $queryCliente = "select * from clientes where cliente_id_itbk = '$request->cliente_id_itbk'";
-        $cliente = DB::connection('italdocv6')->select($queryCliente);
-        // dd($cliente);
-        // $cliente = Cliente::where('cliente_id_itbk', $request->cliente_id_itbk);
+
+        //comentado el 13/10/2020
+        // $queryCliente = "select * from clientes where cliente_id_itbk = '$request->cliente_id_itbk'";
+        // $cliente = DB::connection('italdocv6')->select($queryCliente);
+
+
+        //agregado para pruebas 13/10/2020
+        $client = new Client([
+            'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+        ]);
+        $id = $request->cliente_id_itbk;
+        $response = $client->request('POST', 'CustomerInfo', ['json' => ['param' => $id]]);
+        $cliente = json_decode($response->getBody()->getContents());
 
         $query = "select * from dolgram.documentidscannedmod where documentid = '$request->cliente_id_itbk'";
         $data = DB::connection('italsis')->select($query);

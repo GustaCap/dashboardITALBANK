@@ -14,11 +14,14 @@ use Illuminate\Support\Str;
 use App\Documentidscannedmod;
 use App\Documentroutemod;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Validator;
 
-// use App\Exceptions\Handler;
+//Agregado para consultar API de clientes.
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request as Psr7Request;
+use GuzzleHttp\Psr7\Response;
 
 class DocumentController extends Controller
 {
@@ -31,146 +34,6 @@ class DocumentController extends Controller
         # code...
     }
 
-    public function consultar_backup(Request $request)
-    {
-        // Validacion de campo id para que no sea vasio ......................................
-
-        $validate = \Validator::make($request->all(), [
-
-            'id' => 'required|numeric',
-        ]);
-
-        if ($validate->fails())
-        {
-            return redirect()->back()->withInput()->withErrors($validate->errors());
-        }
-
-        // fin de la validación ..............................................................
-
-
-        $id= $request -> id;
-
-        try {
-
-            $query = "select * from dolgram.documentroutemod INNER JOIN dolgram.documentidscannedmod ON dolgram.documentroutemod.id_tipo_doc = dolgram.documentidscannedmod.id_doc and dolgram.documentidscannedmod.documentid = '$id'";
-
-        } catch (Exception $e) {
-
-            report($e);
-
-            return false;
-        }
-
-
-        // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
-        $query = DB::connection('italsis')->select($query);
-
-        if ($query==NULL) {
-
-            abort(404);
-
-        }
-
-        // ************************************************************************************************************/
-        // Generar tipo de cliente de acuerdo con la cadena de caracteres contenia en el paht
-
-        $tipo1 = '/1/1.'; // Cliente Individuo
-        $tipo2 = '/2/2.'; // Cliente Corporativo
-        $tipo3 = '/3/3.'; // Cliente Individuo - Pensionado
-
-        foreach ($query as $item) {
-
-            // Esta variable almacena la ruta completa del documento consultado por el usuario
-            $cadena = $item->path;
-            # code...
-        }
-
-        $cadenatipo1 = Str::contains($cadena, $tipo1);
-        if ($cadenatipo1) {
-
-            $tipoCliente = 'Cliente Individuo';
-            # code...
-        }
-
-        $cadenatipo2 = Str::contains($cadena, $tipo2);
-        if ($cadenatipo2) {
-
-            $tipoCliente = 'Cliente Corporativo';
-            # code...
-        }
-
-        $cadenatipo3 = Str::contains($cadena, $tipo3);
-        if ($cadenatipo3) {
-
-            $tipoCliente = 'Cliente Individuo - Pensionado';
-            # code...
-        }
-
-        //******************************************************************************************************************/
-
-
-        return view('pages.dni', ['query' => $query],['tipoCliente' => $tipoCliente] );
-
-    }
-
-
-    public function fechaRegistro(Request $request)
-        {
-             // Validacion de campo id para que no sea vasio ......................................
-
-        $validate = \Validator::make($request->all(), [
-
-            'fecha' => 'required',
-        ]);
-
-        if ($validate->fails())
-        {
-            return redirect()->back()->withInput()->withErrors($validate->errors());
-        }
-
-        // fin de la validación ..............................................................
-
-        $fecha= $request -> fecha;
-        $newDate = date("Ymd", strtotime($fecha));
-
-        $fecha2 = $newDate + 1;
-
-        $pr = strlen($newDate);
-
-        try {
-
-            $query = "select * from dolgram.documentroutemod INNER JOIN dolgram.documentidscannedmod ON dolgram.documentroutemod.id_tipo_doc = dolgram.documentidscannedmod.id_doc and dolgram.documentidscannedmod.uploaddate between '$newDate' and '$fecha2'";
-
-        } catch (Exception $e) {
-
-            report($e);
-
-            return false;
-        }
-
-        // $query = "select * from dolgram.documentidscannedmod where documentid = '$id'";
-        $query = DB::connection('italsis')->select($query);
-
-        foreach ($query as $key) {
-
-            $c = $key->uploaddate;
-
-            // dd($c);
-            # code...
-        }
-        // $fecha = Carbon($c);
-        $f1 = Carbon::now();
-        if ($c > $f1) {
-
-            dd('vencido', $c, $f1);
-            # code...
-        }else {
-            dd('es menor y esta vencido');
-        }
-
-        // dd($c);
-
-        }
 
     public function getClienteINDbackup()
     {
@@ -256,58 +119,13 @@ class DocumentController extends Controller
         $ip = $request->ip();
         $usuario = $user;
         $query1 = "select * from clientes where tipocliente_id = '4'";
-        $query2 = "select * from raices where tipocliente_id = '4' ";
-        // $dataCliente = DB::connection('italdocv2')->select($query1);
         $dataClientes = DB::connection('italdocv6')->select($query1);
+
+        $query2 = "select * from raices where tipocliente_id = '4' ";
         $dataRaices = DB::connection('italdocv6')->select($query2);
-        // return view('pages.getClienteIND',['dataClientes' => $dataClientes], ['dataRaices' => $dataRaices]);
         return view('pages.getClienteCM')->with('dataClientes', $dataClientes)->with('dataRaices', $dataRaices)->with('usuario', $usuario);
 
     }
-
-
-    // public function postClienteFiles(Request $request)
-    // {
-
-    //     $this->validate($request, [
-
-    //         'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048'
-    //     ]);
-
-    //     if ($request->hasfile('file')) {
-
-
-    //         $file = $request->file('file');
-
-    //         $numCuenta = $request->numCuenta;
-    //         //  dd($numCuentacliente);
-
-    //         $nombre = $file->getClientOriginalName();
-    //         // $nombreimage = date('Y-m-d').'_'.$cliente_id.'_'.$nombre;
-    //         $nombreimage = date('Y-m-d').'_'.$numCuenta.'_'.$nombre;
-
-    //         $carpeta = $request->carpeta;
-
-    //         $ruta = public_path().'/'.$carpeta;
-
-    //         $file->move($ruta, $nombreimage);
-    //     }
-
-    //     $rutaFinal = '/'.$carpeta.'/'.$nombreimage;
-
-    //     $data = Archivo::create([
-
-    //         // 'cliente_id' => $cliente_id,
-    //         'nombreArchivo' => $nombre,
-    //         'numCuenta' => $numCuenta,
-    //         'file' =>  $rutaFinal
-
-    //         ]);
-
-    //     $data->save();
-    //     return redirect()->back()->with('status', 'Carga successfully');
-
-    // }
 
     public function getSharedFile()
     {
@@ -356,7 +174,7 @@ class DocumentController extends Controller
 
             $this->validate($request, [
 
-                'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
+                'file.*' => 'required|mimes:pdf,png,jpg,jpeg|max:2048',
 
             ]);
 
@@ -368,47 +186,41 @@ class DocumentController extends Controller
         $usuario = $request->usuario;
         $carpeta = $request->carpetas;
 
-        /**agregado 11/05/2020 para pruebas*/
         $query = "select * from raices where carpeta_raiz = '$carpeta'"; //renombrado para cambios 13/05/2020
         $dataraices = DB::connection('italdocv6')->select($query);
         foreach ($dataraices as $item) {
-
              $raiz_id = $item->id;
              $nombreinicial = $item->nombre_doc;
              $nombrefinal = trim($nombreinicial);
              $nivel_relacion = $item->nivel_relacion;
         }
-        // $raiz_id = $dataraices->id;
-        /***********************************************************************/
+
 
         if ($request->hasfile('file')) {
-
 
             $file = $request->file('file');
             $cliente_id_itbk = $request->cliente_id_itbk;
             $numCuenta = $request->n_cuenta;
 
-            // $query1 = "select * from clientes where cliente_id_itbk = '$cliente_id_itbk' ";
+            $client = new Client([
+                'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+            ]);
+            $response = $client->request('POST', 'CustomerInfo', ['json' => ['param' => $cliente_id_itbk]]);
+            $data = json_decode($response->getBody()->getContents());
+            foreach ($data as $item) {
+                $clasificacion = $item->Clasificacion;
+            }
 
-            $query1 = "select * from clientes where n_cuenta = '$numCuenta' "; /**query de prueba */
+            $query1 = "select * from tipoclientes where tipo = '$clasificacion'";
             $datotipocliente = DB::connection('italdocv6')->select($query1);
             foreach ($datotipocliente as $item) {
-
-                $cliente_id = $item->id;
-                $tipocliente = $item->tipocliente_id;
-
+                $tipocliente = $item->id;
             }
 
             $fecEmitido = $request->fecEmitido;
+
             $fecExpira = $request->fecExpira;
 
-            // dd($request->fecExpira);
-
-            // $nombre = $file->getClientOriginalName(); //comentado por cambios 13/05/2020
-
-            // $nombreimage = $nombrefinal.'_'.$nombre;
-            // $nombreimage = $numCuenta.'_'.$nombre;
-            //$nombreimage = date('Y-m-d').'_'.$numCuenta.'_'.$nombre; //comentado por canbios 13/05/2020
 
             //cambiar el nombre de la imagen
             //**************************************************************************************************/
@@ -421,7 +233,6 @@ class DocumentController extends Controller
             //**************************************************************************************************/
 
             $ruta = public_path().'/'.$carpeta;
-            // $ruta = storage_path().'/'.$carpeta;
 
             $file->move($ruta, $nombreimage);
         }
@@ -430,42 +241,34 @@ class DocumentController extends Controller
             $errors = array(
                 'errors' => 'FILED UPLOAD - Debe seleccionar un archvio valido',
                );
-
-               return response()->json($errors);
+            return response()->json($errors);
         }
 
         $rutaFinal = '/'.$carpeta.'/'.$nombreimage;
 
         $data = Archivo::create([
 
-            'cliente_id' => $cliente_id,
-            'raiz_id' => $raiz_id,          //agregado 11/05/2020 para pruebas
-            'tipo_cliente' => $tipocliente,
-            'name_archivo' => $nombrefinal,    //comentado por canbios 13/05/2020
-            // 'name_archivo' => $nombree,
-            'n_cuenta' => $numCuenta,
-            'cliente_id_itbk' => $cliente_id_itbk,
-            'fecha_emitido' => $fecEmitido,
-            'fecha_vence' => $fecExpira,
-            'file' =>  $rutaFinal,
-            'estatus_doc' => 1,
-            // 'usuario' => $str_user
-            'usuario' => $usuario,
-            'nivel_relacion' => $nivel_relacion
+            'raiz_id'           => $raiz_id,
+            'tipo_cliente'      => $tipocliente,
+            'name_archivo'      => $nombrefinal,
+            'n_cuenta'          => $numCuenta,
+            'cliente_id_itbk'   => $cliente_id_itbk,
+            'fecha_emitido'     => $fecEmitido,
+            'fecha_vence'       => $fecExpira,
+            'file'              =>  $rutaFinal,
+            'estatus_doc'       => 1,
+            'usuario'           => $usuario,
+            'nivel_relacion'    => $nivel_relacion
 
             ]);
 
         $data->save();
         $output = array(
             'success' => 'Carga successfully',
-           );
+        );
 
-           return response()->json($output);
-        // return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
-
+        return response()->json($output);
     }
-
-
 
     /********************************************************************************************************************************** */
 
@@ -578,9 +381,7 @@ class DocumentController extends Controller
      */
     public function eliminarDocumento(Request $request, $id, $user)
     {
-        // $value = new Usuario();
-        // $user = $value->userSesion();
-        // $str_user = rtrim($user, '-12345678admin');
+
         $navegador = $request->header('User-Agent');
         $ip = $request->ip();
         $usuario = $user;
@@ -662,9 +463,6 @@ class DocumentController extends Controller
         $data = DB::connection('italdocv6')->select($query);
         return view('pages.repoTransferencias')->with('data', $data)->with('usuario', $usuario);
     }
-
-
-
 
 
     public function postDocClienteFiles(Request $request)
@@ -760,8 +558,16 @@ class DocumentController extends Controller
         $navegador = $request->header('User-Agent');
         $ip = $request->ip();
         $usuario = $user;
-        $query = "select distinct * from clientes";
-        $clientes = DB::connection('italdocv6')->select($query);
+        /**LINEAS 769-770 COMENTADAS PARA USAR EL SERVICIO WEB */
+        // $query = "select distinct * from clientes";
+        // $clientes = DB::connection('italdocv6')->select($query);
+        $client = new Client([
+
+            'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+
+        ]);
+        $response = $client->request('POST', 'CustomerInfo');
+        $clientes = json_decode($response->getBody()->getContents());
         return view('pages.documentos')->with('clientes', $clientes)->with('usuario', $usuario);
         # code...
     }
@@ -769,9 +575,14 @@ class DocumentController extends Controller
     public function getdocumentosJson($id)
     {
 
-            $documentosJson = Cliente::where('cliente_id_itbk', $id)->get();
+        $client = new Client([
+            'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+        ]);
+
+        $response = $client->request('POST', 'CustomerInfo', ['json' => ['param' => $id]]);
+        $documentosJson = json_decode($response->getBody()->getContents());
             foreach ($documentosJson as $item) {
-                $documentosJsonArray[$item->n_cuenta] = $item->n_cuenta;
+                $documentosJsonArray[$item->CUENTA] = $item->CUENTA;
             }
             return response()->json($documentosJsonArray);
 
@@ -788,12 +599,26 @@ class DocumentController extends Controller
 
     }
 
+    public function getdocumentosBACKUP(Request $request, $user)
+    {
+        $navegador = $request->header('User-Agent');
+        $ip = $request->ip();
+        $usuario = $user;
+        $query = "select distinct * from clientes";
+        $clientes = DB::connection('italdocv6')->select($query);
+        return view('pages.documentos')->with('clientes', $clientes)->with('usuario', $usuario);
+        # code...
+    }
 
+    public function getdocumentosJsonBACKUP($id)
+    {
 
+            $documentosJson = Cliente::where('cliente_id_itbk', $id)->get();
+            foreach ($documentosJson as $item) {
+                $documentosJsonArray[$item->n_cuenta] = $item->n_cuenta;
+            }
+            return response()->json($documentosJsonArray);
 
-
-
-
-
+    }
 
 }

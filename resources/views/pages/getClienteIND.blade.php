@@ -39,7 +39,8 @@
                       <select id="n_cuenta" name="n_cuenta" class="form-control seleccion" required>
                           <option> </option>
                           @foreach($data as $item)
-                               <option value="{{ $item->n_cuenta }}">{{ $item->n_cuenta }}</option>
+                               {{-- <option value="{{ $item->n_cuenta }}">{{ $item->n_cuenta }}</option> --}}
+                               <option value="{{ $item->CUENTA }}">{{ $item->CUENTA }}</option>
                           @endforeach
 
                    </select>

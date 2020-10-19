@@ -107,7 +107,7 @@ class PdfController extends Controller
                     and via_payment = '$viaPayment'
                     and channel = '$channel'
                     and created_at
-                    between '$fechaini' and '$fechafin'";
+                    between '$fechaini' and '$fechafin 24:00:00'";
         $data = DB::connection('italdocv6')->select($query);
         $query2 = "select * from clientes where cliente_id_itbk = '$cliente_id_itbk'";
         $dataCliente = DB::connection('italdocv6')->select($query2);

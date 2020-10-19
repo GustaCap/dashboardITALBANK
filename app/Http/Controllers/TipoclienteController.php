@@ -30,7 +30,7 @@ class TipoclienteController extends Controller
 
         $dataTipocliente = Tipocliente::create([
 
-            'tipo' => $request->tipo,
+            'tipo' => strtoupper($request->tipo),
             'estatus' => 1,
             'usuario' => $request->usuario
 

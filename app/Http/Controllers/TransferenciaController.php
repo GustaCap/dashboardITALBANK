@@ -3,10 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use App\Http\Controllers\DB;
 use Illuminate\Support\Facades\DB;
 use App\Archivo;
 use App\Cliente;
+
+/**
+ * Agregado para manejo del API. servicio web que trae los clientes
+ * URI: http://10.200.0.46:4438/api/v1/CustomerInfo
+ */
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request as Psr7Request;
+use GuzzleHttp\Psr7\Response;
+
+/**
+ * Agregado para manejo de Cache
+*/
+use Illuminate\Support\Facades\Cache;
+
 
 class TransferenciaController extends Controller
 {
@@ -16,7 +31,22 @@ class TransferenciaController extends Controller
         $navegador = $request->header('User-Agent');
         $ip = $request->ip();
         $usuario = $user;
-        $clientes = Cliente::all();
+
+        /**
+         * Cache::remember
+         * para manejo de cache y minimizar el tiempo de consulta del servicio web
+         */
+        $clientes = Cache::remember('clientes', 60, function () {
+
+            $client = new Client([
+                'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+            ]);
+            $response = $client->request('POST', 'CustomerInfo');
+            $json = json_decode($response->getBody()->getContents());
+            return $json;
+
+        });
+
         $query = "select * from raices where nivel_relacion = 'transferencia' and tipo_carpeta = 'subnivel'";
         $dataRaices = DB::connection('italdocv6')->select($query);
         return view('pages.getCargarTransferencia')->with('usuario', $usuario)->with('clientes', $clientes)->with('dataRaices', $dataRaices);
@@ -25,44 +55,43 @@ class TransferenciaController extends Controller
 
     public function store(Request $request)
     {
-
-
-
         $this->validate($request, [
 
-            'file.*' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,csv,gif|max:2048',
+            'file.*' => 'required|mimes:pdf,png,jpg,jpeg|max:2048',
 
         ]);
 
-        $querycliente = "select * from clientes where cliente_id_itbk = '$request->cliente_id_itbk' FETCH FIRST 1 ROWS ONLY";
-        $data = DB::connection('italdocv6')->select($querycliente);
+        $client = new Client([
+            'base_uri' => 'http://10.200.0.46:4438/api/v1/'
+        ]);
+        $response = $client->request('POST', 'CustomerInfo', ['json' => ['param' => $request->cliente_id_itbk]]);
+        $data = json_decode($response->getBody()->getContents());
         foreach ($data as $item) {
-            $cliente_id_itbk = $item->cliente_id_itbk;
-            $tipocliente = $item->tipocliente_id;
-            $n_cuenta = $item->n_cuenta;
+            $cliente_id_itbk = $item->IDCLIENTE;
+            $clasificacion = $item->Clasificacion;
+            $n_cuenta = $item->CUENTA;
+        }
+        $querydata= "select * from tipoclientes where tipo = '$clasificacion'";
+        $result = DB::connection('italdocv6')->select($querydata);
+        foreach ($result as $item) {
+            $tipocliente = $item->id;
         }
 
-        // $carpeta = 'Transferencias';
         $carpeta = $request->nombredoc;
+
         $query = "select * from raices where carpeta_raiz like '%$carpeta%'";
         $dataraices = DB::connection('italdocv6')->select($query);
-        // dd($dataraices);
         foreach ($dataraices as $item) {
              $raiz_id = $item->id;
              $nombreinicial = $item->nombre_doc;
-            //  dd($nombreinicial);
              $nombrefinal = trim($nombreinicial); /**Elimino los espacios en blanco con trim() */
              $nivel_relacion = $item->nivel_relacion;
         }
-        // dd($nombrefinal);
 
         if ($request->hasfile('file')) {
 
-
             $file = $request->file('file');
             $numeroTransfer = $request->transfer;
-            // $documento = $request->nombredoc;
-
             $ext = $file->getClientOriginalExtension();
             $nombreimage = $nombrefinal.'.'.$ext;
             $ruta = public_path().'/'.$carpeta;
@@ -74,30 +103,28 @@ class TransferenciaController extends Controller
 
             $data = Archivo::create([
 
-                'cliente_id_itbk' => $cliente_id_itbk,
-                'tipo_cliente' => $tipocliente,
-                'n_cuenta' => $n_cuenta,
-                'raiz_id' => $raiz_id,
-                'name_archivo' => $nombreimage,    //comentado por canbios 13/05/2020
-                'n_transfer' => $numeroTransfer,
-                'file' =>  $rutaFinal,
-                'estatus_doc' => 1,
-                'usuario' => $request->usuario,
-                'via_payment' => $request->viaPayment,
-                'channel' => $request->channel,
-                'cuenta_bene' => $request->cuenta_bene,
-                'nombre_bene' => $request->nombre_bene,
-                'banco_bene' => $request->banco_bene,
-                'proposito' => $request->proposito,
-                'nivel_relacion'=>$nivel_relacion
+                'cliente_id_itbk'   => $cliente_id_itbk,
+                'tipo_cliente'      => $tipocliente,
+                'n_cuenta'          => $n_cuenta,
+                'raiz_id'           => $raiz_id,
+                'name_archivo'      => $nombreimage,
+                'n_transfer'        => $numeroTransfer,
+                'file'              =>  $rutaFinal,
+                'estatus_doc'       => 1,
+                'usuario'           => $request->usuario,
+                'via_payment'       => $request->viaPayment,
+                'channel'           => $request->channel,
+                'cuenta_bene'       => $request->cuenta_bene,
+                'nombre_bene'       => $request->nombre_bene,
+                'banco_bene'        => $request->banco_bene,
+                'proposito'         => $request->proposito,
+                'nivel_relacion'    =>$nivel_relacion
 
             ]);
 
         $data->save();
         return redirect()->back()->with('status', 'Carga successfully')->withInput($request->input());
 
-
-        # code...
     }
 
     public function show(Request $request, $user)
@@ -108,10 +135,9 @@ class TransferenciaController extends Controller
         $usuario = $user;
         $query = "select id, n_transfer, name_archivo, file, usuario, created_at from archivos";
         $data = DB::connection('italdocv6')->select($query);
+
         return view('pages.getListarTransferencias')->with('data', $data)->with('usuario', $usuario);
 
-
-        # code...
     }
 
     public function eliminarDocumento(Request $request, $id, $user)
@@ -135,8 +161,9 @@ class TransferenciaController extends Controller
         $navegador = $request->header('User-Agent');
         $ip = $request->ip();
         $data = Archivo::all()->where('estatus_doc', 2);
+
         return view('pages.audilog')->with('data', $data);
-        // dd($data);
+
     }
 
 

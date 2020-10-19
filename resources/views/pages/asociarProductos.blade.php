@@ -56,7 +56,8 @@
                           <select id="cliente_id_itbk" name="cliente_id_itbk" class="form-control seleccion" required>
                               <option> </option>
                               @foreach($clientes as $item)
-                                  <option value="{{ $item->cliente_id_itbk }}">{{ $item->nombre }}</option>
+                                  {{-- <option value="{{ $item->cliente_id_itbk }}">{{ $item->nombre }}</option> --}}
+                                  <option value="{{ $item->IDCLIENTE }}">{{ $item->NOMBRE }} - {{ $item->IDCLIENTE }}</option>
                               @endforeach
                           </select>
                       </div>

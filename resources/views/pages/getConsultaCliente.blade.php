@@ -9,24 +9,13 @@
             <div class="card-header card-header-warning">
               {{-- {{ $usuario }} --}}
               <h4 class="card-title"><strong>Detalle de Cliente</strong> </h4>
-              <p class="card-category"><strong>Cliente ID: {{ $cliente->cliente_id_itbk }}</strong> </p>
-              <p class="card-category"><strong>Nombre: {{ $cliente->nombre }}, {{ $cliente->apellido }}</strong> </p>
-              <p class="card-category"><strong>DNI: {{ $cliente->dni }}</strong> </p>
-              <p class="card-category"><strong>Correo Electronico: {{ $cliente->email }}</strong> </p>
-              <p class="card-category"><strong>Cuenta Cliente: {{ $cliente->n_cuenta }}</strong> </p>
-              @if ($cliente->tipocliente_id == 1)
-              <p class="card-category"><strong>Tipo de Cliente: Individuo(IND)</strong> </p>
-              @endif
-              @if ($cliente->tipocliente_id == 2)
-              <p class="card-category"><strong>Tipo de Cliente: Cliente Empresa(CE)</strong> </p>
-              @endif
-              @if ($cliente->tipocliente_id == 3)
-              <p class="card-category"><strong>Tipo de Cliente: Cliente Bancos(CB)</strong> </p>
-              @endif
-              @if ($cliente->tipocliente_id == 4)
-              <p class="card-category"><strong>Tipo de Cliente: Cliente MSB(CM)</strong> </p>
-              @endif
-              {{-- <p class="card-category"><strong>Tipo de Cliente: {{ $cliente->tipo_clienteid }}</strong> </p> --}}
+              @foreach ($cliente as $cliente )
+              <p class="card-category"><strong>Cliente ID: {{ $cliente->IDCLIENTE }}</strong> </p>
+              <p class="card-category"><strong>Nombre: {{ $cliente->NOMBRE }}</strong> </p>
+              <p class="card-category"><strong>DNI: {{ $cliente->IDENTIFICACION }}</strong> </p>
+              <p class="card-category"><strong>Correo Electronico: {{ $cliente->correo }}</strong> </p>
+              <p class="card-category"><strong>Cuenta Cliente: {{ $cliente->CUENTA }}</strong> </p>
+              @endforeach
               {{-- <div class="iconForward">
                 <a href="{{ route('getlistarCliente') }}">
                   <i class="material-icons">forward</i>

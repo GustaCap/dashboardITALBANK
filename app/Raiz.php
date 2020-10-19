@@ -17,12 +17,11 @@ class Raiz extends Model
         'requerido',
         'frecuencia',
         'fec_expiracion',
-         'nombre_doc',
-         'nivel',
-         'tipo_carpeta',
-         'usuario',
-         'estatus'
-
+        'nombre_doc',
+        'nivel',
+        'tipo_carpeta',
+        'usuario',
+        'estatus'
     ];
 
     protected $connection = 'italdocv6';

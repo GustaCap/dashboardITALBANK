@@ -47,10 +47,4 @@ class EstructuraController extends Controller
 
     }
 
-
-
-
-
-
-
 }

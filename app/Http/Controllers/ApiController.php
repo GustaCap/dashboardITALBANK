@@ -513,7 +513,91 @@ class ApiController extends Controller
     {
         $prueba = $request->all();
         return response()->json($id, 200);
-        // dd($prueba, $id);
+
+    }
+
+    public function createProducto(Request $request)
+    {
+        $this->validate($request, [
+
+            'tipocliente_id' => 'required',
+            'name' => 'required',
+            'nivel_relacion' => 'required',
+            'usuario' => 'required'
+        ]);
+
+        $data = Raiz::create([
+
+            'tipocliente_id' => $request->tipocliente_id,
+            'carpeta_raiz' => $request->name,
+            'tipo_carpeta' => 'base',
+            'nivel_relacion' => $request->nivel_relacion,
+            'nombre_doc' =>  $request->name,
+            'usuario' => $request->usuario,
+            'estatus' => '1'
+
+            ]);
+
+        $data->save();
+        return response()->json([
+            'data' =>  [
+                    'type' => 'Producto',
+                    'id' => (string) $data->id,
+                    'attributes' => [
+                        'tipo carpeta' => $data->tipo_carpeta,
+                        'nombre' => $data->nombre_doc,
+                        'created_at' => $data->created_at,
+                        'updated_at' => $data->updated_at,
+
+                    ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
+                ]
+        ]);
+
+    }
+
+    public function updateProducto(Request $request, $id)
+    {
+        $query = "update raices
+                    set tipocliente_id = '$request->tipocliente_id',
+                    carpeta_raiz = '$request->name',
+                    nivel_relacion = '$request->nivel_relacion'
+                    where id = '$id'";
+        $result = DB::connection('italdocv6')->select($query);
+        $data = Raiz::find($id);
+        return response()->json([
+            'data' =>  [
+                'type' => 'Producto actualizado.',
+                'id' => (string) $data->id,
+                'attributes' => [
+                    'carpeta_raiz'      => $data->carpeta_raiz,
+                    'nivel_relacion'    => $data->nivel_relacion,
+                    'fec_expiracion'    => $data->fec_expiracion,
+                    'tipocliente_id'    => $data->tipocliente_id,
+                    'requerido'         => $data->requerido,
+                    'frecuencia'        => $data->frecuencia,
+                    'nombre_doc'        => rtrim($data->nombre_doc),
+                    'nivel'             => $data->nivel,
+                    'tipo_carpeta'      => rtrim($data->tipo_carpeta),
+                    'usuario'           => $data->usuario,
+                    'estatus'           => $data->estatus,
+                    'created_at'        => $data->created_at,
+                    'updated_at'        => $data->updated_at
+                ],
+                    'jsonapi' => [
+                        'version' => '1.0'
+                    ]
+            ]
+        ]);
+    }
+
+    public function deleteProducto(Request $request, $id)
+    {
+        $prueba = $request->all();
+        return response()->json($id, 200);
+
     }
 
 
